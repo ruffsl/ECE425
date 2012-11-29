@@ -1,0 +1,770 @@
+Archive member included because of file (symbol)
+
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_main.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o (main)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_move.o)
+                              MoveCircle.o (STEPPER_move)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_open.o)
+                              MoveCircle.o (STEPPER_open)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_run.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_move.o) (STEPPER_run)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_accel.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_move.o) (STEPPER_set_accel)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_dir.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_run.o) (STEPPER_set_dir)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_mode.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_move.o) (STEPPER_set_mode)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_speed.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_run.o) (STEPPER_set_speed)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_step.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_move.o) (STEPPER_step)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_wait_and_then.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_move.o) (STEPPER_wait_and_then)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_set_state.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_open.o) (SYS_set_state)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_init.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_main.o) (CBOT_init)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_isr.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_main.o) (CBOT_ISR_init)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR_globals.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_isr.o) (CBOT_ISR_vtable)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR_open.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_init.o) (ISR_open)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATMEGA_open.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_init.o) (ATMEGA_open)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATMEGA_set_clk_mode.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATMEGA_open.o) (ATMEGA_set_clk_mode)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_open.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_init.o) (SPI_open)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_set_config_func.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_open.o) (SPI_set_config_func)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_set_slave_addr.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_open.o) (SPI_set_slave_addr)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_globals.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_open.o) (STEPPER_params)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_go.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_step.o) (STEPPER_go)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__STEPPER_init.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_open.o) (__STEPPER_init)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_steps.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_step.o) (STEPPER_set_steps)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_stop_mode.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_step.o) (STEPPER_set_stop_mode)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_setup_decels.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_step.o) (STEPPER_setup_decels)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_get_state.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR_open.o) (SYS_get_state)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_globals.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_set_state.o) (CBOT_system)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_init.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_init.o) (SYS_init)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATTINY_open.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_init.o) (ATTINY_open)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_open.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_init.o) (TMRSRVC_open)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_start.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_open.o) (__TMRSRVC_start)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__ISR_attach.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_open.o) (__ISR_attach)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__ATMEGA_init.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATMEGA_open.o) (__ATMEGA_init)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_cfgrs.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_open.o) (SPI_default_config)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_globals.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_set_config_func.o) (spi_config_func_LUT)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__SPI_init.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_open.o) (__SPI_init)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_decel_step_values.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_setup_decels.o) (STEPPER_set_decel_step_values)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATTINY_globals.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATTINY_open.o) (ATTINY_params)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_open.o) (__TIMER0_COMPA_vect)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_globals.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_open.o) (timer_busy_status)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_init.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_open.o) (__TMRSRVC_init)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_tick.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o) (TMRSRVC_tick)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPKR_beep_clk.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o) (SPKR_beep_clk)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPKR_globals.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPKR_beep_clk.o) (beep_mode_active)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_clk.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o) (STEPPER_clk)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_accel.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_clk.o) (STEPPER_process_accel)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_run_mode.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_clk.o) (STEPPER_process_run_mode)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_step_mode.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_run_mode.o) (STEPPER_process_step_mode)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_stop.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_run_mode.o) (STEPPER_stop)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_process.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_tick.o) (TMRSRVC_process)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_stop.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_process.o) (TMRSRVC_stop)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_pwm.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_run_mode.o) (STEPPER_process_pwm)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_insert.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_process.o) (TMRSRVC_insert)
+C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_start.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_insert.o) (TMRSRVC_start)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_decel_step_values.o) (__mulsi3)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_decel_step_values.o) (__udivmodsi4)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o (exit)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_main.o) (__do_copy_data)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_main.o) (__do_clear_bss)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(malloc.o)
+                              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_process.o) (free)
+
+Allocating common symbols
+Common symbol       size              file
+
+__brkval            0x2               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(malloc.o)
+ATTINY_params       0x1e              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATTINY_globals.o)
+CBOT_system         0x13              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_globals.o)
+tmrNodes            0x3               C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_globals.o)
+STEPPER_params      0x37              C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_globals.o)
+curr_spi_addr       0x1               C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_globals.o)
+__flp               0x2               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(malloc.o)
+step_done           0x2               C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_globals.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00020000         xr
+data             0x00800060         0x0000ffa0         rw !x
+eeprom           0x00810000         0x00010000         rw !x
+fuse             0x00820000         0x00000400         rw !x
+lock             0x00830000         0x00000400         rw !x
+signature        0x00840000         0x00000400         rw !x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+Address of section .data set to 0x800100
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
+LOAD MoveCircle.o
+LOAD C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a
+LOAD C:\Users\solorzaa\Desktop\AVR\libm.a
+LOAD C:\Users\solorzaa\Desktop\AVR\libprintf_flt.a
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000     0x1e44
+ *(.vectors)
+ .vectors       0x00000000       0x7c c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
+                0x00000000                __vectors
+                0x00000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+ .progmem.gcc_sw_table
+                0x0000007c       0x26 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_set_state.o)
+ .progmem.gcc_sw_table
+                0x000000a2       0x26 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_get_state.o)
+ *(.progmem*)
+                0x000000c8                . = ALIGN (0x2)
+                0x000000c8                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x000000c8        0x0 linker stubs
+ *(.trampolines*)
+                0x000000c8                __trampolines_end = .
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x000000c8                __ctors_start = .
+ *(.ctors)
+                0x000000c8                __ctors_end = .
+                0x000000c8                __dtors_start = .
+ *(.dtors)
+                0x000000c8                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x000000c8        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
+                0x000000c8                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x000000c8        0xc c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x000000d4       0x16 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+                0x000000d4                __do_copy_data
+ .init4         0x000000ea       0x10 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+                0x000000ea                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x000000fa        0x8 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
+ *(.init9)
+ *(.text)
+ .text          0x00000102        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
+                0x00000102                __vector_22
+                0x00000102                __vector_28
+                0x00000102                __vector_1
+                0x00000102                __vector_24
+                0x00000102                __bad_interrupt
+                0x00000102                __vector_3
+                0x00000102                __vector_23
+                0x00000102                __vector_30
+                0x00000102                __vector_25
+                0x00000102                __vector_19
+                0x00000102                __vector_27
+                0x00000102                __vector_2
+                0x00000102                __vector_21
+                0x00000102                __vector_29
+                0x00000102                __vector_8
+                0x00000102                __vector_26
+                0x00000102                __vector_20
+ .text          0x00000106       0x84 MoveCircle.o
+                0x00000106                CBOT_main
+ .text          0x0000018a       0x12 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_main.o)
+                0x0000018a                main
+ .text          0x0000019c      0x2c8 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_move.o)
+                0x00000316                STEPPER_move
+ .text          0x00000464       0xae C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_open.o)
+                0x00000464                STEPPER_open
+ .text          0x00000512       0x2e C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_run.o)
+                0x00000512                STEPPER_run
+ .text          0x00000540       0x44 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_accel.o)
+                0x00000540                STEPPER_set_accel
+ .text          0x00000584       0x2a C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_dir.o)
+                0x00000584                STEPPER_set_dir
+ .text          0x000005ae       0x2a C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_mode.o)
+                0x000005ae                STEPPER_set_mode
+ .text          0x000005d8       0x44 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_speed.o)
+                0x000005d8                STEPPER_set_speed
+ .text          0x0000061c      0x118 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_step.o)
+                0x0000061c                STEPPER_step
+ .text          0x00000734       0x9c C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_wait_and_then.o)
+                0x00000734                STEPPER_wait_and_then
+ .text          0x000007d0       0x8e C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_set_state.o)
+                0x000007d0                SYS_set_state
+ .text          0x0000085e       0x1c C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_init.o)
+                0x0000085e                CBOT_init
+ .text          0x0000087a      0x480 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_isr.o)
+                0x00000b0e                __vector_12
+                0x00000c56                __vector_6
+                0x00000a18                __vector_11
+                0x00000a6a                __vector_13
+                0x000008d0                __vector_17
+                0x00000ca8                __vector_7
+                0x00000c04                __vector_5
+                0x00000bb2                __vector_4
+                0x00000974                __vector_9
+                0x00000b60                __vector_15
+                0x0000087a                CBOT_ISR_init
+                0x00000abc                __vector_14
+                0x000009c6                __vector_10
+                0x0000087e                __vector_16
+                0x00000922                __vector_18
+ .text          0x00000cfa        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR_globals.o)
+ .text          0x00000cfa       0x28 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR_open.o)
+                0x00000cfa                ISR_open
+ .text          0x00000d22       0x24 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATMEGA_open.o)
+                0x00000d22                ATMEGA_open
+ .text          0x00000d46       0xa6 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATMEGA_set_clk_mode.o)
+                0x00000d46                ATMEGA_set_clk_mode
+ .text          0x00000dec       0x72 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_open.o)
+                0x00000dec                SPI_open
+ .text          0x00000e5e       0x12 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_set_config_func.o)
+                0x00000e5e                SPI_set_config_func
+ .text          0x00000e70       0xa2 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_set_slave_addr.o)
+                0x00000e70                SPI_set_slave_addr
+ .text          0x00000f12        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_globals.o)
+ .text          0x00000f12       0x2a C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_go.o)
+                0x00000f12                STEPPER_go
+ .text          0x00000f3c       0x14 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__STEPPER_init.o)
+                0x00000f3c                __STEPPER_init
+ .text          0x00000f50       0x36 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_steps.o)
+                0x00000f50                STEPPER_set_steps
+ .text          0x00000f86       0x2a C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_stop_mode.o)
+                0x00000f86                STEPPER_set_stop_mode
+ .text          0x00000fb0       0x7a C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_setup_decels.o)
+                0x00000fb0                STEPPER_setup_decels
+ .text          0x0000102a       0x90 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_get_state.o)
+                0x0000102a                SYS_get_state
+ .text          0x000010ba        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_globals.o)
+ .text          0x000010ba       0x46 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_init.o)
+                0x000010ba                SYS_init
+ .text          0x00001100       0x9e C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATTINY_open.o)
+                0x00001100                ATTINY_open
+ .text          0x0000119e       0x3e C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_open.o)
+                0x0000119e                TMRSRVC_open
+ .text          0x000011dc        0xc C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_start.o)
+                0x000011dc                __TMRSRVC_start
+ .text          0x000011e8       0x22 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__ISR_attach.o)
+                0x000011e8                __ISR_attach
+ .text          0x0000120a        0x6 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__ATMEGA_init.o)
+                0x0000120a                __ATMEGA_init
+ .text          0x00001210       0x52 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_cfgrs.o)
+                0x00001220                SPI_ATtiny0_config
+                0x00001250                SPI_FLASH_config
+                0x00001210                SPI_default_config
+                0x00001240                SPI_LCD_config
+                0x00001230                SPI_PSXC_config
+ .text          0x00001262        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_globals.o)
+ .text          0x00001262        0xe C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__SPI_init.o)
+                0x00001262                __SPI_init
+ .text          0x00001270       0xda C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_decel_step_values.o)
+                0x00001270                STEPPER_set_decel_step_values
+ .text          0x0000134a        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATTINY_globals.o)
+ .text          0x0000134a        0xe C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o)
+                0x0000134a                __TIMER0_COMPA_vect
+ .text          0x00001358        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_globals.o)
+ .text          0x00001358       0x12 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_init.o)
+                0x00001358                __TMRSRVC_init
+ .text          0x0000136a       0x32 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_tick.o)
+                0x0000136a                TMRSRVC_tick
+ .text          0x0000139c       0x4e C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPKR_beep_clk.o)
+                0x0000139c                SPKR_beep_clk
+ .text          0x000013ea        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPKR_globals.o)
+ .text          0x000013ea      0x162 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_clk.o)
+                0x000013ea                STEPPER_clk
+ .text          0x0000154c       0x8a C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_accel.o)
+                0x0000154c                STEPPER_process_accel
+ .text          0x000015d6      0x206 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_run_mode.o)
+                0x000015d6                STEPPER_process_run_mode
+ .text          0x000017dc       0xa8 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_step_mode.o)
+                0x000017dc                STEPPER_process_step_mode
+ .text          0x00001884       0x4a C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_stop.o)
+                0x00001884                STEPPER_stop
+ .text          0x000018ce       0xd6 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_process.o)
+                0x000018ce                TMRSRVC_process
+ .text          0x000019a4        0x6 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_stop.o)
+                0x000019a4                TMRSRVC_stop
+ .text          0x000019aa      0x130 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_pwm.o)
+                0x000019aa                STEPPER_process_pwm
+ .text          0x00001ada       0xd2 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_insert.o)
+                0x00001ada                TMRSRVC_insert
+ .text          0x00001bac        0x8 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_start.o)
+                0x00001bac                TMRSRVC_start
+ .text          0x00001bb4        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+ .text          0x00001bb4        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+ .text          0x00001bb4        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text          0x00001bb4        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .text          0x00001bb4        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .text          0x00001bb4        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(malloc.o)
+                0x00001bb4                . = ALIGN (0x2)
+ *(.text.*)
+ .text.libgcc   0x00001bb4       0x3e c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+                0x00001bb4                __mulsi3
+ .text.libgcc   0x00001bf2       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+                0x00001bf2                __udivmodsi4
+ .text.libgcc   0x00001c36        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x00001c36        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00001c36        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .text.avr-libc
+                0x00001c36      0x20a c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(malloc.o)
+                0x00001c36                malloc
+                0x00001d90                free
+                0x00001e40                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x00001e40        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                0x00001e40                exit
+                0x00001e40                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x00001e40        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ *(.fini0)
+                0x00001e44                _etext = .
+
+.data           0x00800100       0x46 load address 0x00001e44
+                0x00800100                PROVIDE (__data_start, .)
+ *(.data)
+ .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
+ .data          0x00800100        0x0 MoveCircle.o
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_main.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_move.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_open.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_run.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_accel.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_dir.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_mode.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_speed.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_step.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_wait_and_then.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_set_state.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_init.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_isr.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR_globals.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR_open.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATMEGA_open.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATMEGA_set_clk_mode.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_open.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_set_config_func.o)
+ .data          0x00800100        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_set_slave_addr.o)
+ .data          0x00800100        0x8 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_globals.o)
+                0x00800104                Motor_R_LUT
+                0x00800100                Motor_L_LUT
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_go.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__STEPPER_init.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_steps.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_stop_mode.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_setup_decels.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_get_state.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_globals.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_init.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATTINY_open.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_open.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_start.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__ISR_attach.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__ATMEGA_init.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_cfgrs.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_globals.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__SPI_init.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_decel_step_values.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATTINY_globals.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_globals.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_init.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_tick.o)
+ .data          0x00800108        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPKR_beep_clk.o)
+ .data          0x00800108       0x38 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPKR_globals.o)
+                0x00800138                diatonic_LUT
+                0x00800108                note_LUT
+ .data          0x00800140        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_clk.o)
+ .data          0x00800140        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_accel.o)
+ .data          0x00800140        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_run_mode.o)
+ .data          0x00800140        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_step_mode.o)
+ .data          0x00800140        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_stop.o)
+ .data          0x00800140        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_process.o)
+ .data          0x00800140        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_stop.o)
+ .data          0x00800140        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_pwm.o)
+ .data          0x00800140        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_insert.o)
+ .data          0x00800140        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_start.o)
+ .data          0x00800140        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+ .data          0x00800140        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+ .data          0x00800140        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .data          0x00800140        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .data          0x00800140        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .data          0x00800140        0x6 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(malloc.o)
+                0x00800142                __malloc_heap_start
+                0x00800144                __malloc_heap_end
+                0x00800140                __malloc_margin
+ *(.data*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x00800146                . = ALIGN (0x2)
+                0x00800146                _edata = .
+                0x00800146                PROVIDE (__data_end, .)
+
+.bss            0x00800146       0xdb
+                0x00800146                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x00800146        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
+ .bss           0x00800146        0x0 MoveCircle.o
+ .bss           0x00800146        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_main.o)
+ .bss           0x00800146        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_move.o)
+ .bss           0x00800146        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_open.o)
+ .bss           0x00800146        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_run.o)
+ .bss           0x00800146        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_accel.o)
+ .bss           0x00800146        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_dir.o)
+ .bss           0x00800146        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_mode.o)
+ .bss           0x00800146        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_speed.o)
+ .bss           0x00800146        0x2 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_step.o)
+ .bss           0x00800148        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_wait_and_then.o)
+ .bss           0x00800148        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_set_state.o)
+ .bss           0x00800148        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_init.o)
+ .bss           0x00800148        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(CBOT_isr.o)
+ .bss           0x00800148       0x40 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR_globals.o)
+                0x00800148                CBOT_ISR_vtable
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR_open.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATMEGA_open.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATMEGA_set_clk_mode.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_open.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_set_config_func.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_set_slave_addr.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_globals.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_go.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__STEPPER_init.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_steps.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_stop_mode.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_setup_decels.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_get_state.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_globals.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_init.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATTINY_open.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_open.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_start.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__ISR_attach.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__ATMEGA_init.o)
+ .bss           0x00800188        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_cfgrs.o)
+ .bss           0x00800188       0x10 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_globals.o)
+                0x00800188                spi_config_func_LUT
+ .bss           0x00800198        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__SPI_init.o)
+ .bss           0x00800198        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_set_decel_step_values.o)
+ .bss           0x00800198        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATTINY_globals.o)
+ .bss           0x00800198        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o)
+ .bss           0x00800198        0x2 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_globals.o)
+                0x00800199                timer_run_status
+                0x00800198                timer_busy_status
+ .bss           0x0080019a        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_init.o)
+ .bss           0x0080019a        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_tick.o)
+ .bss           0x0080019a        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPKR_beep_clk.o)
+ .bss           0x0080019a       0x10 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPKR_globals.o)
+                0x008001a8                p_Freq_LUT
+                0x0080019c                spkr_accum32
+                0x008001a0                spkr_freq
+                0x008001a6                beep_freq
+                0x008001a4                beep_accum16
+                0x0080019b                beep_mode_active
+                0x0080019a                tone_mode_active
+ .bss           0x008001aa        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_clk.o)
+ .bss           0x008001aa        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_accel.o)
+ .bss           0x008001aa        0x1 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_run_mode.o)
+ .bss           0x008001ab        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_step_mode.o)
+ .bss           0x008001ab        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_stop.o)
+ .bss           0x008001ab        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_process.o)
+ .bss           0x008001ab        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_stop.o)
+ .bss           0x008001ab        0x4 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_process_pwm.o)
+ .bss           0x008001af        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(__TMRSRVC_insert.o)
+ .bss           0x008001af        0x0 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_start.o)
+ .bss           0x008001af        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+ .bss           0x008001af        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+ .bss           0x008001af        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .bss           0x008001af        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .bss           0x008001af        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .bss           0x008001af        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(malloc.o)
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x008001af       0x39 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(STEPPER_globals.o)
+                0x008001af                STEPPER_params
+                0x008001e6                step_done
+ COMMON         0x008001e8       0x13 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SYS_globals.o)
+                0x008001e8                CBOT_system
+ COMMON         0x008001fb        0x1 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(SPI_globals.o)
+                0x008001fb                curr_spi_addr
+ COMMON         0x008001fc       0x1e C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(ATTINY_globals.o)
+                0x008001fc                ATTINY_params
+ COMMON         0x0080021a        0x3 C:\Users\solorzaa\Desktop\AVR\libcapi324v221.a(TMRSRVC_globals.o)
+                0x0080021a                tmrNodes
+ COMMON         0x0080021d        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(malloc.o)
+                0x0080021d                __brkval
+                0x0080021f                __flp
+                0x00800221                PROVIDE (__bss_end, .)
+                0x00001e44                __data_load_start = LOADADDR (.data)
+                0x00001e8a                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x00800221        0x0
+                0x00800221                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                0x00800221                PROVIDE (__noinit_end, .)
+                0x00800221                _end = .
+                0x00800221                PROVIDE (__heap_start, .)
+
+.eeprom         0x00810000        0x0
+ *(.eeprom*)
+                0x00810000                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000       0x20
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 MoveCircle.o
+
+.debug_pubnames
+                0x00000000       0x20
+ *(.debug_pubnames)
+ .debug_pubnames
+                0x00000000       0x20 MoveCircle.o
+
+.debug_info     0x00000000       0xfa
+ *(.debug_info)
+ .debug_info    0x00000000       0xfa MoveCircle.o
+ *(.gnu.linkonce.wi.*)
+
+.debug_abbrev   0x00000000       0x60
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0x60 MoveCircle.o
+
+.debug_line     0x00000000       0xfd
+ *(.debug_line)
+ .debug_line    0x00000000       0xfd MoveCircle.o
+
+.debug_frame    0x00000000       0x20
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x20 MoveCircle.o
+
+.debug_str      0x00000000      0x1b2
+ *(.debug_str)
+ .debug_str     0x00000000      0x1b2 MoveCircle.o
+                                0x1eb (size before relaxing)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+OUTPUT(MoveCircle.elf elf32-avr)
+LOAD linker stubs
