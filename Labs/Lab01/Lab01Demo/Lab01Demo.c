@@ -26,6 +26,7 @@ The robot is able to move in a square, circle, and figure8. When in iddle, the r
 #define c_both 0.9369357426
 #define c_left 1.142900308
 #define c_right 0.8570996920
+#define d_step 0.1335176878
 
 // list all function prototypes 
 void performAction( void ); 
@@ -59,6 +60,21 @@ void CBOT_main( void )
 /**********************************************************************************************/
 
 //Make any subfunctions
+
+	void Stepper_arc_stwt(int arcRadius, int arcLength, int arcSpeed, int arcAccel, bool arcBrk){
+		int stepper_NUM;
+
+		if(arcRadius){
+			
+		}
+		else{
+			stepper_NUM = arcLength/d_step;
+			bool stepper_FWD = arcLength >= 0;
+			STEPPER_move_stwt( STEPPER_BOTH, 
+			stepper_FWD, stepper_NUM, arcSpeed, arcAccel, arcBrk, // Left
+			stepper_FWD, stepper_NUM, arcSpeed, arcAccel, arcBrk); // Right
+		}
+	}
 
 	//Perform Action (type of robot movement) based on the pushbutton pressed 
 	void performAction(void)

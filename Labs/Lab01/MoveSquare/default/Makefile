@@ -37,7 +37,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Include Directories
-INCLUDES = -I"C:\Users\solorzaa\Documents\RHIT\RHIT SR\Winter Term\ECE425\Labs\Lab01\MoveSquare\..\..\..\..\..\..\..\..\Desktop\AVR\lib-includes" 
+INCLUDES = -I"C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Lab01\MoveSquare\..\..\..\..\..\..\..\..\Desktop\AVR\lib-includes" 
 
 ## Library Directories
 LIBDIRS = -L"C:\Users\solorzaa\Desktop\AVR" 
