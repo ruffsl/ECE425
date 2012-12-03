@@ -94,7 +94,6 @@ int sampleVariable = 0;
 
 void CBOT_main( void )
 {
-	// Initialize variables
 	int btnValue=0;//value of button pushed
 	int i=0;//loop counter
 
@@ -121,20 +120,132 @@ void CBOT_main( void )
 
 	ATopstat = ATTINY_open();//open the tiny microcontroller
 	LEopstat = LED_open(); //open the LED module
-	LCopstat = LCD_open(); //open the LCD module
 	SPKR_open(SPKR_BEEP_MODE);//open the speaker in beep mode
-	
+	LCopstat = LCD_open(); //open the LCD module
 	LED_open();
 	I2C_open();
 	ADC_open();//open the ADC module
- 	ADC_set_VREF( ADC_VREF_AVCC );// Set the Voltage Reference first so VREF=5V.
+		ADC_set_VREF( ADC_VREF_AVCC );// Set the Voltage Reference first so VREF=5V.
 
 
-	// Infinite loop
-	while (1)
-    {
-		
-    }
+	//keep the microcontroller running
+	while(1)
+	{
+		LCD_printf_PGM( PSTR( "SENSOR TEST\n" ));
+		btnValue=WaitButton();
+		if (btnValue==1)
+		{
+			//Check Light Sensors
+			//beep once
+			SPKR_play_beep( 500,500,100);//500 Hz for 500 ms
+			i = 0;
+			for(i = 0;i<25;i++)
+			{
+				//read the contact sensors
+				ltContact = ATTINY_get_IR_state(ATTINY_IR_LEFT);
+				rtContact = ATTINY_get_IR_state(ATTINY_IR_RIGHT);
+				LCD_printf("ltCt: %d  rtCt: %d\n",ltContact, rtContact);//print contact sensors status
+
+				//read the photocells
+				ltLght = getLeftLight();//get left light
+				rtLght = getRightLight();//get right light
+				LCD_printf("ltLt: %3.2f rtLt: %3.2f\n\n",ltLght, rtLght);//print photocell status
+
+				TMRSRVC_delay(1000);//wait 1 secs
+			}
+		}
+		else if (btnValue==2)
+		{
+			//Check IR Sensors
+			//beep twice
+			SPKR_play_beep(250, 500, 50);//250 Hz for 250 ms
+			SPKR_play_beep(250, 500, 50);//250 Hz for 250 ms
+			//LCD_printf("get the IR sensors\n");//print left IR
+
+			//read the IR sensors
+			i = 0;
+			for(i = 0;i<25;i++)
+			{
+				//get IR data
+				ltIR = getLeftIR();
+				rtIR = getRightIR();
+				ftIR = getFrontIR();
+				bkIR = getBackIR();
+
+				//print IR data
+				LCD_printf("ftIR: %3.2f\n", ftIR);
+				LCD_printf("bkIR: %3.2f\n", bkIR);
+				LCD_printf("ltIR: %3.2f\n", ltIR);
+				LCD_printf("rtIR: %3.2f\n", rtIR);
+				//wait 1 sec
+				TMRSRVC_delay(1000);
+			}
+		}
+		else if (btnValue==3)
+		{
+			//Check temperature sensor
+			//beep three times
+			SPKR_play_beep(125, 250, 50);//125 Hz for 1250 ms
+			SPKR_play_beep(125, 250, 50);//125 Hz for 1250 ms
+			SPKR_play_beep(125, 250, 50);//125 Hz for 1250 ms
+			
+			LED_set( LED_Green );
+			//read the IR sensors
+			i = 0;
+			for(i = 0;i<25;i++)
+			{
+				// read the 8 pixels
+				read_pixel_1(&pixel1);
+				read_pixel_2(&pixel2);
+				read_pixel_3(&pixel3);
+				read_pixel_4(&pixel4);
+				read_pixel_5(&pixel5);
+				read_pixel_6(&pixel6);
+				read_pixel_7(&pixel7);
+				read_pixel_8(&pixel8);
+
+				if( read_pixel_1(&pixel1) == I2C_STAT_OK )
+				{
+
+					// Display the sensor values:
+					LCD_printf_PGM( PSTR( "Sensor Pixels: \n" ));
+
+					// The first four pixels.
+					LCD_printf_PGM( PSTR( "%3d, %3d, %3d, %3d\n" ),
+						pixel1, pixel2, pixel3,pixel4);
+
+					// The last four pixels.
+					LCD_printf_PGM( PSTR( "%3d, %3d, %3d, %3d\n" ),
+					pixel5, pixel6, pixel7, pixel8);
+
+					// Let's read the ambient temperature also...
+					if( get_ambient_temp( &data ) == I2C_STAT_OK )
+					{
+
+						LCD_printf_PGM( PSTR( "Ambient: %3d\t" ), data );
+
+					} // end if()
+					else
+						LCD_printf_PGM( PSTR( "Ambient: ?\t" ) );
+
+				} // end if()
+
+				else
+
+				//LCD_printf_PGM( PSTR( "ERROR: Reading!\n" ) );
+
+				LED_clr( LED_Green );
+
+				// Wait a bit
+				TMRSRVC_delay_sec(1);
+
+				// Clear the display for the next iteration.
+				//LCD_clear();
+			}
+
+		}//end read the tempearature sensor
+		//LCD_clear();//clear the LCD
+	}//end the while loop	
 }// end the CBOT_main()
 
 /*******************************************************************
