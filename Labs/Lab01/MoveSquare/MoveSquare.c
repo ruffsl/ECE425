@@ -2,9 +2,9 @@
 #include "capi324v221.h"
 
 // Make some CONSTANTS
-#define c_both 0.936935742
-#define c_left 1.002734732
-#define c_right 0.997265268
+#define c_both 1.006760408
+#define c_left 1.108703414
+#define c_right 0.8912965852
 #define sideLength 750
 #define turnLength 125
 
