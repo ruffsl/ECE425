@@ -1,12 +1,12 @@
 ###############################################################################
-# Makefile for the project RangeSensors
+# Makefile for the project Project
 ###############################################################################
 
 ## General Flags
-PROJECT = RangeSensors
+PROJECT = Project
 MCU = atmega324p
-TARGET = RangeSensors.elf
-CC = 
+TARGET = Project.elf
+CC = avr-gcc
 
 CPP = avr-g++
 
@@ -15,7 +15,7 @@ COMMON = -mmcu=$(MCU)
 
 ## Compile options common for all C compilation units.
 CFLAGS = $(COMMON)
-CFLAGS += -Wall -gdwarf-2 -Os -std=gnu99 -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CFLAGS += -Wall -gdwarf-2 -std=gnu99   -DF_CPU=20000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
 
 ## Assembly specific flags
@@ -25,7 +25,7 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 
 ## Linker flags
 LDFLAGS = $(COMMON)
-LDFLAGS +=  -Wl,-Map=RangeSensors.map
+LDFLAGS += -Wl,-u,vfprintf -Wl,-Map=Project.map
 
 
 ## Intel Hex file production flags
@@ -36,15 +36,24 @@ HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
 HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
+## Include Directories
+INCLUDES = -I"C:\Users\solorzaa\Documents\GitHub\ECE425\Labs\Lab02\Lab2 Demo\..\..\..\..\..\..\..\Program Files\AVR Libraries\lib-includes" 
+
+## Library Directories
+LIBDIRS = -L"C:\Program Files\AVR Libraries" -L"C:\WinAVR-20100110\avr\lib\avr4" 
+
+## Libraries
+LIBS = -lcapi324v221 -lm -lprintf_flt 
+
 ## Objects that must be built in order to link
-OBJECTS = RangeSensors.o 
+OBJECTS = Project.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
 
 ## Build
-all: $(TARGET) RangeSensors.hex RangeSensors.eep RangeSensors.lss## Compile
-RangeSensors.o: ../RangeSensors.c
+all: $(TARGET) Project.hex Project.eep Project.lss## Compile
+Project.o: ../Project.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link
@@ -63,7 +72,7 @@ $(TARGET): $(OBJECTS)
 ## Clean target
 .PHONY: clean
 clean:
-	-rm -rf $(OBJECTS) RangeSensors.elf dep/* RangeSensors.hex RangeSensors.eep RangeSensors.lss RangeSensors.map
+	-rm -rf $(OBJECTS) Project.elf dep/* Project.hex Project.eep Project.lss Project.map
 
 
 ## Other dependencies

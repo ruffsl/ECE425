@@ -68,8 +68,7 @@ I2C_STATUS read_pixel_8( unsigned char *pixel_8);
 void sampleFunction(void);
 void checkIR(void);
 void moveCollide(void);
-char moveAway(void);
-void moveWander(void);
+void moveAway(void);
 
 //IR functions
 float getLeftIR(void);
@@ -147,7 +146,7 @@ void CBOT_main( void )
 	// if no obstacle detected MOVE
 	// if obstacle detected STOP
 	// moveCollide();
-	moveWander();
+	moveAway();
 		
     }
 }// end the CBOT_main()
@@ -170,37 +169,6 @@ void checkIR( void )
 	ltIR = getLeftIR();
 	rtIR = getRightIR();
 
-}
-
-/*******************************************************************
-* Function:			void moveWander(void)
-* Input Variables:	none
-* Output Return:	none
-* Overview:			Use a comment block like this before functions
-********************************************************************/
-void moveWander ( void )
-{
-	// Check moveAway() (shy kid) program
-	char isShy = moveAway();
-	STEPPER_STEPS curr_steps = STEPPER_get_nSteps();
-	
-	// IF moveAway() returns zero (NOT shy) and my motion is complete do random motion
-	if ((isShy == 0)&(curr_steps.left == 0)&(curr_steps.right == 0))
-	{
-		float moveRandR = rand()*200;
-		float moveRandL = rand()*200;
-		float turnRandR = 100+rand()*100;
-		float turnRandL = 100+rand()*100;
-		
-		
-		// Move.
-		STEPPER_move_stnb( STEPPER_BOTH, 
-		STEPPER_FWD, moveRandL, turnRandL, 450, STEPPER_BRK_OFF, // Left
-		STEPPER_FWD, moveRandR, turnRandR, 450, STEPPER_BRK_OFF ); // Right
-		
-	}
-	
-	
 }
 
 /*******************************************************************
@@ -233,51 +201,35 @@ void moveCollide( void )
 /*******************************************************************
 * Function:			void moveAway(void)
 * Input Variables:	none
-* Output Return:	char
+* Output Return:	none
 * Overview:			Use a comment block like this before functions
 ********************************************************************/
-char moveAway ( void )
+void moveAway ( void )
 {	
 	checkIR();
 	
-	char shyRobot = 0;
-	
-	float moveY = ftIR - bkIR;
-	float moveX = rtIR - ltIR;
-	
-	if ((ftIR < IR_THRESHOLD)|(bkIR < IR_THRESHOLD))
+	if ((ftIR < IR_THRESHOLD)|(bkIR < IR_THRESHOLD)|(ltIR < IR_THRESHOLD)|(rtIR < IR_THRESHOLD))
 	{
-			BOOL moveForward = moveY <= 0;
+			float move = bkIR - ftIR;
+			BOOL moveForward = move >= 0;
+			float turn = ltIR - rtIR;
+			BOOL turnCW = turn >= 0;
+			if(moveForward == 1){
+				turn = -turn;
+			}
 			
 			// Move.
 			STEPPER_move_stnb( STEPPER_BOTH, 
-			moveForward, 50, abs(moveY)+moveX, 450, STEPPER_BRK_OFF, // Left
-			moveForward, 50, abs(moveY)-moveX, 450, STEPPER_BRK_OFF ); // Right
-			
-			shyRobot = 1;
+			moveForward, (move)/10, 200+turn+move, 450, STEPPER_BRK_OFF, // Left
+			moveForward, (move)/10, 200-turn+move, 450, STEPPER_BRK_OFF ); // Right
 	}
-	else if ((rtIR < IR_THRESHOLD)|(ltIR < IR_THRESHOLD))
+	else
 	{
-			BOOL moveForwardR = moveX <= 0;
-			BOOL moveForwardL = moveX > 0;
-			
-			// Move.
-			STEPPER_move_stnb( STEPPER_BOTH, 
-			moveForwardL, 200, abs(moveX), 450, STEPPER_BRK_OFF, // Left
-			moveForwardR, 200, abs(moveX), 450, STEPPER_BRK_OFF ); // Right
-			
-			shyRobot = 1;
+		//STOP.
+		STEPPER_move_stnb( STEPPER_BOTH, 
+		STEPPER_FWD, 0, 0, 0, STEPPER_BRK_OFF, // Left
+		STEPPER_FWD, 0, 0, 0, STEPPER_BRK_OFF ); // Right
 	}
-	// else
-	// {
-		
-	// //	STOP.
-		// STEPPER_move_stnb( STEPPER_BOTH, 
-		// STEPPER_FWD, 0, 0, 0, STEPPER_BRK_OFF, // Left
-		// STEPPER_FWD, 0, 0, 0, STEPPER_BRK_OFF ); // Right
-	// }
-	
-	return shyRobot;
 }
 
 /*******************************************************************
