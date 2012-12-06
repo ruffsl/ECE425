@@ -23,7 +23,8 @@
 #define C_B 1
 #define C_L 1
 #define C_R 1
-#define IR_THRESHOLD 20
+#define IR_THRESHOLD_FTBK 20
+#define IR_THRESHOLD_LTRT 10
 
 // IR Constants
 #define IRRIGHT_CHAN ADC_CHAN3
@@ -138,6 +139,7 @@ void CBOT_main( void )
 
 	
 	btnValue = WaitButton();
+	char number;
 
 	// Infinite loop
 	while (1)
@@ -147,8 +149,12 @@ void CBOT_main( void )
 	// if no obstacle detected MOVE
 	// if obstacle detected STOP
 	// moveCollide();
-	moveWander();
-		
+	//moveWander();
+	
+	TMRSRVC_delay(1000);//wait 1 s
+	LCD_clear();
+	number = rand();
+	LCD_printf("number: %3u\n",number);
     }
 }// end the CBOT_main()
 
@@ -187,10 +193,10 @@ void moveWander ( void )
 	// IF moveAway() returns zero (NOT shy) and my motion is complete do random motion
 	if ((isShy == 0)&(curr_steps.left == 0)&(curr_steps.right == 0))
 	{
-		float moveRandR = rand()*200;
-		float moveRandL = rand()*200;
-		float turnRandR = 100+rand()*100;
-		float turnRandL = 100+rand()*100;
+		float moveRandR = abs(rand()*200);
+		float moveRandL = abs(rand()*200);
+		float turnRandR = abs(100+rand()*100);
+		float turnRandL = abs(100+rand()*100);
 		
 		
 		// Move.
@@ -213,7 +219,7 @@ void moveCollide( void )
 {
 	ftIR = getFrontIR();
 	// Check front IR sensor
-	if(ftIR > IR_THRESHOLD)
+	if(ftIR > IR_THRESHOLD_FTBK)
 	{
 		// Move forward.
 		STEPPER_move_stnb( STEPPER_BOTH, 
@@ -245,7 +251,7 @@ char moveAway ( void )
 	float moveY = ftIR - bkIR;
 	float moveX = rtIR - ltIR;
 	
-	if ((ftIR < IR_THRESHOLD)|(bkIR < IR_THRESHOLD))
+	if ((ftIR < IR_THRESHOLD_FTBK)|(bkIR < IR_THRESHOLD_FTBK))
 	{
 			BOOL moveForward = moveY <= 0;
 			
@@ -256,7 +262,7 @@ char moveAway ( void )
 			
 			shyRobot = 1;
 	}
-	else if ((rtIR < IR_THRESHOLD)|(ltIR < IR_THRESHOLD))
+	else if ((rtIR < IR_THRESHOLD_LTRT)|(ltIR < IR_THRESHOLD_LTRT))
 	{
 			BOOL moveForwardR = moveX <= 0;
 			BOOL moveForwardL = moveX > 0;
