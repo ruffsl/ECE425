@@ -20,9 +20,9 @@
 #include "stdio.h"
 
 /** Define Constants Here ******************************************/
-#define C_BOTH 0.9369357426
-#define C_LEFT 1.142900308
-#define C_RIGHT 0.8570996920
+#define C_BOTH 1
+#define C_LEFT 1
+#define C_RIGHT 1
 
 // IR Constants
 #define IRRIGHT_CHAN ADC_CHAN3
