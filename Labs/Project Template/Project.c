@@ -20,9 +20,10 @@
 #include "stdio.h"
 
 /** Define Constants Here ******************************************/
-#define C_BOTH 1
-#define C_LEFT 1
-#define C_RIGHT 1
+#define C_B 1
+#define C_L 1
+#define C_R 1
+#define D_STEP 0.1335176878
 
 // IR Constants
 #define IRRIGHT_CHAN ADC_CHAN3
@@ -140,6 +141,36 @@ void CBOT_main( void )
 /*******************************************************************
 * Additional Helper Functions
 ********************************************************************/
+
+/*******************************************************************
+* Function:			void move_arc_stwt(void)
+* Input Variables:	void
+* Output Return:	void
+* Overview:			This moves the robot in any arc length
+********************************************************************/
+
+void move_arc_stwt(int arcRadius, int arcLength, int arcSpeed, int arcAccel, bool arcBrk){
+	
+	bool step_Fwd_L;
+	bool step_Fwd_R;
+	int step_Num_L;
+	int step_Num_R;
+	int step_Speed_L;
+	int step_Speed_R;
+	int step_Accel_L;
+	int step_Accel_R;
+
+	if(arcRadius){
+
+	}
+	else{
+		stepper_NUM = arcLength/D_STEP;
+		bool stepper_FWD = arcLength >= 0;
+		STEPPER_move_stwt( STEPPER_BOTH, 
+		stepper_FWD, stepper_NUM, arcSpeed, arcAccel, arcBrk, // Left
+		stepper_FWD, stepper_NUM, arcSpeed, arcAccel, arcBrk); // Right
+	}
+}
 
 /*******************************************************************
 * Function:			int waitButton(void)
