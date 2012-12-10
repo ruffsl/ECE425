@@ -1,11 +1,14 @@
 /*******************************************************************
-* FileName:        ObstacleAvoidance.c
+* FileName:        RangeSensors.c
 * Processor:       ATmega324P
 * Compiler:        
 *
 * Code Description:
-*
-*                                                                     
+* This program runs a submission architecture design composed of different 
+* layers  of an obstacle avoidance algorithm.
+* When NO obstacle is detected by the robot, the robot performs a random wander
+* behavior while checking for its IR sensors. When an obstacle is inside the robot's                                                                     
+* IR threshold, the robot then calls the obstacle avoidance subroutines.
 *
 * Creation and Revisions:
 *
@@ -143,12 +146,6 @@ void CBOT_main( void )
 	// Infinite loop
 	while (1)
     {
-	// check sensors
-	//checkIR();
-	// if no obstacle detected MOVE
-	// if obstacle detected STOP
-	// moveCollide();
-	//moveWander();
 	btnValue = WaitButton();
 	number = rand();
 
@@ -225,13 +222,14 @@ void moveWander ( void )
 	// IF moveAway() returns zero (NOT shy) and my motion is complete do random motion
 	if ((isShy == 0)&(curr_steps.left == 0)&(curr_steps.right == 0))
 	{
+		// create random values for wheel position and wheel speed
 		float moveRandR = abs(rand()*200);
 		float moveRandL = abs(rand()*200);
 		float turnRandR = abs(100+rand()*100);
 		float turnRandL = abs(100+rand()*100);
 		
 		
-		// Move.
+		// Move Randomly
 		STEPPER_move_stnb( STEPPER_BOTH, 
 		STEPPER_FWD, moveRandL, turnRandL, 450, STEPPER_BRK_OFF, // Left
 		STEPPER_FWD, moveRandR, turnRandR, 450, STEPPER_BRK_OFF ); // Right
@@ -276,13 +274,17 @@ void moveCollide( void )
 ********************************************************************/
 char moveAway ( void )
 {	
+	// check the IR sensors
 	checkIR();
 	
+	// return this value to the high-level subroutine to inform the robot of the last behavior
 	char shyRobot = 0;
 	
+	// determinde which IR sensor detects an obstacle
 	float moveY = ftIR - bkIR;
 	float moveX = rtIR - ltIR;
 	
+	//check front and back sensors
 	if ((ftIR < IR_THRESHOLD_FTBK)|(bkIR < IR_THRESHOLD_FTBK))
 	{
 			BOOL moveForward = moveY <= 0;
@@ -294,6 +296,7 @@ char moveAway ( void )
 			
 			shyRobot = 1;
 	}
+	// check left and right sensors
 	else if ((rtIR < IR_THRESHOLD_LTRT)|(ltIR < IR_THRESHOLD_LTRT))
 	{
 			BOOL moveForwardR = moveX <= 0;
