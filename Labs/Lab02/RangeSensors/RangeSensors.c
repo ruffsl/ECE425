@@ -138,8 +138,7 @@ void CBOT_main( void )
  	ADC_set_VREF( ADC_VREF_AVCC );// Set the Voltage Reference first so VREF=5V.
 
 	
-	btnValue = WaitButton();
-	char number;
+	int number;
 
 	// Infinite loop
 	while (1)
@@ -150,6 +149,39 @@ void CBOT_main( void )
 	// if obstacle detected STOP
 	// moveCollide();
 	//moveWander();
+	btnValue = WaitButton();
+	number = rand();
+
+		if (btnValue == 1)
+		{
+			LCD_printf("Aggresive Kid");
+			TMRSRVC_delay(1000);//wait 1 s
+			moveCollide();
+			btnValue = 0;
+			LCD_clear();
+		}
+		else if (btnValue == 2)
+		{
+			LCD_printf("Shy Kid");
+			TMRSRVC_delay(1000);//wait 1 s
+			btnValue = 0;
+			LCD_clear();			
+		}
+		else if (btnValue == 3)
+		{
+			LCD_printf("Wander Bot");
+			TMRSRVC_delay(1000);//wait 1 s
+			moveWander();
+			btnValue = 0;
+			LCD_clear();
+		}
+		else
+		{
+			LCD_printf("IDLE: Hello Dolly\n");
+			LCD_printf("number: %4d\n", number);
+			TMRSRVC_delay(2000);//wait 2 s
+			LCD_clear();
+		}
 	
 	TMRSRVC_delay(1000);//wait 1 s
 	LCD_clear();
