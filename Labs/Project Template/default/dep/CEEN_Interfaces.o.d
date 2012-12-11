@@ -1,4 +1,4 @@
-Project.o: ../Project.c \
+CEEN_Interfaces.o: ../CEEN_Interfaces.c \
   C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Project\ Template\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/capi324v221.h \
   C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Project\ Template\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/utils324v221.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h \

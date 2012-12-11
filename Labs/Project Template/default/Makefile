@@ -46,7 +46,7 @@ LIBDIRS = -L"C:\Program Files\AVR Libraries" -L"C:\WinAVR-20100110\avr\lib\avr4"
 LIBS = -lcapi324v221 -lm -lprintf_flt 
 
 ## Objects that must be built in order to link
-OBJECTS = Project.o 
+OBJECTS = Project.o CEEN_Interfaces.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -54,6 +54,9 @@ LINKONLYOBJECTS =
 ## Build
 all: $(TARGET) Project.hex Project.eep Project.lss## Compile
 Project.o: ../Project.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+CEEN_Interfaces.o: ../CEEN_Interfaces.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link
