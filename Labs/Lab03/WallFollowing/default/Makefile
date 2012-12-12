@@ -25,7 +25,7 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 
 ## Linker flags
 LDFLAGS = $(COMMON)
-LDFLAGS +=  -Wl,-u,vfprintf  -Wl,-Map=WallFollowing.map
+LDFLAGS += -Wl,-u,vfprintf -Wl,-Map=WallFollowing.map
 
 
 ## Intel Hex file production flags
@@ -46,7 +46,7 @@ LIBDIRS = -L"C:\Program Files\AVR Libraries" -L"C:\WinAVR-20100110\avr\lib\avr4"
 LIBS = -lcapi324v221 -lm -lprintf_flt 
 
 ## Objects that must be built in order to link
-OBJECTS = WallFollowing.o 
+OBJECTS = WallFollowing.o CEEN_Interfaces.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -54,6 +54,9 @@ LINKONLYOBJECTS =
 ## Build
 all: $(TARGET) WallFollowing.hex WallFollowing.eep WallFollowing.lss## Compile
 WallFollowing.o: ../WallFollowing.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+CEEN_Interfaces.o: ../CEEN_Interfaces.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link
