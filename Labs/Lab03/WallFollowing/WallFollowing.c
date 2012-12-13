@@ -26,31 +26,50 @@
 #define C_R 1
 #define D_STEP 0.1335176878
 
-#define IR_OBST_F_THRESH 15
-#define IR_OBST_R_THRESH 10
-#define IR_OBST_L_THRESH 10
-#define IR_OBST_B_THRESH 15
+#define IR_OBST_F_THRESH 1
+#define IR_OBST_R_THRESH 1
+#define IR_OBST_L_THRESH 1
+#define IR_OBST_B_THRESH 1
 
-#define IR_WALL_F_THRESH 25
+#define IR_WALL_F_THRESH 20
 #define IR_WALL_R_THRESH 20
 #define IR_WALL_L_THRESH 20
-#define IR_WALL_B_THRESH 25
+#define IR_WALL_B_THRESH 40
+
+
+#define KP 7
+#define KI 0
+#define KD 7
+
+
+#define MAX_SPEED 300
+#define MAX_EFFORT 100
+#define PREFILTER_SIZE 10
 
 
 /** Local Function Prototypes **************************************/
-void moveWall(void);
 void checkIR(void);
+char moveWall(void);
 char moveWander(void);
 char moveAway(void);
 char check_threshhold(float, float, float, float);
+float pidController(float ,char);
+void prefilter(char);
 
 
 /** Global Variables ***********************************************/
-int sampleVariable = 0;
+float Ierror = 0;
+float error_old = 0;
+
 float	ltIR = 0;//left IR sensor
 float	rtIR = 0;//right IR sensor
 float	ftIR = 0;//front IR sensor
 float 	bkIR = 0;//back IR sensor
+
+float	ltIR_old[PREFILTER_SIZE];//left IR sensor
+float	rtIR_old[PREFILTER_SIZE];//right IR sensor
+float	ftIR_old[PREFILTER_SIZE];//front IR sensor
+float 	bkIR_old[PREFILTER_SIZE];//back IR sensor
 	
 /*******************************************************************
 * Function:        void CBOT_main( void )
@@ -64,6 +83,7 @@ void CBOT_main( void )
 	ATopstat = ATTINY_open();//open the tiny microcontroller
 	LEopstat = LED_open(); //open the LED module
 	LCopstat = LCD_open(); //open the LCD module
+	STEPPER_open(); // Open STEPPER module for use
 	SPKR_open(SPKR_BEEP_MODE);//open the speaker in beep mode
 	
 	LED_open();
@@ -72,12 +92,15 @@ void CBOT_main( void )
  	ADC_set_VREF( ADC_VREF_AVCC );// Set the Voltage Reference first so VREF=5V.
 
 
+	checkIR();
+	prefilter(1);
+
 	// Infinite loop
 	while (1)
     {
 		checkIR();
-	//	moveWall();
-		moveAway();
+		// prefilter(0);
+		moveWall();
 		
     }
 }// end the CBOT_main()
@@ -86,17 +109,131 @@ void CBOT_main( void )
 * Additional Helper Functions
 ********************************************************************/
 
+/*******************************************************************
+* Function:			void prefilter(char reset)
+* Input Variables:	char reset
+* Output Return:	void
+* Overview:			This appies a prefilter to the IR data
+********************************************************************/
+void prefilter(char reset)
+{	
+	int i;
+	if(reset)
+	{
+		for (i = 0; i < PREFILTER_SIZE; i++)
+		{
+			ltIR_old[i] = ltIR;
+			rtIR_old[i] = rtIR;
+			ftIR_old[i] = ftIR;
+			bkIR_old[i] = bkIR;
+		}
+	}
+	int j;
+	float ltIR_new = 0;
+	float rtIR_new = 0;
+	float ftIR_new = 0;
+	float bkIR_new = 0;
+	
+	for (i = PREFILTER_SIZE-1; i >= 0 ; i--)
+	{
+		j = i - 1;
+		ltIR_old[i] = ltIR_old[j];
+		rtIR_old[i] = rtIR_old[j];
+		ftIR_old[i] = ftIR_old[j];
+		bkIR_old[i] = bkIR_old[j];
+		ltIR_new += ltIR_old[i];
+		rtIR_new += rtIR_old[i];
+		ftIR_new += ftIR_old[i];
+		bkIR_new += bkIR_old[i];
+	}
+	
+	ltIR_old[0] = ltIR;
+	rtIR_old[0] = rtIR;
+	ftIR_old[0] = ftIR;
+	bkIR_old[0] = bkIR;
+	
+	ltIR = ltIR_new/PREFILTER_SIZE;
+	rtIR = rtIR_new/PREFILTER_SIZE;
+	ftIR = ftIR_new/PREFILTER_SIZE;
+	bkIR = bkIR_new/PREFILTER_SIZE;
+}
 
 /*******************************************************************
-* Function:			void moveWall(void)
+* Function:			float pidController(float error, char reset)
+* Input Variables:	float error, char reset
+* Output Return:	float
+* Overview:			This computes the control effort
+********************************************************************/
+float pidController(float error, char reset )
+{	
+	if(reset){
+		Ierror = 0;
+	}
+	Ierror += error;
+	
+	float effort = (KP*error) + (KD*(error-error_old)) + (KI*Ierror);
+	
+	return effort;	
+}
+
+/*******************************************************************
+* Function:			char moveWall(void)
 * Input Variables:	void
-* Output Return:	void
+* Output Return:	char
 * Overview:			This moves the robot in any arc length
 ********************************************************************/
-void moveWall( void )
-{
+char moveWall( void )
+{	
+	char isWander = moveWander();
+	if(isWander){
+		return isWander;
+	}
 	
-	moveWander();
+	BOOL isLEFT;
+	
+	if(rtIR>IR_WALL_R_THRESH){
+		rtIR = IR_WALL_R_THRESH-15;
+		isLEFT = 0;
+	}
+	if(ltIR>IR_WALL_L_THRESH){
+		ltIR = IR_WALL_L_THRESH-15;
+		isLEFT = 1;
+	}
+	
+	float error;
+	if(bkIR < IR_WALL_B_THRESH)
+	{
+		if (isLEFT)
+		{
+			error = rtIR - (ltIR + bkIR);
+		}
+		else 
+		{
+			error = rtIR - (ltIR - bkIR);
+		}
+	}
+	else 
+	{
+		error = rtIR - ltIR;
+	}
+
+	
+	float effort = pidController(error, 0);
+	if((abs(effort) > MAX_EFFORT)&(effort!=0)){
+		effort = MAX_EFFORT*(effort/abs(effort));
+	}
+	
+	float stepper_speed_L = MAX_SPEED/2 + (MAX_SPEED/2)*(effort/MAX_EFFORT);
+	float stepper_speed_R = MAX_SPEED/2 - (MAX_SPEED/2)*(effort/MAX_EFFORT);
+	
+	// Move with wall
+	STEPPER_move_stnb( STEPPER_BOTH, 
+	STEPPER_REV, 50, stepper_speed_L, 450, STEPPER_BRK_OFF, // Left
+	STEPPER_REV, 50, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
+	
+	LCD_clear();
+	LCD_printf("moveWall\nError: %3f\nEffort: %3f\n\n", error, effort);
+	
 }
 
 /*******************************************************************
@@ -109,41 +246,47 @@ char moveWander ( void )
 {
 	// Check moveAway() (shy kid) program
 	char isShy = moveAway();
-	char objectSeen = 0;
+	char isWander = 0;
 	
 	// Check to see if robot sees a wall. If YES go track the wall else randomly WANDER.
 	if (isShy)
 	{
-		return objectSeen = 1;
+		return isShy;
 	}
 	
-	char irBool = check_threshhold(IR_WALL_F_THRESH,IR_WALL_B_THRESH,IR_WALL_L_THRESH,IR_WALL_R_THRESH);
-	if (irBool)
+	// char irBool = check_threshhold(IR_WALL_F_THRESH,IR_WALL_B_THRESH,IR_WALL_L_THRESH,IR_WALL_R_THRESH);
+	if ((ftIR < IR_WALL_F_THRESH)|(bkIR < IR_WALL_B_THRESH)|(rtIR < IR_WALL_R_THRESH)|(ltIR < IR_WALL_L_THRESH))
 	{	
-		return objectSeen = 0;
+		return isWander = 0;
 	}
 	else
 	{
 		STEPPER_STEPS curr_steps = STEPPER_get_nSteps();
 		
+		// reset Ierror if we are now wandering
+		Ierror = 0;
+		
 		// IF moveAway() returns zero (NOT shy) and my motion is complete do random motion
-		if ((isShy == 0)&(curr_steps.left == 0)&(curr_steps.right == 0))
+		if ((curr_steps.left == 0)&(curr_steps.right == 0))
 		{
 			// create random values for wheel position and wheel speed
-			float moveRandR = abs(rand()*200);
-			float moveRandL = abs(rand()*200);
-			float turnRandR = abs(100+rand()*100);
-			float turnRandL = abs(100+rand()*100);
+			int moveRand = rand()%400+400;
+			float turnRandR = rand()%200+200;
+			float turnRandL = rand()%200+200;
 			
-			
-			// Move Randomly
+			BOOL direction = ~((rand()%10)>7);
+					
+			// Move.
 			STEPPER_move_stnb( STEPPER_BOTH, 
-			STEPPER_FWD, moveRandL, turnRandL, 450, STEPPER_BRK_OFF, // Left
-			STEPPER_FWD, moveRandR, turnRandR, 450, STEPPER_BRK_OFF ); // Right
+			direction, moveRand, turnRandL, 450, STEPPER_BRK_OFF, // Left
+			direction, moveRand, turnRandR, 450, STEPPER_BRK_OFF ); // Right
+			LCD_clear();
+			LCD_printf("moveWander\nmoveRand: %3d\nturnRandR: %3d\nturnRandL: %3d\n",moveRand,turnRandR,turnRandL);
 			
 		}
+		isWander = 1;
 	}
-	return objectSeen = 1;
+	return isWander;
 }
 
 /*******************************************************************
@@ -154,54 +297,39 @@ char moveWander ( void )
 ********************************************************************/
 char moveAway ( void )
 {	
-	// check the IR sensors
-	// checkIR();
-	
-	// return this value to the high-level subroutine to inform the robot of the last behavior
 	char shyRobot = 0;
 	
-	// determinde which IR sensor detects an obstacle
 	float moveY = ftIR - bkIR;
 	float moveX = rtIR - ltIR;
 	
-	//check front and back sensors
-	//if ((ftIR < IR_OBST_F_THRESH)|(bkIR < IR_OBST_FB_THRESH))
 	
-	char irBool = check_threshhold(IR_OBST_F_THRESH,IR_OBST_B_THRESH,IR_OBST_L_THRESH,IR_OBST_R_THRESH);
-	
-	if ((irBool&&0b0011))
+	if ((ftIR < IR_OBST_F_THRESH)|(bkIR < IR_OBST_B_THRESH))
 	{
-			BOOL moveForward = moveY <= 0;
+			BOOL moveForward = ~(moveY <= 0);
 			
 			// Move.
 			STEPPER_move_stnb( STEPPER_BOTH, 
 			moveForward, 50, abs(moveY)+moveX, 450, STEPPER_BRK_OFF, // Left
 			moveForward, 50, abs(moveY)-moveX, 450, STEPPER_BRK_OFF ); // Right
+			LCD_clear();
+			LCD_printf("moveAwayF\n\n\n\n");
 			
 			shyRobot = 1;
 	}
-	// check left and right sensors
-	// else if ((rtIR < IR_OBST_R_THRESH)|(ltIR < IR_OBST_L_THRESH))
-	else if ((irBool&&0b1100))
+	else if ((rtIR < IR_OBST_R_THRESH)|(ltIR < IR_OBST_L_THRESH))
 	{
-			BOOL moveForwardR = moveX <= 0;
-			BOOL moveForwardL = moveX > 0;
+			BOOL moveForwardR = ~(moveX <= 0);
+			BOOL moveForwardL = ~(moveX > 0);
 			
 			// Move.
 			STEPPER_move_stnb( STEPPER_BOTH, 
 			moveForwardL, 200, abs(moveX), 450, STEPPER_BRK_OFF, // Left
 			moveForwardR, 200, abs(moveX), 450, STEPPER_BRK_OFF ); // Right
+			LCD_clear();
+			LCD_printf("moveAwayS\n\n\n\n");
 			
 			shyRobot = 1;
 	}
-	// else
-	// {
-		
-	// //	STOP.
-		// STEPPER_move_stnb( STEPPER_BOTH, 
-		// STEPPER_FWD, 0, 0, 0, STEPPER_BRK_OFF, // Left
-		// STEPPER_FWD, 0, 0, 0, STEPPER_BRK_OFF ); // Right
-	// }
 	
 	return shyRobot;
 }
@@ -217,10 +345,10 @@ char moveAway ( void )
 char check_threshhold(float F, float B, float L, float R)
 {
 	char check = 0;
-	check += 1*(ftIR < F);
-	check += 2*(bkIR < B);
-	check += 4*(ltIR < L);
-	check += 8*(rtIR < R);
+	check += 0b00000001*(ftIR < F);
+	check += 0b00000010*(bkIR < B);
+	check += 0b00000100*(ltIR < L);
+	check += 0b00001000*(rtIR < R);
 	return check;	
 }
 
@@ -237,7 +365,6 @@ void checkIR( void )
 	bkIR = getBackIR();
 	ltIR = getLeftIR();
 	rtIR = getRightIR();
-
 }
 
 /*******************************************************************

@@ -12,20 +12,20 @@
 #include "stdio.h"
 #include "CEEN_Interfaces.h"
  
- 
 
 /*******************************************************************
 * Function:			int waitButton(void)
 * Input Variables:	none
 * Output Return:	int
-* Overview:			Returns and prints on the LCD what button is currently pressed
+* Overview:			Use a comment block like this before functions
 ********************************************************************/
 int WaitButton( void ) 
 {
     BOOL btnState1, btnState2, btnState3;//local variables - button states
-	int rtnValue=0;//return the button value
+	//int rtnValue=0;//return the button value
+	int rtnValue=0;
 
-
+	LCD_clear();
 
 	if((ATopstat.state=SUBSYS_OPEN))
 	{
@@ -142,8 +142,7 @@ float getLeftIR( void )
 	voltage = adcsample * ( 5.0 / 1024 );
 	// Convert to distance in cm
 	distance = (2914/(adcsample+5.0))-1.0;
-	//Convert distance to inches
-	dist = distance*0.3937;
+	dist = distance*1;
 	return dist;
 }
 
@@ -169,8 +168,7 @@ float getRightIR( void )
 	voltage = adcsample * ( 5.0 / 1024 );
 	// Convert to distance in cm
 	distance = (2914/(adcsample+5.0))-1.0;
-	//Convert distance to inches
-	dist = distance*0.3937;
+	dist = distance*1;
 	return dist;
 }
 
@@ -198,8 +196,7 @@ float getFrontIR( void )
 	voltage = adcsample * ( 5.0 / 1024 );
 	// Convert to distance in cm
 	distance = (2914/(adcsample+5.0))-1.0;
-	//Convert distance to inches
-	dist = distance*0.3937;
+	dist = distance*1;
 	return dist;
 }
 
@@ -227,8 +224,7 @@ float getBackIR()
 	voltage = adcsample * ( 5.0 / 1024 );
 	// Convert to distance in cm
 	distance = (2914/(adcsample+5.0))-1.0;
-	//Convert distance to inches
-	dist = distance*0.3937;
+	dist = distance*1;
 	return dist;
 }
 
@@ -542,3 +538,5 @@ I2C_STATUS get_ambient_temp( unsigned char *ambient_temp )
 	return i2c_stat;
 
 } // end get_ambient_temp()
+
+
