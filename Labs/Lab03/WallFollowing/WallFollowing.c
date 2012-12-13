@@ -34,17 +34,19 @@
 #define IR_WALL_F_THRESH 20
 #define IR_WALL_R_THRESH 20
 #define IR_WALL_L_THRESH 20
-#define IR_WALL_B_THRESH 40
+#define IR_WALL_B_THRESH 25
 
 
-#define KP 7
-#define KI 0
-#define KD 7
+#define KP 2
+#define KI 0.001
+#define KD 5
+
+#define IR_B_KICK 1
 
 
-#define MAX_SPEED 300
+#define MAX_SPEED 200
 #define MAX_EFFORT 100
-#define PREFILTER_SIZE 10
+#define PREFILTER_SIZE 30
 
 
 /** Local Function Prototypes **************************************/
@@ -101,7 +103,6 @@ void CBOT_main( void )
 		checkIR();
 		// prefilter(0);
 		moveWall();
-		
     }
 }// end the CBOT_main()
 
@@ -152,10 +153,10 @@ void prefilter(char reset)
 	ftIR_old[0] = ftIR;
 	bkIR_old[0] = bkIR;
 	
-	ltIR = ltIR_new/PREFILTER_SIZE;
-	rtIR = rtIR_new/PREFILTER_SIZE;
-	ftIR = ftIR_new/PREFILTER_SIZE;
-	bkIR = bkIR_new/PREFILTER_SIZE;
+	// ltIR = ltIR_new/PREFILTER_SIZE;
+	// rtIR = rtIR_new/PREFILTER_SIZE;
+	// ftIR = ftIR_new/PREFILTER_SIZE;
+	// bkIR = bkIR_new/PREFILTER_SIZE;
 }
 
 /*******************************************************************
@@ -184,10 +185,12 @@ float pidController(float error, char reset )
 ********************************************************************/
 char moveWall( void )
 {	
-	char isWander = moveWander();
-	if(isWander){
-		return isWander;
-	}
+	// if((ltIR_old[PREFILTER_SIZE-1] > (IR_WALL_L_THRESH))|(rtIR_old[PREFILTER_SIZE-1] > (IR_WALL_R_THRESH))){
+		char isWander = moveWander();
+		if(isWander){
+			return isWander;
+		}
+	// }
 	
 	BOOL isLEFT;
 	
@@ -205,11 +208,12 @@ char moveWall( void )
 	{
 		if (isLEFT)
 		{
-			error = rtIR - (ltIR + bkIR);
+			error = rtIR - (ltIR + bkIR*bkIR);
 		}
 		else 
 		{
-			error = rtIR - (ltIR - bkIR);
+		//IR_B_KICK
+			error = rtIR - (ltIR - bkIR*bkIR);
 		}
 	}
 	else 
@@ -232,7 +236,7 @@ char moveWall( void )
 	STEPPER_REV, 50, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
 	
 	LCD_clear();
-	LCD_printf("moveWall\nError: %3f\nEffort: %3f\n\n", error, effort);
+	LCD_printf("bkIR: %3.2f\nmoveWall\nError: %3f\nEffort: %3f\n", bkIR, error, effort);
 	
 }
 
@@ -280,6 +284,7 @@ char moveWander ( void )
 			STEPPER_move_stnb( STEPPER_BOTH, 
 			direction, moveRand, turnRandL, 450, STEPPER_BRK_OFF, // Left
 			direction, moveRand, turnRandR, 450, STEPPER_BRK_OFF ); // Right
+			
 			LCD_clear();
 			LCD_printf("moveWander\nmoveRand: %3d\nturnRandR: %3d\nturnRandL: %3d\n",moveRand,turnRandR,turnRandL);
 			
@@ -311,6 +316,7 @@ char moveAway ( void )
 			STEPPER_move_stnb( STEPPER_BOTH, 
 			moveForward, 50, abs(moveY)+moveX, 450, STEPPER_BRK_OFF, // Left
 			moveForward, 50, abs(moveY)-moveX, 450, STEPPER_BRK_OFF ); // Right
+			
 			LCD_clear();
 			LCD_printf("moveAwayF\n\n\n\n");
 			
@@ -325,6 +331,7 @@ char moveAway ( void )
 			STEPPER_move_stnb( STEPPER_BOTH, 
 			moveForwardL, 200, abs(moveX), 450, STEPPER_BRK_OFF, // Left
 			moveForwardR, 200, abs(moveX), 450, STEPPER_BRK_OFF ); // Right
+			
 			LCD_clear();
 			LCD_printf("moveAwayS\n\n\n\n");
 			
