@@ -1,5 +1,5 @@
 /*******************************************************************
-* FileName:        WallFollowing.c
+* FileName:        Light Sensing.c
 * Processor:       ATmega324P
 * Compiler:        
 *
@@ -338,7 +338,7 @@ char moveWander ( void )
 			direction, moveRand, turnRandL, 450, STEPPER_BRK_OFF, // Left
 			direction, moveRand, turnRandR, 450, STEPPER_BRK_OFF ); // Right
 			
-			// debug LCD print statement
+			// debug LCP print statement
 			LCD_clear();
 			LCD_printf("moveWander\nmoveRand: %3d\nturnRandR: %3d\nturnRandL: %3d\n",moveRand,turnRandR,turnRandL);
 			
