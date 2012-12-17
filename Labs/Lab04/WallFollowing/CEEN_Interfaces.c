@@ -96,7 +96,7 @@ float getLeftLight( void )
 	adcsample = ADC_sample();
 	//LCD_printf( "ADC: %i\n",adcsample);
 	voltage = adcsample * (5.0/ 1024.0 );
-	//LCD_printf( "voltage: %f\n",voltage);
+	// LCD_printf( "voltage: %f\n",voltage);
 	return voltage;
 }
 
@@ -113,9 +113,9 @@ float getRightLight( void )
 	ADC_set_VREF( ADC_VREF_AVCC );
 	ADC_set_channel( RIGHT_LIGHT_CHAN );
 	adcsample = ADC_sample();
-	//LCD_printf( "ADC: %i\n",adcsample);
+	// LCD_printf( "ADC: %i\n",adcsample);
 	voltage = adcsample * ( 5.0 / 1024 );
-	//LCD_printf( "right: %f\n",voltage);
+	// LCD_printf( "right: %f\n",voltage);
 	return voltage;
 }
 

@@ -110,9 +110,11 @@ void CBOT_main( void )
 	// Infinite loop
 	while (1)
     {
-		checkIR();
-		// prefilter(0);
-		moveWall();
+		float voltageR = getRightLight();
+		float voltageL = getLeftLight();
+		LCD_printf("R Voltage: %3.2f\nL Voltage: %3.2f\n\n\n", voltageR, voltageL);
+		TMRSRVC_delay(2000);//wait 2 seconds
+		LCD_clear;
     }
 }// end the CBOT_main()
 
