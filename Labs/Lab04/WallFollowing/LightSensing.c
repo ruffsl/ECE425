@@ -27,10 +27,10 @@
 #define D_STEP 0.1335176878
 
 // Obstacle Avoidance Threshold
-#define IR_OBST_F_THRESH 1
-#define IR_OBST_R_THRESH 1
-#define IR_OBST_L_THRESH 1
-#define IR_OBST_B_THRESH 1
+#define IR_OBST_F_THRESH 7
+#define IR_OBST_R_THRESH 10
+#define IR_OBST_L_THRESH 10
+#define IR_OBST_B_THRESH 7
 
 // Wall Following Threshold
 #define IR_WALL_F_THRESH 20
@@ -39,10 +39,10 @@
 #define IR_WALL_B_THRESH 20
 
 // Light Sensor Threshold values based on ambient light
-#define LIGHT_R_THRESH	2.30
-#define LIGHT_L_THRESH	2.76
-#define LIGHT_R_MAX 4.0
-#define LIGHT_L_MAX 4.0
+#define LIGHT_R_THRESH	4.19
+#define LIGHT_L_THRESH	4.19
+#define LIGHT_R_MAX 4.7
+#define LIGHT_L_MAX 4.7
 
 // PID Control Gains
 // Note: these current values are adjusted for control cycles times
@@ -54,8 +54,8 @@
 #define IR_B_KICK 1
 
 // Maximum Wall Following Speed
-#define MAX_SPEED_LIGHT 40
-#define MAX_SPEED 200
+#define MAX_SPEED_LIGHT 50
+#define MAX_SPEED 50
 
 // Maximum Magnitude Control Effort
 #define MAX_EFFORT 100
@@ -145,12 +145,7 @@ void CBOT_main( void )
 		// update the sensor values
 		checkLightSensor();
 		checkIR();
-		if(btnValue == LIGHT_LOVER){
-			moveBehavior(btnValue);
-		}
-		else{
-			moveLight(btnValue);
-		}
+		moveBehavior(btnValue);
 		// direction_L = 1;
 		// direction_R = 1;
 		
@@ -272,13 +267,13 @@ char moveBehavior( int behavior)
 		Ierror = 0;
 		return 2;
 	}
-	if(moveWall()){
-		return 3;
-	}
-	if(moveWander()){
-		Ierror = 0;
-		return 4;
-	}
+	// if(moveWall()){
+		// return 3;
+	// }
+	// if(moveWander()){
+		// Ierror = 0;
+		// return 4;
+	// }
 	return 0;	
 }
 
@@ -490,7 +485,7 @@ char moveAway ( void )
 	// move appropriately in the Y direction
 	if ((ftIR < IR_OBST_F_THRESH)|(bkIR < IR_OBST_B_THRESH))
 	{
-			BOOL moveForward = ~(moveY <= 0);
+			BOOL moveForward = (moveY >= 0);
 			
 			// Move.
 			STEPPER_move_stnb( STEPPER_BOTH, 
@@ -508,15 +503,33 @@ char moveAway ( void )
 	
 	// if the object is on either side of the robot
 	// rotate the robot appropriately
-	else if ((rtIR < IR_OBST_R_THRESH)|(ltIR < IR_OBST_L_THRESH))
+	else if ((rtIR < IR_OBST_R_THRESH))
 	{
 			BOOL moveForwardR = ~(moveX <= 0);
 			BOOL moveForwardL = ~(moveX > 0);
 			
 			// Move.
 			STEPPER_move_stnb( STEPPER_BOTH, 
-			moveForwardL, 200, abs(moveX), 450, STEPPER_BRK_OFF, // Left
-			moveForwardR, 200, abs(moveX), 450, STEPPER_BRK_OFF ); // Right
+			0, 200, abs(moveX), 450, STEPPER_BRK_OFF, // Left
+			1, 200, abs(moveX), 450, STEPPER_BRK_OFF ); // Right
+			
+			// debug LCP print statement
+			LCD_clear();
+			LCD_printf("moveAwayS\n\n\n\n");
+			
+			// if the robot was shy
+			// state that fact
+			shyRobot = 1;
+	}
+	else if ((ltIR < IR_OBST_L_THRESH))
+	{
+			BOOL moveForwardR = ~(moveX <= 0);
+			BOOL moveForwardL = ~(moveX > 0);
+			
+			// Move.
+			STEPPER_move_stnb( STEPPER_BOTH, 
+			1, 200, abs(moveX), 450, STEPPER_BRK_OFF, // Left
+			0, 200, abs(moveX), 450, STEPPER_BRK_OFF ); // Right
 			
 			// debug LCP print statement
 			LCD_clear();
@@ -559,7 +572,7 @@ void checkIR( void )
 {
 	// Update all IR values
 	ftIR = getFrontIR();
-	bkIR = getBackIR();
+	bkIR = 50;
 	ltIR = getLeftIR();
 	rtIR = getRightIR();
 }
