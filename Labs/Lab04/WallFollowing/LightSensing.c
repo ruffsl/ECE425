@@ -1,5 +1,5 @@
 /*******************************************************************
-* FileName:        Light Sensing.c
+* FileName:        LightSensing.c
 * Processor:       ATmega324P
 * Compiler:        
 *
@@ -36,7 +36,13 @@
 #define IR_WALL_F_THRESH 20
 #define IR_WALL_R_THRESH 20
 #define IR_WALL_L_THRESH 20
-#define IR_WALL_B_THRESH 25
+#define IR_WALL_B_THRESH 20
+
+// Light Sensor Threshold values based on ambient light
+#define LIGHT_R_THRESH	2.30
+#define LIGHT_L_THRESH	2.76
+#define LIGHT_R_MAX 4.0
+#define LIGHT_L_MAX 4.0
 
 // PID Control Gains
 // Note: these current values are adjusted for control cycles times
@@ -48,21 +54,31 @@
 #define IR_B_KICK 1
 
 // Maximum Wall Following Speed
+#define MAX_SPEED_LIGHT 40
 #define MAX_SPEED 200
 
 // Maximum Magnitude Control Effort
 #define MAX_EFFORT 100
 #define PREFILTER_SIZE 30
 
+// Light behavior selection
+#define LIGHT_WANDER 0
+#define LIGHT_LOVER  1
+#define LIGHT_AGGRO  2
+#define	LIGHT_SHY	 3
+
 
 /** Local Function Prototypes **************************************/
 void checkIR(void);
+void checkLightSensor(void);
 char moveWall(void);
 char moveWander(void);
 char moveAway(void);
 char check_threshhold(float, float, float, float);
 float pidController(float ,char);
 void prefilter(char);
+char moveLight(int);
+char moveBehavior(int);
 
 
 /** Global Variables ***********************************************/
@@ -76,6 +92,10 @@ float	ltIR = 0;//left IR sensor
 float	rtIR = 0;//right IR sensor
 float	ftIR = 0;//front IR sensor
 float 	bkIR = 0;//back IR sensor
+
+// Light Range Sensor global variables
+float	rightLightVolt	= 0;//right light sensors
+float	leftLightVolt	= 0;//left light sensors
 
 // Range Sensor Value Arrays For Prefilter
 float	ltIR_old[PREFILTER_SIZE];//left IR sensor
@@ -106,15 +126,48 @@ void CBOT_main( void )
 	// Initialize IR Values and Reset Prefilter
 	checkIR();
 	prefilter(1);
+	
+	//
+	LCD_printf("PRESS a button\nOR\nWAIT for default\n");
+	TMRSRVC_delay(3000);//wait 3 seconds
+	btnValue = WaitButton();
+	LCD_clear;
+	
+	// float stepper_speed_L = 0;
+	// float stepper_speed_R = 0;
+		
+	// BOOL direction_L = 1;
+	// BOOL direction_R = 1;
 
 	// Infinite loop
 	while (1)
     {
-		float voltageR = getRightLight();
-		float voltageL = getLeftLight();
-		LCD_printf("R Voltage: %3.2f\nL Voltage: %3.2f\n\n\n", voltageR, voltageL);
-		TMRSRVC_delay(2000);//wait 2 seconds
-		LCD_clear;
+		// update the sensor values
+		checkLightSensor();
+		checkIR();
+		if(btnValue == LIGHT_LOVER){
+			moveBehavior(btnValue);
+		}
+		else{
+			moveLight(btnValue);
+		}
+		// direction_L = 1;
+		// direction_R = 1;
+		
+		// stepper_speed_R = MAX_SPEED*(leftLightVolt - LIGHT_L_THRESH)/(LIGHT_L_MAX - LIGHT_L_THRESH);
+		// stepper_speed_L = MAX_SPEED*(rightLightVolt - LIGHT_R_THRESH)/(LIGHT_R_MAX - LIGHT_R_THRESH);
+		
+		// if(stepper_speed_L<0){
+			// stepper_speed_L = 0;
+			// direction_L = 0;}
+		
+		// if(stepper_speed_R<0){
+			// stepper_speed_R = 0;
+			// direction_R = 0;}
+			
+		// STEPPER_move_stnb( STEPPER_BOTH, 
+		// direction_L, 50, stepper_speed_L, 450, STEPPER_BRK_OFF, // Left
+		// direction_R, 50, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
     }
 }// end the CBOT_main()
 
@@ -204,6 +257,96 @@ float pidController(float error, char reset )
 }
 
 /*******************************************************************
+* Function:			char moveBehavior (int)
+* Input Variables:	int
+* Output Return:	char
+* Overview:		    This is the currrent behavior of the robot
+********************************************************************/
+char moveBehavior( int behavior)
+{
+	if(moveAway()){
+		Ierror = 0;
+		return 1; 
+	}
+	if(moveLight(behavior)){
+		Ierror = 0;
+		return 2;
+	}
+	if(moveWall()){
+		return 3;
+	}
+	if(moveWander()){
+		Ierror = 0;
+		return 4;
+	}
+	return 0;	
+}
+
+/*******************************************************************
+* Function:			void moveLight(int)
+* Input Variables:	int
+* Output Return:	char
+* Overview:		    Move towards the light based on the following inputs
+			0(default): Light_Wander = explorer behavior while searching for light
+					 1: Light_Lover = track the light but do not collide
+					 2: Light_Aggro = run towards the light and touch it
+					 3: Light_Shy = run away from the light
+********************************************************************/
+char moveLight( int lightBehavior)
+{
+	// call the moveWall() to detect walls and return a Boolean
+	
+	BOOL isLight = (rightLightVolt > LIGHT_R_THRESH)||(leftLightVolt > LIGHT_L_THRESH);
+	if(!isLight){
+		return isLight;
+	}
+
+	float stepper_speed_L = 0;
+	float stepper_speed_R = 0;
+	BOOL direction_L = 1;
+	BOOL direction_R = 1;
+	
+	switch(lightBehavior){
+		case LIGHT_WANDER:
+			stepper_speed_L = MAX_SPEED_LIGHT - MAX_SPEED_LIGHT*((leftLightVolt - LIGHT_R_THRESH)/(LIGHT_L_MAX - LIGHT_L_THRESH));
+			stepper_speed_R = MAX_SPEED_LIGHT - MAX_SPEED_LIGHT*((rightLightVolt - LIGHT_L_THRESH)/(LIGHT_R_MAX - LIGHT_R_THRESH));
+			break;
+						
+		case LIGHT_LOVER:
+			stepper_speed_L = MAX_SPEED_LIGHT - MAX_SPEED_LIGHT*((leftLightVolt - LIGHT_L_THRESH)/(LIGHT_L_MAX - LIGHT_L_THRESH));
+			stepper_speed_R = MAX_SPEED_LIGHT - MAX_SPEED_LIGHT*((rightLightVolt - LIGHT_R_THRESH)/(LIGHT_R_MAX - LIGHT_R_THRESH));
+			break;
+			
+		case LIGHT_AGGRO:	
+			stepper_speed_R = MAX_SPEED_LIGHT*((leftLightVolt - LIGHT_L_THRESH)/(LIGHT_L_MAX - LIGHT_L_THRESH));
+			stepper_speed_L = MAX_SPEED_LIGHT*((rightLightVolt - LIGHT_R_THRESH)/(LIGHT_R_MAX - LIGHT_R_THRESH));
+			break;
+			
+		case LIGHT_SHY:
+			stepper_speed_L = MAX_SPEED_LIGHT*((leftLightVolt - LIGHT_L_THRESH)/(LIGHT_L_MAX - LIGHT_L_THRESH));
+			stepper_speed_R = MAX_SPEED_LIGHT*((rightLightVolt - LIGHT_R_THRESH)/(LIGHT_R_MAX - LIGHT_R_THRESH));
+			break;
+			
+		default: break;
+		}
+		
+		if(stepper_speed_L<0){
+			stepper_speed_L = 0;
+			direction_L = 0;}
+		
+		if(stepper_speed_R<0){
+			stepper_speed_R = 0;
+			direction_R = 0;}
+			
+		// STEPPER_REV
+		STEPPER_move_stnb( STEPPER_BOTH, 
+		direction_L, 50, stepper_speed_L, 450, STEPPER_BRK_OFF, // Left
+		direction_R, 50, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
+
+		return isLight;
+}
+
+/*******************************************************************
 * Function:			char moveWall(void)
 * Input Variables:	void
 * Output Return:	char
@@ -213,11 +356,10 @@ float pidController(float error, char reset )
 ********************************************************************/
 char moveWall( void )
 {	
-	// Check to see if a wall has encountered the wall thresholds
-	// or that any other lower-level function requires execution
-	char isWander = moveWander();
-	if(isWander){
-		return isWander;
+	// Check for walls
+	BOOL isWall = (ftIR < IR_WALL_F_THRESH)|(bkIR < IR_WALL_B_THRESH)|(rtIR < IR_WALL_R_THRESH)|(ltIR < IR_WALL_L_THRESH);
+	if(!isWall){	
+		return isWall;
 	}
 	
 	// A variable that contains the logic of which wall is imaginary
@@ -295,60 +437,37 @@ char moveWall( void )
 *					robot randomly if walls are not detected
 ********************************************************************/
 char moveWander ( void )
-{
-	// Check to see if a object has encountered the object thresholds
-	// or that any other lower-level function requires execution
-	char isShy = moveAway();
-	if (isShy)
+{	
+	// If we have wondered
+	// notify that we have
+	char isWander = 1;
+	
+	// if we are wondering
+	// first check the current progress of our wondering
+	STEPPER_STEPS curr_steps = STEPPER_get_nSteps();
+	
+	
+	// IF my motion is complete do another random motion
+	if ((curr_steps.left == 0)&(curr_steps.right == 0))
 	{
-		return isShy;
-	}
-	
-	char isWander = 0;
-	
-	// Check for walls before attempting to wonder
-	// if the wall is detected return without wandering
-	if ((ftIR < IR_WALL_F_THRESH)|(bkIR < IR_WALL_B_THRESH)|(rtIR < IR_WALL_R_THRESH)|(ltIR < IR_WALL_L_THRESH))
-	{	
-		return isWander = 0;
-	}
-	
-	else
-	{
-		// reset Ierror if we are now wandering
-		Ierror = 0;
+		// create random values for wheel position and wheel speed
+		int moveRand = rand()%400+400;
+		float turnRandR = rand()%200+200;
+		float turnRandL = rand()%200+200;
 		
-		// if we are wondering
-		// first check the current progress of our wondering
-		STEPPER_STEPS curr_steps = STEPPER_get_nSteps();
+		// Weight the chance that we will go forward slightly more
+		// so that the robot may possibly traverse farther
+		BOOL direction = ~((rand()%10)>7);
+				
+		// Move.
+		STEPPER_move_stnb( STEPPER_BOTH, 
+		direction, moveRand, turnRandL, 450, STEPPER_BRK_OFF, // Left
+		direction, moveRand, turnRandR, 450, STEPPER_BRK_OFF ); // Right
 		
-		
-		// IF my motion is complete do another random motion
-		if ((curr_steps.left == 0)&(curr_steps.right == 0))
-		{
-			// create random values for wheel position and wheel speed
-			int moveRand = rand()%400+400;
-			float turnRandR = rand()%200+200;
-			float turnRandL = rand()%200+200;
-			
-			// Weight the chance that we will go forward slightly more
-			// so that the robot may possibly traverse farther
-			BOOL direction = ~((rand()%10)>7);
-					
-			// Move.
-			STEPPER_move_stnb( STEPPER_BOTH, 
-			direction, moveRand, turnRandL, 450, STEPPER_BRK_OFF, // Left
-			direction, moveRand, turnRandR, 450, STEPPER_BRK_OFF ); // Right
-			
-			// debug LCP print statement
-			LCD_clear();
-			LCD_printf("moveWander\nmoveRand: %3d\nturnRandR: %3d\nturnRandL: %3d\n",moveRand,turnRandR,turnRandL);
-			
+		// debug LCP print statement
+		// LCD_clear();
+		// LCD_printf("moveWander\nmoveRand: %3d\nturnRandR: %3d\nturnRandL: %3d\n",moveRand,turnRandR,turnRandL);
 		}
-		// If we have wondered
-		// notify that we have
-		isWander = 1;
-	}
 	return isWander;
 }
 
@@ -443,6 +562,23 @@ void checkIR( void )
 	bkIR = getBackIR();
 	ltIR = getLeftIR();
 	rtIR = getRightIR();
+}
+
+/*******************************************************************
+* Function:			void checkLightSensor(void)
+* Input Variables:	none
+* Output Return:	none
+* Overview:			This function update all of the light range
+*					sensors values sequentially
+********************************************************************/
+void checkLightSensor( void )
+{
+	// Update both light sensor variables
+	rightLightVolt = getRightLight();
+	leftLightVolt = getLeftLight();
+	// LCD_printf("R Voltage: %3.2f\nL Voltage: %3.2f\n\n\n", voltageR, voltageL);
+	// TMRSRVC_delay(2000);//wait 2 seconds
+	// LCD_clear;
 }
 
 /*******************************************************************
