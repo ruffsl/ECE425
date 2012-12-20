@@ -190,7 +190,7 @@ float getFrontIR( void )
 	ADC_set_VREF( ADC_VREF_AVCC );
 	// Set the channel we will sample from.
 	// Note: Swaped with back IR for orientation
-	ADC_set_channel(IRBACK_CHAN);
+	ADC_set_channel(IRFRONT_CHAN);
 	// Now sample it!
 	adcsample = ADC_sample();
 	// Convert to meaningful voltage value.
@@ -219,7 +219,7 @@ float getBackIR()
 	ADC_set_VREF( ADC_VREF_AVCC );
 	// Set the channel we will sample from.
 	// Note: Swaped with frount IR for orientation
-	ADC_set_channel(IRFRONT_CHAN);
+	ADC_set_channel(IRBACK_CHAN);
 	// Now sample it!
 	adcsample = ADC_sample();
 	// Convert to meaningful voltage value.

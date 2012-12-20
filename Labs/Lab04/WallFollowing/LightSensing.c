@@ -27,38 +27,35 @@
 #define D_STEP 0.1335176878
 
 // Obstacle Avoidance Threshold
-#define IR_OBST_F_THRESH 10
-#define IR_OBST_R_THRESH 10
-#define IR_OBST_L_THRESH 10
-#define IR_OBST_B_THRESH 10
+#define IR_OBST_F_THRESH 1
+#define IR_OBST_R_THRESH 1
+#define IR_OBST_L_THRESH 1
+#define IR_OBST_B_THRESH 1
 
 // Wall Following Threshold
 #define IR_WALL_F_THRESH 20
 #define IR_WALL_R_THRESH 20
 #define IR_WALL_L_THRESH 20
-#define IR_WALL_B_THRESH 30
+#define IR_WALL_B_THRESH 20
 
 // Light Sensor Threshold values based on ambient light
-#define LIGHT_R_THRESH	4.16
-#define LIGHT_L_THRESH	4.19
-#define LIGHT_R_MAX 4.70
-#define LIGHT_L_MAX 4.70
+#define LIGHT_R_THRESH	2.30
+#define LIGHT_L_THRESH	2.76
+#define LIGHT_R_MAX 4.0
+#define LIGHT_L_MAX 4.0
 
 // PID Control Gains
 // Note: these current values are adjusted for control cycles times
 // including LCD debug print statements, but not for prefilter
-// #define KP 2
-// #define KI 0.001
-// #define KD 5
-#define KP 4
-#define KI 0
-#define KD 8
+#define KP 2
+#define KI 0.001
+#define KD 5
 
 #define IR_B_KICK 1
 
 // Maximum Wall Following Speed
-#define MAX_SPEED_LIGHT 50
-#define MAX_SPEED 50
+#define MAX_SPEED_LIGHT 40
+#define MAX_SPEED 200
 
 // Maximum Magnitude Control Effort
 #define MAX_EFFORT 100
@@ -148,14 +145,29 @@ void CBOT_main( void )
 		// update the sensor values
 		checkLightSensor();
 		checkIR();
+		if(btnValue == LIGHT_LOVER){
+			moveBehavior(btnValue);
+		}
+		else{
+			moveLight(btnValue);
+		}
+		// direction_L = 1;
+		// direction_R = 1;
 		
-		// LCD_printf("L Light Sensor: %2.2f\nR Light Sensor: %2.2f\n\n\n",leftLightVolt,rightLightVolt);
-		// TMRSRVC_delay(2000);//wait 2 seconds
+		// stepper_speed_R = MAX_SPEED*(leftLightVolt - LIGHT_L_THRESH)/(LIGHT_L_MAX - LIGHT_L_THRESH);
+		// stepper_speed_L = MAX_SPEED*(rightLightVolt - LIGHT_R_THRESH)/(LIGHT_R_MAX - LIGHT_R_THRESH);
 		
-		// LCD_printf("bkIR: %3.2f\nftIR: %3.2f\nrtIR: %3.2f\nltIR: %3.2f\n",bkIR,ftIR,rtIR,ltIR);
-		// TMRSRVC_delay(2000);//wait 2 seconds
+		// if(stepper_speed_L<0){
+			// stepper_speed_L = 0;
+			// direction_L = 0;}
 		
-		moveBehavior(btnValue);
+		// if(stepper_speed_R<0){
+			// stepper_speed_R = 0;
+			// direction_R = 0;}
+			
+		// STEPPER_move_stnb( STEPPER_BOTH, 
+		// direction_L, 50, stepper_speed_L, 450, STEPPER_BRK_OFF, // Left
+		// direction_R, 50, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
     }
 }// end the CBOT_main()
 
@@ -256,17 +268,17 @@ char moveBehavior( int behavior)
 		Ierror = 0;
 		return 1; 
 	}
-	// if(moveLight(behavior)){
-		// Ierror = 0;
-		// return 2;
-	// }
-	// if(moveWall()){
-		// return 3;
-	// }
-	// if(moveWander()){
-		// Ierror = 0;
-		// return 4;
-	// }
+	if(moveLight(behavior)){
+		Ierror = 0;
+		return 2;
+	}
+	if(moveWall()){
+		return 3;
+	}
+	if(moveWander()){
+		Ierror = 0;
+		return 4;
+	}
 	return 0;	
 }
 
@@ -412,8 +424,8 @@ char moveWall( void )
 	STEPPER_REV, 50, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
 	
 	// debug LCP print statement
-	// LCD_clear();
-	// LCD_printf("bkIR: %3.2f\nmoveWall\nError: %3f\nEffort: %3f\n", bkIR, error, effort);
+	LCD_clear();
+	LCD_printf("bkIR: %3.2f\nmoveWall\nError: %3f\nEffort: %3f\n", bkIR, error, effort);
 	
 }
 
@@ -474,41 +486,32 @@ char moveAway ( void )
 	float moveY = ftIR - bkIR;
 	float moveX = rtIR - ltIR;
 	
-	BOOL moveForwardR;
-	BOOL moveForwardL;
-	
 	// if the object is in front of us are behind us
 	// move appropriately in the Y direction
-	// if ((ftIR < IR_OBST_F_THRESH)|(bkIR < IR_OBST_B_THRESH))
-	// {
-			// moveForward = (moveY <= 0);
+	if ((ftIR < IR_OBST_F_THRESH)|(bkIR < IR_OBST_B_THRESH))
+	{
+			BOOL moveForward = ~(moveY <= 0);
 			
-			// // Move.
-			// STEPPER_move_stnb( STEPPER_BOTH, 
-			// moveForward, 50, abs(moveY)+moveX, 450, STEPPER_BRK_OFF, // Left
-			// moveForward, 50, abs(moveY)-moveX, 450, STEPPER_BRK_OFF ); // Right
+			// Move.
+			STEPPER_move_stnb( STEPPER_BOTH, 
+			moveForward, 50, abs(moveY)+moveX, 450, STEPPER_BRK_OFF, // Left
+			moveForward, 50, abs(moveY)-moveX, 450, STEPPER_BRK_OFF ); // Right
 			
-			// // debug LCP print statement
-			// // LCD_clear();
-			// // LCD_printf("moveAwayF\n\n\n\n");
+			// debug LCP print statement
+			LCD_clear();
+			LCD_printf("moveAwayF\n\n\n\n");
 			
-			// // if the robot was shy
-			// // state that fact
-			// shyRobot = 1;
-	// }
+			// if the robot was shy
+			// state that fact
+			shyRobot = 1;
+	}
 	
 	// if the object is on either side of the robot
 	// rotate the robot appropriately
-	if ((rtIR < IR_OBST_R_THRESH)|(ltIR < IR_OBST_L_THRESH))
+	else if ((rtIR < IR_OBST_R_THRESH)|(ltIR < IR_OBST_L_THRESH))
 	{
-			if(moveX <= 0){
-				moveForwardR = 0;
-				moveForwardL = 1;
-			}
-			else{
-				moveForwardR = 1;
-				moveForwardL = 0;
-			}
+			BOOL moveForwardR = ~(moveX <= 0);
+			BOOL moveForwardL = ~(moveX > 0);
 			
 			// Move.
 			STEPPER_move_stnb( STEPPER_BOTH, 
@@ -516,8 +519,8 @@ char moveAway ( void )
 			moveForwardR, 200, abs(moveX), 450, STEPPER_BRK_OFF ); // Right
 			
 			// debug LCP print statement
-			// LCD_clear();
-			// LCD_printf("moveAwayS\n\n\n\n");
+			LCD_clear();
+			LCD_printf("moveAwayS\n\n\n\n");
 			
 			// if the robot was shy
 			// state that fact
