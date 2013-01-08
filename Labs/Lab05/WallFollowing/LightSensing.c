@@ -71,6 +71,7 @@
 /** Local Function Prototypes **************************************/
 void checkIR(void);
 void checkLightSensor(void);
+void checkContactIR(void);
 char moveWall(void);
 char moveWander(void);
 char moveAway(void);
@@ -102,6 +103,10 @@ float	ltIR_old[PREFILTER_SIZE];//left IR sensor
 float	rtIR_old[PREFILTER_SIZE];//right IR sensor
 float	ftIR_old[PREFILTER_SIZE];//front IR sensor
 float 	bkIR_old[PREFILTER_SIZE];//back IR sensor
+
+// Contact IR sensors
+BOOL rightContact;
+BOOL leftContact;
 	
 /*******************************************************************
 * Function:        void CBOT_main( void )
@@ -128,16 +133,11 @@ void CBOT_main( void )
 	prefilter(1);
 	
 	//
-	LCD_printf("PRESS a button\nOR\nWAIT for default\n");
-	TMRSRVC_delay(3000);//wait 3 seconds
-	btnValue = WaitButton();
+	// LCD_printf("PRESS a button\nOR\nWAIT for default\n");
+	//TMRSRVC_delay(3000);//wait 3 seconds
+	//btnValue = WaitButton();
 	LCD_clear;
 	
-	// float stepper_speed_L = 0;
-	// float stepper_speed_R = 0;
-		
-	// BOOL direction_L = 1;
-	// BOOL direction_R = 1;
 
 	// Infinite loop
 	while (1)
@@ -145,24 +145,14 @@ void CBOT_main( void )
 		// update the sensor values
 		checkLightSensor();
 		checkIR();
-		moveBehavior(btnValue);
-		// direction_L = 1;
-		// direction_R = 1;
+		checkContactIR();
 		
-		// stepper_speed_R = MAX_SPEED*(leftLightVolt - LIGHT_L_THRESH)/(LIGHT_L_MAX - LIGHT_L_THRESH);
-		// stepper_speed_L = MAX_SPEED*(rightLightVolt - LIGHT_R_THRESH)/(LIGHT_R_MAX - LIGHT_R_THRESH);
+		LCD_printf("Right Contact: %i\nLeft Contact: %i\n\n\n",rightContact,leftContact);
+		TMRSRVC_delay(1000);//wait 1 seconds
 		
-		// if(stepper_speed_L<0){
-			// stepper_speed_L = 0;
-			// direction_L = 0;}
-		
-		// if(stepper_speed_R<0){
-			// stepper_speed_R = 0;
-			// direction_R = 0;}
-			
-		// STEPPER_move_stnb( STEPPER_BOTH, 
-		// direction_L, 50, stepper_speed_L, 450, STEPPER_BRK_OFF, // Left
-		// direction_R, 50, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
+		// select move behavior
+		// moveBehavior(btnValue);
+	
     }
 }// end the CBOT_main()
 
@@ -419,8 +409,8 @@ char moveWall( void )
 	STEPPER_REV, 50, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
 	
 	// debug LCP print statement
-	LCD_clear();
-	LCD_printf("bkIR: %3.2f\nmoveWall\nError: %3f\nEffort: %3f\n", bkIR, error, effort);
+	// LCD_clear();
+	// LCD_printf("bkIR: %3.2f\nmoveWall\nError: %3f\nEffort: %3f\n", bkIR, error, effort);
 	
 }
 
@@ -493,8 +483,8 @@ char moveAway ( void )
 			moveForward, 50, abs(moveY)-moveX, 450, STEPPER_BRK_OFF ); // Right
 			
 			// debug LCP print statement
-			LCD_clear();
-			LCD_printf("moveAwayF\n\n\n\n");
+			// LCD_clear();
+			// LCD_printf("moveAwayF\n\n\n\n");
 			
 			// if the robot was shy
 			// state that fact
@@ -514,8 +504,8 @@ char moveAway ( void )
 			1, 200, abs(moveX), 450, STEPPER_BRK_OFF ); // Right
 			
 			// debug LCP print statement
-			LCD_clear();
-			LCD_printf("moveAwayS\n\n\n\n");
+			// LCD_clear();
+			// LCD_printf("moveAwayS\n\n\n\n");
 			
 			// if the robot was shy
 			// state that fact
@@ -532,8 +522,8 @@ char moveAway ( void )
 			0, 200, abs(moveX), 450, STEPPER_BRK_OFF ); // Right
 			
 			// debug LCP print statement
-			LCD_clear();
-			LCD_printf("moveAwayS\n\n\n\n");
+			// LCD_clear();
+			// LCD_printf("moveAwayS\n\n\n\n");
 			
 			// if the robot was shy
 			// state that fact
@@ -594,6 +584,20 @@ void checkLightSensor( void )
 	// LCD_clear;
 }
 
+/*******************************************************************
+* Function:			unsigned char getContactIR(void)
+* Input Variables:	none
+* Output Return:	none
+* Overview:			Acquires status of contact sensors
+********************************************************************/
+void checkContactIR(void)
+{
+	unsigned char sensors = ATTINY_get_sensors();
+	rightContact = 0b00000001 & sensors;
+	leftContact =  (0b00000010 & sensors)>>1;
+	
+	
+}
 /*******************************************************************
 * Function:			void move_arc_stwt(void)
 * Input Variables:	void

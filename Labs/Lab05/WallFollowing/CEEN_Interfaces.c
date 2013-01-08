@@ -202,7 +202,7 @@ float getFrontIR( void )
 }
 
 /*******************************************************************
-* Function:			float float getBackIR(void)
+* Function:			float getBackIR(void)
 * Input Variables:	none
 * Output Return:	float
 * Overview:			getBackIR() converts ADC voltage to inches

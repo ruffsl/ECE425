@@ -60,6 +60,7 @@
 	//photocells functions
 	float getLeftLight(void);
 	float getRightLight(void);
+	
 
 	//Locomotion and Buttons
 	int WaitButton();//button function
