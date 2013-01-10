@@ -46,7 +46,7 @@ LIBDIRS = -L"C:\Program Files\AVR Libraries" -L"C:\WinAVR-20100110\avr\lib\avr4"
 LIBS = -lcapi324v221 -lm -lprintf_flt 
 
 ## Objects that must be built in order to link
-OBJECTS = CEEN_Interfaces.o LightSensing.o 
+OBJECTS = CEEN_Interfaces.o WallFollow_LightTrack.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -56,7 +56,7 @@ all: $(TARGET) WallFollowing.hex WallFollowing.eep WallFollowing.lss## Compile
 CEEN_Interfaces.o: ../CEEN_Interfaces.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-LightSensing.o: ../LightSensing.c
+WallFollow_LightTrack.o: ../WallFollow_LightTrack.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

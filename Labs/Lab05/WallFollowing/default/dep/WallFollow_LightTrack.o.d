@@ -1,4 +1,4 @@
-LightSensing.o: ../LightSensing.c \
+WallFollow_LightTrack.o: ../WallFollow_LightTrack.c \
   C:\Users\solorzaa\Documents\GitHub\ECE425\Labs\Lab05\WallFollowing\..\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/capi324v221.h \
   C:\Users\solorzaa\Documents\GitHub\ECE425\Labs\Lab05\WallFollowing\..\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/utils324v221.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h \

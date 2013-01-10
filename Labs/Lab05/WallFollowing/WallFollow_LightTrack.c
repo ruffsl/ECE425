@@ -80,6 +80,8 @@ float pidController(float ,char);
 void prefilter(char);
 char moveLight(int);
 char moveBehavior(int);
+char moveTrackLight(void);
+char moveRetreat(void);
 
 
 /** Global Variables ***********************************************/
@@ -107,6 +109,10 @@ float 	bkIR_old[PREFILTER_SIZE];//back IR sensor
 // Contact IR sensors
 BOOL rightContact;
 BOOL leftContact;
+
+// moveBehavior Global Flag Variables
+char lightFlagStatus = 0;
+char retreatFlagStatus = 0;
 	
 /*******************************************************************
 * Function:        void CBOT_main( void )
@@ -147,11 +153,16 @@ void CBOT_main( void )
 		checkIR();
 		checkContactIR();
 		
-		LCD_printf("Right Contact: %i\nLeft Contact: %i\n\n\n",rightContact,leftContact);
-		TMRSRVC_delay(1000);//wait 1 seconds
+		//Test contact Sensors
+		// LCD_printf("Right Contact: %i\nLeft Contact: %i\n\n\n",rightContact,leftContact);
+		// TMRSRVC_delay(1000);//wait 1 seconds
 		
-		// select move behavior
-		// moveBehavior(btnValue);
+		// run the moveBehavior FSM
+		//moveBehavior(1);
+		
+		// debug primitive behaviors
+		moveAway();
+		// moveWall();
 	
     }
 }// end the CBOT_main()
@@ -245,26 +256,118 @@ float pidController(float error, char reset )
 * Function:			char moveBehavior (int)
 * Input Variables:	int
 * Output Return:	char
-* Overview:		    This is the currrent behavior of the robot
+* Overview:		    This is the flow for the behavior of the robot
 ********************************************************************/
 char moveBehavior( int behavior)
 {
+	// Check the moveAway behavior for obstacles
 	if(moveAway()){
 		Ierror = 0;
 		return 1; 
 	}
-	if(moveLight(behavior)){
-		Ierror = 0;
-		return 2;
+	
+	// Check the moveLight behavior for light. 
+	// If it sees light track the light. 
+	// If it is in front of the light kill moveLight and move to moveRetreat
+	if(lightFlagStatus==0){
+		if(moveTrackLight()){
+			Ierror = 0;
+			return 2;
+		}
 	}
-	// if(moveWall()){
-		// return 3;
-	// }
-	// if(moveWander()){
-		// Ierror = 0;
-		// return 4;
-	// }
+	
+	// Check the moveRetreat behavior.
+	// If it returns a zero (contacts detect obstacle) have it stop itself and inhibit moveWall
+	if(retreatFlagStatus==1){
+		if(moveRetreat()){
+			Ierror = 0;
+			return 3;
+		}
+	}
+	
+	// Run the moveWall behavior
+	if(moveWall()){
+		Ierror = 0;
+		return 4;
+	}
+
 	return 0;	
+}
+
+/*******************************************************************
+* Function:			char moveRetreat(void)
+* Input Variables:	void
+* Output Return:	char
+* Overview:		    Moves robot backwards until contact sensors encounter
+					a wall or obstacle
+********************************************************************/
+char moveRetreat( void )
+{
+	// Make a variable that keeps track of this behavior
+	char isRetreat = 0;
+	
+	// Act as a docking robot
+	TMRSRVC_delay(2000);//wait 2 seconds
+	
+	// Back up until an object is encountered
+	// Check for left and right contact
+	if((rightContact != 1)&&(leftContact != 1))
+	{	
+		// move backward while nothing is detected
+		STEPPER_move_stnb( STEPPER_BOTH, 
+		STEPPER_REV, 50, 200, 450, STEPPER_BRK_OFF, // Left
+		STEPPER_REV, 50, 200, 450, STEPPER_BRK_OFF ); // Right
+		
+		isRetreat = 1;
+	}
+	else if(rightContact = 1)
+	{
+		// Turn 1/4 of a revolution CW
+		STEPPER_move_stwt( STEPPER_BOTH, 
+		STEPPER_FWD, 100, 200, 450, STEPPER_BRK_OFF, // Left
+		STEPPER_REV, 100, 200, 450, STEPPER_BRK_OFF ); // Right
+		retreatFlagStatus = 0;
+	}
+	
+	else if(leftContact = 1)
+	{
+		// Turn 1/4 of a revolution CCW
+		STEPPER_move_stwt( STEPPER_BOTH, 
+		STEPPER_REV, 100, 200, 450, STEPPER_BRK_OFF, // Left
+		STEPPER_FWD, 100, 200, 450, STEPPER_BRK_OFF ); // Right
+		retreatFlagStatus = 0;
+	}
+	
+	return isRetreat;
+}
+/*******************************************************************
+* Function:			char moveTrackLight(void)
+* Input Variables:	void
+* Output Return:	char
+* Overview:		    Tracks the light using only light lover behavior.
+					When it is right infront of the light, it outputs a unique
+					flag value that suppresses this behavior and inhibits
+					the moveRetreat behavior.
+********************************************************************/
+char moveTrackLight(void)
+{
+	// make a variable that keeps track of the light tracking behavior
+	char isTracking = 0;
+	
+	// check to see if there is too much light (is the robot in front of the light?)
+	if((leftLightVolt >= LIGHT_L_MAX)&&(rightLightVolt >= LIGHT_R_MAX))
+	{
+		lightFlagStatus = 1;
+		retreatFlagStatus = 1;
+	}
+	// else run moveLight(Lover) behavior
+	else
+	{
+		// inhibit LOVER behavior of move light
+		isTracking = moveLight(2);
+	}
+	
+	return isTracking;
 }
 
 /*******************************************************************
