@@ -49,7 +49,7 @@
 // including LCD debug print statements, but not for prefilter
 #define KP 2
 #define KI 0
-#define KD 10
+#define KD 0.5
 
 #define IR_B_KICK 1
 
@@ -138,7 +138,7 @@ void CBOT_main( void )
 	checkIR();
 	prefilter(1);
 	
-	//
+	
 	// LCD_printf("PRESS a button\nOR\nWAIT for default\n");
 	//TMRSRVC_delay(3000);//wait 3 seconds
 	//btnValue = WaitButton();
@@ -162,13 +162,14 @@ void CBOT_main( void )
 		// TMRSRVC_delay(2000);//wait 2 seconds
 		
 		// run the moveBehavior FSM
-		//moveBehavior(1);
+		moveBehavior(LIGHT_LOVER);
 		
 		// debug primitive behaviors
 		// moveAway();
 		// moveWall();
 		// moveRetreat();
-		moveTrackLight();
+		// moveTrackLight();
+		// moveWander();
 	
     }
 }// end the CBOT_main()
@@ -296,6 +297,11 @@ char moveBehavior( int behavior)
 		Ierror = 0;
 		return 4;
 	}
+	
+	// if(moveWander()){
+		// Ierror = 0;
+		// return 5;
+	// }
 
 	return 0;	
 }
@@ -401,7 +407,7 @@ char moveTrackLight(void)
 	else
 	{
 		// inhibit LOVER behavior of move light
-		isTracking = moveLight(2);
+		isTracking = moveLight(LIGHT_LOVER);
 	}
 	
 	return isTracking;
@@ -422,7 +428,7 @@ char moveLight( int lightBehavior)
 	// call the moveWall() to detect walls and return a Boolean
 	
 	BOOL isLight = (rightLightVolt > LIGHT_R_THRESH)||(leftLightVolt > LIGHT_L_THRESH);
-	if(!isLight){
+	if(isLight == 0){
 		return isLight;
 	}
 
@@ -513,12 +519,12 @@ char moveWall( void )
 		// an upcoming corner, the robot will turn away from both walls
 		if (isLEFT)
 		{
-			error = rtIR - (ltIR + ftIR*ftIR);
+			error = rtIR - (ltIR + (1000/ftIR));
 		}
 		// biased the error appropriately for the inverse situation
 		else 
 		{
-			error = rtIR - (ltIR - ftIR*ftIR);
+			error = rtIR - (ltIR - (1000/ftIR));
 		}
 	}
 	
