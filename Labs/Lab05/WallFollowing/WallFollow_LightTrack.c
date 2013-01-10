@@ -33,10 +33,10 @@
 #define IR_OBST_B_THRESH 7
 
 // Wall Following Threshold
-#define IR_WALL_F_THRESH 20
+#define IR_WALL_F_THRESH 23
 #define IR_WALL_R_THRESH 20
 #define IR_WALL_L_THRESH 20
-#define IR_WALL_B_THRESH 20
+#define IR_WALL_B_THRESH 23
 
 // Light Sensor Threshold values based on ambient light
 #define LIGHT_R_THRESH	4.19
@@ -48,14 +48,14 @@
 // Note: these current values are adjusted for control cycles times
 // including LCD debug print statements, but not for prefilter
 #define KP 2
-#define KI 0.001
-#define KD 5
+#define KI 0
+#define KD 10
 
 #define IR_B_KICK 1
 
 // Maximum Wall Following Speed
-#define MAX_SPEED_LIGHT 50
-#define MAX_SPEED 50
+#define MAX_SPEED_LIGHT 100
+#define MAX_SPEED 200
 
 // Maximum Magnitude Control Effort
 #define MAX_EFFORT 100
@@ -157,12 +157,18 @@ void CBOT_main( void )
 		// LCD_printf("Right Contact: %i\nLeft Contact: %i\n\n\n",rightContact,leftContact);
 		// TMRSRVC_delay(1000);//wait 1 seconds
 		
+		//Test IR Sensors
+		// LCD_printf("FrontIR = %3.2f\nBackIR = %3.2f\nLeftIR = %3.2f\nRightIR = %3.2f\n", ftIR,bkIR,ltIR,rtIR);
+		// TMRSRVC_delay(2000);//wait 2 seconds
+		
 		// run the moveBehavior FSM
 		//moveBehavior(1);
 		
 		// debug primitive behaviors
-		moveAway();
+		// moveAway();
 		// moveWall();
+		// moveRetreat();
+		moveTrackLight();
 	
     }
 }// end the CBOT_main()
@@ -306,35 +312,60 @@ char moveRetreat( void )
 	// Make a variable that keeps track of this behavior
 	char isRetreat = 0;
 	
-	// Act as a docking robot
-	TMRSRVC_delay(2000);//wait 2 seconds
-	
 	// Back up until an object is encountered
 	// Check for left and right contact
 	if((rightContact != 1)&&(leftContact != 1))
 	{	
 		// move backward while nothing is detected
 		STEPPER_move_stnb( STEPPER_BOTH, 
-		STEPPER_REV, 50, 200, 450, STEPPER_BRK_OFF, // Left
-		STEPPER_REV, 50, 200, 450, STEPPER_BRK_OFF ); // Right
+		STEPPER_FWD, 200, 200, 450, STEPPER_BRK_OFF, // Left
+		STEPPER_FWD, 200, 200, 450, STEPPER_BRK_OFF ); // Right
 		
 		isRetreat = 1;
 	}
-	else if(rightContact = 1)
+	
+	// Check right contact
+	else if((leftContact == 0)&&(rightContact == 1))
 	{
+		// move forward to leave room for turn
+		STEPPER_move_stwt( STEPPER_BOTH, 
+		STEPPER_REV, 75, 200, 250, STEPPER_BRK_OFF, // Left
+		STEPPER_REV, 75, 200, 250, STEPPER_BRK_OFF ); // Right
+		
 		// Turn 1/4 of a revolution CW
 		STEPPER_move_stwt( STEPPER_BOTH, 
-		STEPPER_FWD, 100, 200, 450, STEPPER_BRK_OFF, // Left
-		STEPPER_REV, 100, 200, 450, STEPPER_BRK_OFF ); // Right
+		STEPPER_REV, 100, 200, 250, STEPPER_BRK_OFF, // Left
+		STEPPER_FWD, 100, 200, 250, STEPPER_BRK_OFF ); // Right
 		retreatFlagStatus = 0;
 	}
 	
-	else if(leftContact = 1)
+	// Check left contact
+	else if((leftContact == 1)&&(rightContact == 0))
 	{
+		// move forward to leave room for turn
+		STEPPER_move_stwt( STEPPER_BOTH, 
+		STEPPER_REV, 75, 200, 250, STEPPER_BRK_OFF, // Left
+		STEPPER_REV, 75, 200, 250, STEPPER_BRK_OFF ); // Right
+			
 		// Turn 1/4 of a revolution CCW
 		STEPPER_move_stwt( STEPPER_BOTH, 
-		STEPPER_REV, 100, 200, 450, STEPPER_BRK_OFF, // Left
-		STEPPER_FWD, 100, 200, 450, STEPPER_BRK_OFF ); // Right
+		STEPPER_FWD, 100, 200, 250, STEPPER_BRK_OFF, // Left
+		STEPPER_REV, 100, 200, 250, STEPPER_BRK_OFF ); // Right
+		retreatFlagStatus = 0;
+	}
+	
+	// check both contacts
+	else if ((leftContact == 1)&&(rightContact == 1))
+	{
+		// move forward to leave room for turn
+		STEPPER_move_stwt( STEPPER_BOTH, 
+		STEPPER_REV, 75, 200, 250, STEPPER_BRK_OFF, // Left
+		STEPPER_REV, 75, 200, 250, STEPPER_BRK_OFF ); // Right
+			
+		// Turn 1/4 of a revolution CCW
+		STEPPER_move_stwt( STEPPER_BOTH, 
+		STEPPER_FWD, 100, 200, 250, STEPPER_BRK_OFF, // Left
+		STEPPER_REV, 100, 200, 250, STEPPER_BRK_OFF ); // Right
 		retreatFlagStatus = 0;
 	}
 	
@@ -357,8 +388,14 @@ char moveTrackLight(void)
 	// check to see if there is too much light (is the robot in front of the light?)
 	if((leftLightVolt >= LIGHT_L_MAX)&&(rightLightVolt >= LIGHT_R_MAX))
 	{
+		// set global flags to 1
 		lightFlagStatus = 1;
 		retreatFlagStatus = 1;
+		
+		// Act as a docking robot
+		LCD_printf("Arkin = Docked.\nPreparing to retreat.\n\n");
+		TMRSRVC_delay(3000);//wait 3 seconds
+		LCD_clear;
 	}
 	// else run moveLight(Lover) behavior
 	else
@@ -469,19 +506,19 @@ char moveWall( void )
 	float error;
 	
 	// Check to see if the wall exists in front of the robot
-	if(bkIR < IR_WALL_B_THRESH)
+	if(ftIR < IR_WALL_F_THRESH)
 	{
 		// if the imaginary wall was on the left side
 		// then biased the error so that when the robot encounters
 		// an upcoming corner, the robot will turn away from both walls
 		if (isLEFT)
 		{
-			error = rtIR - (ltIR + bkIR*bkIR);
+			error = rtIR - (ltIR + ftIR*ftIR);
 		}
 		// biased the error appropriately for the inverse situation
 		else 
 		{
-			error = rtIR - (ltIR - bkIR*bkIR);
+			error = rtIR - (ltIR - ftIR*ftIR);
 		}
 	}
 	
