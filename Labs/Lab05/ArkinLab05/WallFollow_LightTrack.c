@@ -1,10 +1,13 @@
 /*******************************************************************
-* FileName:        LightSensing.c
+* FileName:        WallFollow_LightTrack.c
 * Processor:       ATmega324P
 * Compiler:        
 *
 * Code Description:
-*
+*		This code runs a wall following behavior and tracks a light source 
+*		when it detects a light beacon. It will then proceed to dock in front of the light,
+*		retreat away from the light, and then continue tracking the wall from the same spot
+*		it left the wall.
 *                                                                     
 *
 * Creation and Revisions:
