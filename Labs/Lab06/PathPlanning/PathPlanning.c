@@ -68,7 +68,14 @@
 #define	LIGHT_SHY	 3
 
 // Maximum number of User Moves
-#define MAX_MOVE_SIZE 32
+#define MAX_MOVE_SIZE 9
+
+// Button States
+#define PRESSED 0
+#define UNPRESSED 1
+
+// Grid Resolution
+#define GRIDRES 45
 
 
 /** Local Function Prototypes **************************************/
@@ -86,6 +93,7 @@ char moveLight(int);
 char moveBehavior(int);
 char moveTrackLight(void);
 char moveRetreat(void);
+char moveWorld(void);
 
 
 
@@ -118,9 +126,19 @@ BOOL leftContact;
 // moveBehavior Global Flag Variables
 char lightFlagStatus = 0;
 char retreatFlagStatus = 0;
+char moveWallFlagStatus = 0;
 
 // Create an array for button value commands
 char moveCommands[MAX_MOVE_SIZE]; // maximum of 32 moves
+char currentMoveWorld = 0;
+
+// Create the Robot World
+static char ROBOT_WORLD[3][3] = {
+							{0b1101,0b1111,0b1111,0b1101},
+							{0b0001,0b1010,0b1010,0b0100},
+							{0b0101,0b1111,0b1111,0b0101},
+							{0b0111,0b1111,0b1011,0b0110}
+							};
 	
 /*******************************************************************
 * Function:        void CBOT_main( void )
@@ -149,12 +167,11 @@ void CBOT_main( void )
 	
 	LCD_printf("ENTER move commands\n\n\n\n");
 	TMRSRVC_delay(1000);//wait 1 seconds
-	LCD_clear;
+	LCD_clear();
+	TMRSRVC_delay(1000);//wait 1 seconds
 	movesInput();
-	//TMRSRVC_delay(3000);//wait 3 seconds
-	//btnValue = WaitButton();
-	LCD_clear;
-	
+	TMRSRVC_delay(3000);//wait 3 seconds
+	LCD_clear();
 
 	// Infinite loop
 	while (1)
@@ -162,18 +179,20 @@ void CBOT_main( void )
 		// update the sensor values
 		// checkLightSensor();
 		checkIR();
-		// checkContactIR();
+		checkContactIR();
 		
 		//Test contact Sensors
 		// LCD_printf("Right Contact: %i\nLeft Contact: %i\n\n\n",rightContact,leftContact);
 		// TMRSRVC_delay(1000);//wait 1 seconds
 		
 		//Test IR Sensors
+		// LCD_clear();
 		// LCD_printf("FrontIR = %3.2f\nBackIR = %3.2f\nLeftIR = %3.2f\nRightIR = %3.2f\n", ftIR,bkIR,ltIR,rtIR);
-		// TMRSRVC_delay(2000);//wait 2 seconds
+		// TMRSRVC_delay(1000);//wait 1 seconds
 		
 		// run the moveBehavior FSM
-		// moveBehavior(LIGHT_LOVER);
+		// moveBehavior(1);
+		moveWorld();
 		
 		// debug primitive behaviors
 		// moveAway();
@@ -181,6 +200,9 @@ void CBOT_main( void )
 		// moveRetreat();
 		// moveTrackLight();
 		// moveWander();
+		
+		// Debug the Robot World
+		// LCD_printf(ROBOT_WORLD[0][0]);
 	
     }
 }// end the CBOT_main()
@@ -199,16 +221,29 @@ void CBOT_main( void )
 void movesInput( void )
 {
 	// Initialize a button holder
+	int ii = 0;
 	int btnHolder = 0;
 	int btnHolderOld = 0;
 	
-	for (ii=0; ii < MAX_MOVE_SIZE; i++){
-		while(btnHolder==0){
-			btnHolder = WaitButton();			
-		}	
+	char recentButtonState = UNPRESSED;
+	
+	LCD_clear();
+	
+	for (ii; ii < MAX_MOVE_SIZE; ii++){
+		// while NO buttons are pressed
+		while(btnHolder==UNPRESSED){
+			btnHolder = WaitButton();
+		}
+		LCD_clear();
+		
 		moveCommands[ii] = btnHolder;
-		LCD_printf("Old Command: %d\nNew Command: %d\n",btnHolderOld,btnHolder);
+		LCD_printf("Old Command: %i\nNew Command: %i\nCommand Num %i\n\n",btnHolderOld,btnHolder,ii);
 		btnHolderOld = btnHolder;		
+		
+		while(btnHolder==btnHolderOld){
+			btnHolder = WaitButton();
+		}
+		TMRSRVC_delay(100);	//wait 0.5 seconds
 	}
 }
 
@@ -307,37 +342,51 @@ char moveBehavior( int behavior)
 		return 1; 
 	}
 	
-	// Check the moveLight behavior for light. 
-	// If it sees light track the light. 
-	// If it is in front of the light kill moveLight and move to moveRetreat
-	if(lightFlagStatus==0){
-		if(moveTrackLight()){
-			Ierror = 0;
-			return 2;
-		}
+	if(moveWorld()){
+		Ierror = 0;
+		return 2; 
 	}
 	
-	// Check the moveRetreat behavior.
-	// If it returns a zero (contacts detect obstacle) have it stop itself and inhibit moveWall
-	if(retreatFlagStatus==1){
-		if(moveRetreat()){
+	if(moveWallFlagStatus){
+		// Run the moveWall behavior
+		if(moveWall()){
 			Ierror = 0;
 			return 3;
 		}
 	}
-	
-	// Run the moveWall behavior
-	if(moveWall()){
-		Ierror = 0;
-		return 4;
-	}
-	
-	// if(moveWander()){
-		// Ierror = 0;
-		// return 5;
-	// }
-
 	return 0;	
+}
+
+/*******************************************************************
+* Function:			char moveWorld(void)
+* Input Variables:	void
+* Output Return:	char
+* Overview:		    Moves robot through the world
+********************************************************************/
+char moveWorld( void )
+{	
+	char currentMove = moveCommands[currentMoveWorld];
+	switch(currentMove){
+	case 1:
+		LCD_clear();
+		LCD_printf("Left");
+		TMRSRVC_delay(1000);//wait 1 seconds
+		break;
+	case 2:
+		LCD_clear();
+		LCD_printf("Forward");
+		TMRSRVC_delay(1000);//wait 1 seconds
+		break;
+	case 3:
+		LCD_clear();
+		LCD_printf("Right");
+		TMRSRVC_delay(1000);//wait 1 seconds
+		break;
+	default:
+		break;
+	}
+	currentMoveWorld += 1;
+	return 1;
 }
 
 /*******************************************************************
@@ -742,7 +791,7 @@ void checkIR( void )
 {
 	// Update all IR values
 	ftIR = getFrontIR();
-	bkIR = 50;
+	bkIR = getBackIR();
 	ltIR = getLeftIR();
 	rtIR = getRightIR();
 }

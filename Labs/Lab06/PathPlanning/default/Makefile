@@ -37,7 +37,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Include Directories
-INCLUDES = -I"C:\Users\solorzaa\Documents\GitHub\ECE425\Labs\Lab05\WallFollowing\..\..\..\..\..\..\..\..\Program Files\AVR Libraries\lib-includes" 
+INCLUDES = -I"C:\Users\solorzaa\Documents\GitHub\ECE425\Labs\Lab06\PathPlanning\..\..\..\..\..\..\..\..\Program Files\AVR Libraries\lib-includes" 
 
 ## Library Directories
 LIBDIRS = -L"C:\Program Files\AVR Libraries" -L"C:\WinAVR-20100110\avr\lib\avr4" 
@@ -46,7 +46,7 @@ LIBDIRS = -L"C:\Program Files\AVR Libraries" -L"C:\WinAVR-20100110\avr\lib\avr4"
 LIBS = -lcapi324v221 -lm -lprintf_flt 
 
 ## Objects that must be built in order to link
-OBJECTS = CEEN_Interfaces.o WallFollow_LightTrack.o 
+OBJECTS = CEEN_Interfaces.o PathPlanning.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -56,7 +56,7 @@ all: $(TARGET) WallFollowing.hex WallFollowing.eep WallFollowing.lss## Compile
 CEEN_Interfaces.o: ../CEEN_Interfaces.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-WallFollow_LightTrack.o: ../WallFollow_LightTrack.c
+PathPlanning.o: ../PathPlanning.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

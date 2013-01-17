@@ -64,6 +64,7 @@
 
 	//Locomotion and Buttons
 	int WaitButton();//button function
+	int EnterTopoCommand( void );//enter a sequence of numbers
 
 	/** Status Variable Declarations ***********************************/
 	SUBSYS_OPENSTAT ATopstat;//ATTINY open status

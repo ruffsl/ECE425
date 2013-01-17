@@ -12,6 +12,44 @@
 #include "stdio.h"
 #include "CEEN_Interfaces.h"
  
+ /*******************************************************************
+* Function:			int EnterCommandButton(void)
+* Input Variables:	none
+* Output Return:	int
+* Overview:			Use a comment block like this before functions
+********************************************************************/
+int EnterTopoCommand( void ) 
+{
+    BOOL btnState1, btnState2, btnState3;//local variables - button states
+	//int rtnValue=0;//return the button value
+	int rtnValue=0;
+
+	if((ATopstat.state=SUBSYS_OPEN))
+	{
+       		// Get switch states.
+		btnState1 = ATTINY_get_SW_state( ATTINY_SW3 );
+		btnState2 = ATTINY_get_SW_state( ATTINY_SW4 );
+		btnState3 = ATTINY_get_SW_state( ATTINY_SW5 );
+		//LCD_printf("btnStates: %d %d %d \n", btnState1, btnState2, btnState3);
+
+		if( btnState1 == TRUE ) 
+		{
+			rtnValue=1;
+			}//end if button 1 state open
+
+		if( btnState2 == TRUE ) 
+		{
+			rtnValue=2;
+		}//end if btn 2 open
+
+		if ( btnState3 == TRUE ) 
+		{
+			rtnValue=3;
+		}//end if btn 3 open
+		return rtnValue;
+	}//end AT while
+
+}//end the WaitButton() function
 
 /*******************************************************************
 * Function:			int waitButton(void)
@@ -38,11 +76,11 @@ int WaitButton( void )
 		if( btnState1 == TRUE ) 
 		{
 			LCD_printf( "SW1: Pushed\n");
-			TMRSRVC_delay(1000);//wait 1 s
+			// TMRSRVC_delay(500);//wait 1 s
 
 	                // Assume the LED subsystem opened successfully.
         	        LED_set_pattern( 0b00100000 );//turn the red LED on
-                	TMRSRVC_delay(2000);//wait 2 seconds
+                	TMRSRVC_delay(500);//wait 2 seconds
                		LED_clr_pattern( 0b01000000 );//turn the green LED off
                 	LED_clr_pattern( 0b00100000 );//turn the red LED off
 			rtnValue=1;
@@ -51,11 +89,11 @@ int WaitButton( void )
 		if( btnState2 == TRUE ) 
 		{
 			LCD_printf( "SW2: Pushed\n");
-			TMRSRVC_delay(1000);//wait 1 s
+			// TMRSRVC_delay(500);//wait 1 s
 
 	                // Assume the LED subsystem opened successfully.
         	        LED_set_pattern( 0b01000000 );//turn the green LED on
-                	TMRSRVC_delay(2000);//wait 2 seconds
+                	TMRSRVC_delay(500);//wait 2 seconds
                 	LED_clr_pattern( 0b01000000 );//turn the green LED off
                 	LED_clr_pattern( 0b00100000 );//turn the red LED off
 			rtnValue=2;
@@ -64,12 +102,12 @@ int WaitButton( void )
 		if ( btnState3 == TRUE ) 
 		{
 			LCD_printf( "SW3: Pushed\n");
-			TMRSRVC_delay(1000);//wait 1 s
+			// TMRSRVC_delay(500);//wait 1 s
 
 	                // Assume the LED subsystem opened successfully.
         	        LED_set_pattern( 0b01000000 );//turn the green LED on
                 	LED_set_pattern( 0b00100000 );//turn the red LED on
-                	TMRSRVC_delay(2000);//wait 2 seconds
+                	TMRSRVC_delay(500);//wait 2 seconds
                 	LED_clr_pattern( 0b01000000 );//turn the green LED off
                 	LED_clr_pattern( 0b00100000 );//turn the red LED off
 			rtnValue=3;
