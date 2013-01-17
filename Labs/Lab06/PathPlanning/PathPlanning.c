@@ -1,13 +1,10 @@
 /*******************************************************************
-* FileName:        WallFollow_LightTrack.c
+* FileName:        PathPlanning.c
 * Processor:       ATmega324P
 * Compiler:        
 *
 * Code Description:
-*		This code runs a wall following behavior and tracks a light source 
-*		when it detects a light beacon. It will then proceed to dock in front of the light,
-*		retreat away from the light, and then continue tracking the wall from the same spot
-*		it left the wall.
+*		
 *                                                                     
 *
 * Creation and Revisions:
@@ -70,6 +67,9 @@
 #define LIGHT_AGGRO  2
 #define	LIGHT_SHY	 3
 
+// Maximum number of User Moves
+#define MAX_MOVE_SIZE 32
+
 
 /** Local Function Prototypes **************************************/
 void checkIR(void);
@@ -81,10 +81,12 @@ char moveAway(void);
 char check_threshhold(float, float, float, float);
 float pidController(float ,char);
 void prefilter(char);
+void movesInput(void);
 char moveLight(int);
 char moveBehavior(int);
 char moveTrackLight(void);
 char moveRetreat(void);
+
 
 
 /** Global Variables ***********************************************/
@@ -116,6 +118,9 @@ BOOL leftContact;
 // moveBehavior Global Flag Variables
 char lightFlagStatus = 0;
 char retreatFlagStatus = 0;
+
+// Create an array for button value commands
+char moveCommands[MAX_MOVE_SIZE]; // maximum of 32 moves
 	
 /*******************************************************************
 * Function:        void CBOT_main( void )
@@ -142,7 +147,10 @@ void CBOT_main( void )
 	prefilter(1);
 	
 	
-	// LCD_printf("PRESS a button\nOR\nWAIT for default\n");
+	LCD_printf("ENTER move commands\n\n\n\n");
+	TMRSRVC_delay(1000);//wait 1 seconds
+	LCD_clear;
+	movesInput();
 	//TMRSRVC_delay(3000);//wait 3 seconds
 	//btnValue = WaitButton();
 	LCD_clear;
@@ -152,9 +160,9 @@ void CBOT_main( void )
 	while (1)
     {
 		// update the sensor values
-		checkLightSensor();
+		// checkLightSensor();
 		checkIR();
-		checkContactIR();
+		// checkContactIR();
 		
 		//Test contact Sensors
 		// LCD_printf("Right Contact: %i\nLeft Contact: %i\n\n\n",rightContact,leftContact);
@@ -165,7 +173,7 @@ void CBOT_main( void )
 		// TMRSRVC_delay(2000);//wait 2 seconds
 		
 		// run the moveBehavior FSM
-		moveBehavior(LIGHT_LOVER);
+		// moveBehavior(LIGHT_LOVER);
 		
 		// debug primitive behaviors
 		// moveAway();
@@ -180,6 +188,29 @@ void CBOT_main( void )
 /*******************************************************************
 * Additional Helper Functions
 ********************************************************************/
+
+/*******************************************************************
+* Function:			void movesInput(void)
+* Input Variables:	void
+* Output Return:	void
+* Overview:			Stores the button values pressed by user into an
+*					array of max size 32.
+********************************************************************/
+void movesInput( void )
+{
+	// Initialize a button holder
+	int btnHolder = 0;
+	int btnHolderOld = 0;
+	
+	for (ii=0; ii < MAX_MOVE_SIZE; i++){
+		while(btnHolder==0){
+			btnHolder = WaitButton();			
+		}	
+		moveCommands[ii] = btnHolder;
+		LCD_printf("Old Command: %d\nNew Command: %d\n",btnHolderOld,btnHolder);
+		btnHolderOld = btnHolder;		
+	}
+}
 
 /*******************************************************************
 * Function:			void prefilter(char reset)
