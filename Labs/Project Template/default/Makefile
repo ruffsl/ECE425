@@ -37,7 +37,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Include Directories
-INCLUDES = -I"C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Project Template\..\..\..\..\..\..\..\Program Files\AVR Libraries\lib-includes" 
+INCLUDES = -I"C:\Users\whitemrj\Desktop\Project Template\..\..\..\..\..\..\..\Program Files\AVR Libraries\lib-includes" 
 
 ## Library Directories
 LIBDIRS = -L"C:\Program Files\AVR Libraries" -L"C:\WinAVR-20100110\avr\lib\avr4" 
@@ -46,17 +46,20 @@ LIBDIRS = -L"C:\Program Files\AVR Libraries" -L"C:\WinAVR-20100110\avr\lib\avr4"
 LIBS = -lcapi324v221 -lm -lprintf_flt 
 
 ## Objects that must be built in order to link
-OBJECTS = Project.o CEEN_Interfaces.o 
+OBJECTS = CEEN_Interfaces.o PathPlanning.o PixelPrint.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
 
 ## Build
 all: $(TARGET) Project.hex Project.eep Project.lss## Compile
-Project.o: ../Project.c
+CEEN_Interfaces.o: ../CEEN_Interfaces.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-CEEN_Interfaces.o: ../CEEN_Interfaces.c
+PathPlanning.o: ../PathPlanning.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+PixelPrint.o: ../PixelPrint.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

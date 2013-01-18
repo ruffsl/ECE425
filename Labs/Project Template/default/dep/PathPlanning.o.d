@@ -1,4 +1,4 @@
-CEEN_Interfaces.o: ../CEEN_Interfaces.c \
+PathPlanning.o: ../PathPlanning.c \
   C:\Users\whitemrj\Desktop\Project\ Template\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/capi324v221.h \
   C:\Users\whitemrj\Desktop\Project\ Template\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/utils324v221.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h \
