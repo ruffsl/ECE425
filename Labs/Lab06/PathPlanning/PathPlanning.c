@@ -21,10 +21,17 @@
 #include "CEEN_Interfaces.h"
 
 /** Define Constants Here ******************************************/
+
+#define SUCCESS 1;
+#define FIAL 0;
+
 #define C_B 1
 #define C_L 1
 #define C_R 1
 #define D_STEP 0.1335176878
+#define WHEEL_BASE 21.3
+#define POINT_TURN 0
+#define NO_TURN 2147483647
 
 // Obstacle Avoidance Threshold
 #define IR_OBST_F_THRESH 7
@@ -70,6 +77,10 @@
 // Maximum number of User Moves
 #define MAX_MOVE_SIZE 9
 
+// World Size
+#define WORLD_ROW_SIZE 4
+#define WORLD_COLUMN_SIZE 4
+
 // Button States
 #define PRESSED 0
 #define UNPRESSED 1
@@ -89,8 +100,11 @@ char check_threshhold(float, float, float, float);
 float pidController(float ,char);
 void prefilter(char);
 void movesInput(void);
+void worldInput(void);
 char moveBehavior(int);
 char moveWorld(void);
+char move_arc_stwt(int, int, int, int, BOOL);
+char move_arc_stnb(int, int, int, int, BOOL);
 
 
 /** Global Variables ***********************************************/
@@ -123,11 +137,12 @@ BOOL leftContact;
 char moveWallFlagStatus = 0;
 
 // Create an array for button value commands
-char moveCommands[MAX_MOVE_SIZE]; // maximum of 32 moves
-char currentMoveWorld = 0;
+unsigned char moveCommands[MAX_MOVE_SIZE];
+unsigned char currentMoveWorld = 0;
+unsigned char currentCellWorld = 0;
 
 // Create the Robot World
-static char ROBOT_WORLD[3][3] = {
+static char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] = {
 							{0b1101,0b1111,0b1111,0b1101},
 							{0b0001,0b1010,0b1010,0b0100},
 							{0b0101,0b1111,0b1111,0b0101},
@@ -139,9 +154,6 @@ static char ROBOT_WORLD[3][3] = {
 
 void CBOT_main( void )
 {
-	// Initialize variables
-	int btnValue=0;//value of button pushed
-
 	ATopstat = ATTINY_open();//open the tiny microcontroller
 	LEopstat = LED_open(); //open the LED module
 	LCopstat = LCD_open(); //open the LCD module
@@ -161,8 +173,14 @@ void CBOT_main( void )
 	LCD_printf("ENTER move commands\n\n\n\n");
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
-	TMRSRVC_delay(1000);//wait 1 seconds
 	movesInput();
+	TMRSRVC_delay(1000);//wait 1 seconds
+	LCD_clear();
+	
+	LCD_printf("ENTER current location\n\n\n\n");	
+	TMRSRVC_delay(1000);//wait 1 seconds
+	LCD_clear();
+	worldInput();
 	TMRSRVC_delay(3000);//wait 3 seconds
 	LCD_clear();
 
@@ -194,6 +212,39 @@ void CBOT_main( void )
 ********************************************************************/
 
 /*******************************************************************
+* Function:			void worldInput(void)
+* Input Variables:	void
+* Output Return:	void
+* Overview:			Allows the user to initialize the location of
+*					the robot 
+********************************************************************/
+void worldInput( void )
+{
+	// Initialize a button holder
+	unsigned char btnHolder = UNPRESSED;
+	unsigned char btnHolderOld = UNPRESSED;
+		
+	for (unsigned char i = 0; i < WORLD_ROW_SIZE; i++){
+		// while NO buttons are pressed
+		while(btnHolder == UNPRESSED){
+			btnHolder = WaitButton();
+		}
+		
+		currentCellWorld = currentCellWorld << 1;
+		currentCellWorld += (btnHolder-1);
+				
+		LCD_clear();
+		LCD_printf("Current World Cell:\n%u\n\n",currentCellWorld);
+		btnHolderOld = btnHolder;		
+		
+		while(btnHolder == btnHolderOld){
+			btnHolder = WaitButton();
+		}
+		TMRSRVC_delay(100);	//wait 0.5 seconds
+	}
+}
+
+/*******************************************************************
 * Function:			void movesInput(void)
 * Input Variables:	void
 * Output Return:	void
@@ -203,30 +254,55 @@ void CBOT_main( void )
 void movesInput( void )
 {
 	// Initialize a button holder
-	int ii = 0;
-	int btnHolder = 0;
-	int btnHolderOld = 0;
-	
-	char recentButtonState = UNPRESSED;
-	
-	LCD_clear();
-	
-	for (ii; ii < MAX_MOVE_SIZE; ii++){
+	unsigned char btnHolder = UNPRESSED;
+	unsigned char btnHolderOld = UNPRESSED;
+		
+	for (unsigned char ii = 0; ii < MAX_MOVE_SIZE; ii++){
 		// while NO buttons are pressed
-		while(btnHolder==UNPRESSED){
+		while(btnHolder == UNPRESSED){
 			btnHolder = WaitButton();
 		}
-		LCD_clear();
 		
 		moveCommands[ii] = btnHolder;
+		
+		LCD_clear();
 		LCD_printf("Old Command: %i\nNew Command: %i\nCommand Num %i\n\n",btnHolderOld,btnHolder,ii);
 		btnHolderOld = btnHolder;		
 		
-		while(btnHolder==btnHolderOld){
+		while(btnHolder == btnHolderOld){
 			btnHolder = WaitButton();
 		}
 		TMRSRVC_delay(100);	//wait 0.5 seconds
 	}
+}
+
+/*******************************************************************
+* Function:			char moveWorld(void)
+* Input Variables:	void
+* Output Return:	char
+* Overview:		    Moves robot through the world
+********************************************************************/
+char moveWorld( void )
+{	
+	char currentMove = moveCommands[currentMoveWorld];
+	LCD_clear();
+	switch(currentMove){
+		case 1:
+			LCD_printf("Left");
+			break;
+		case 2:
+			LCD_printf("Forward");
+			break;
+		case 3:
+			LCD_printf("Right");
+			break;
+		default:
+			LCD_printf("What?!");
+			break;
+	}
+	TMRSRVC_delay(1000);//wait 1 seconds
+	currentMoveWorld += 1;
+	return 1;
 }
 
 /*******************************************************************
@@ -256,38 +332,6 @@ char moveBehavior( int behavior)
 		}
 	}
 	return 0;	
-}
-
-/*******************************************************************
-* Function:			char moveWorld(void)
-* Input Variables:	void
-* Output Return:	char
-* Overview:		    Moves robot through the world
-********************************************************************/
-char moveWorld( void )
-{	
-	char currentMove = moveCommands[currentMoveWorld];
-	switch(currentMove){
-	case 1:
-		LCD_clear();
-		LCD_printf("Left");
-		TMRSRVC_delay(1000);//wait 1 seconds
-		break;
-	case 2:
-		LCD_clear();
-		LCD_printf("Forward");
-		TMRSRVC_delay(1000);//wait 1 seconds
-		break;
-	case 3:
-		LCD_clear();
-		LCD_printf("Right");
-		TMRSRVC_delay(1000);//wait 1 seconds
-		break;
-	default:
-		break;
-	}
-	currentMoveWorld += 1;
-	return 1;
 }
 
 /*******************************************************************
@@ -451,6 +495,7 @@ char moveWall( void )
 	// debug LCP print statement
 	// LCD_clear();
 	// LCD_printf("bkIR: %3.2f\nmoveWall\nError: %3f\nEffort: %3f\n", bkIR, error, effort);
+	return isWall;
 	
 }
 
@@ -535,8 +580,8 @@ char moveAway ( void )
 	// rotate the robot appropriately
 	else if ((rtIR < IR_OBST_R_THRESH))
 	{
-			BOOL moveForwardR = ~(moveX <= 0);
-			BOOL moveForwardL = ~(moveX > 0);
+			// BOOL moveForwardR = ~(moveX <= 0);
+			// BOOL moveForwardL = ~(moveX > 0);
 			
 			// Move.
 			STEPPER_move_stnb( STEPPER_BOTH, 
@@ -553,8 +598,8 @@ char moveAway ( void )
 	}
 	else if ((ltIR < IR_OBST_L_THRESH))
 	{
-			BOOL moveForwardR = ~(moveX <= 0);
-			BOOL moveForwardL = ~(moveX > 0);
+			// BOOL moveForwardR = ~(moveX <= 0);
+			// BOOL moveForwardL = ~(moveX > 0);
 			
 			// Move.
 			STEPPER_move_stnb( STEPPER_BOTH, 
@@ -620,7 +665,7 @@ void checkLightSensor( void )
 	leftLightVolt = getLeftLight();
 	// LCD_printf("R Voltage: %3.2f\nL Voltage: %3.2f\n\n\n", voltageR, voltageL);
 	// TMRSRVC_delay(2000);//wait 2 seconds
-	// LCD_clear;
+	// LCD_clear();
 }
 
 /*******************************************************************
@@ -637,31 +682,191 @@ void checkContactIR(void)
 	
 	
 }
+
 /*******************************************************************
-* Function:			void move_arc_stwt(void)
-* Input Variables:	void
-* Output Return:	void
+* Function:			char move_arc_stwt(int, int, int, int, BOOL)
+* Input Variables:	char
+* Output Return:	int, int, int, int, BOOL
 * Overview:			This moves the robot in any arc length
 ********************************************************************/
-void move_arc_stwt(int arcRadius, int arcLength, int arcSpeed, int arcAccel, BOOL arcBrk){
+char move_arc__stwt(int arc_Radius, int arc_Length, int arc_Speed, int arc_Accel, BOOL arc_Brk)
+{
 	
-	// BOOL step_Fwd_L;
-	// BOOL step_Fwd_R;
-	// int step_Num_L;
-	// int step_Num_R;
-	// int step_Speed_L;
-	// int step_Speed_R;
-	// int step_Accel_L;
-	// int step_Accel_R;
+	BOOL step_Fwd_L = (arc_Length>0);
+	BOOL step_Fwd_R = (arc_Length>0);
+	int step_Num = arc_Length/D_STEP;
+	int step_Speed = arc_Speed/D_STEP;
+	int step_Accel = arc_Accel/D_STEP;
 
-	// if(arcRadius){
 
-	// }
-	// else{
-		// stepper_NUM = arcLength/D_STEP;
-		// bool stepper_FWD = arcLength >= 0;
-		// STEPPER_move_stwt( STEPPER_BOTH, 
-		// stepper_FWD, stepper_NUM, arcSpeed, arcAccel, arcBrk, // Left
-		// stepper_FWD, stepper_NUM, arcSpeed, arcAccel, arcBrk); // Right
-	// }
+	if(arc_Radius == NO_TURN){
+		STEPPER_move_stwt( STEPPER_BOTH, 
+		step_Fwd_L, step_Num, step_Speed, step_Accel, arc_Brk, // Left
+		step_Fwd_R, step_Num, step_Speed, step_Accel, arc_Brk); // Right
+		return SUCCESS;
+	}
+	
+	if(arc_Radius == POINT_TURN){				
+		STEPPER_move_stwt( STEPPER_BOTH, 
+	   !step_Fwd_L, step_Num, step_Speed, step_Accel, arc_Brk, // Left
+		step_Fwd_R, step_Num, step_Speed, step_Accel, arc_Brk); // Right
+		return SUCCESS;
+	}
+		
+	int arc_Length_L;
+	int arc_Length_R;	
+	int arc_Speed_L;
+	int arc_Speed_R;	
+	int arc_Accel_L;
+	int arc_Accel_R;
+		
+	int step_Num_L;
+	int step_Num_R;	
+	int step_Speed_L;
+	int step_Speed_R;	
+	int step_Accel_L;
+	int step_Accel_R;
+	
+	if(arc_Radius > 0){
+		arc_Length_L = arc_Length * (1 - WHEEL_BASE/arc_Radius);
+		arc_Length_R = arc_Length * (1 + WHEEL_BASE/arc_Radius);
+		step_Num_L = arc_Length_L/D_STEP;
+		step_Num_R = arc_Length_R/D_STEP;
+		
+		
+		arc_Speed_L = arc_Speed * (1 - WHEEL_BASE/arc_Radius);
+		arc_Speed_R = arc_Speed * (1 + WHEEL_BASE/arc_Radius);
+		step_Speed_L = arc_Speed_L/D_STEP;
+		step_Speed_R = arc_Speed_R/D_STEP;
+		
+		
+		arc_Accel_L = arc_Accel * (1 - WHEEL_BASE/arc_Radius);
+		arc_Accel_R = arc_Accel * (1 + WHEEL_BASE/arc_Radius);
+		step_Accel_L = arc_Accel_L/D_STEP;
+		step_Accel_R = arc_Accel_R/D_STEP;
+		
+		STEPPER_move_stwt( STEPPER_BOTH, 
+		step_Fwd_L, step_Num_L, step_Speed_L, step_Accel_L, arc_Brk, // Left
+		step_Fwd_R, step_Num_R, step_Speed_R, step_Accel_R, arc_Brk); // Right
+		return SUCCESS;
+	}	
+	
+	if(arc_Radius < 0){
+		arc_Length_L = arc_Length * (1 + WHEEL_BASE/arc_Radius);
+		arc_Length_R = arc_Length * (1 - WHEEL_BASE/arc_Radius);
+		step_Num_L = arc_Length_L/D_STEP;
+		step_Num_R = arc_Length_R/D_STEP;
+		
+		
+		arc_Speed_L = arc_Speed * (1 + WHEEL_BASE/arc_Radius);
+		arc_Speed_R = arc_Speed * (1 - WHEEL_BASE/arc_Radius);
+		step_Speed_L = arc_Speed_L/D_STEP;
+		step_Speed_R = arc_Speed_R/D_STEP;
+		
+		
+		arc_Accel_L = arc_Accel * (1 + WHEEL_BASE/arc_Radius);
+		arc_Accel_R = arc_Accel * (1 - WHEEL_BASE/arc_Radius);
+		step_Accel_L = arc_Accel_L/D_STEP;
+		step_Accel_R = arc_Accel_R/D_STEP;
+		
+		STEPPER_move_stwt( STEPPER_BOTH, 
+		step_Fwd_L, step_Num_L, step_Speed_L, step_Accel_L, arc_Brk, // Left
+		step_Fwd_R, step_Num_R, step_Speed_R, step_Accel_R, arc_Brk); // Right
+		return SUCCESS;
+	}	
+	return FIAL;
+}
+
+/*******************************************************************
+* Function:			char move_arc_stnb(int, int, int, int, BOOL)
+* Input Variables:	char
+* Output Return:	int, int, int, int, BOOL
+* Overview:			This moves the robot in any arc length
+********************************************************************/
+char move_arc__stnb(int arc_Radius, int arc_Length, int arc_Speed, int arc_Accel, BOOL arc_Brk)
+{
+	
+	BOOL step_Fwd_L = (arc_Length>0);
+	BOOL step_Fwd_R = (arc_Length>0);
+	int step_Num = arc_Length/D_STEP;
+	int step_Speed = arc_Speed/D_STEP;
+	int step_Accel = arc_Accel/D_STEP;
+
+
+	if(arc_Radius == NO_TURN){
+		STEPPER_move_stnb( STEPPER_BOTH, 
+		step_Fwd_L, step_Num, step_Speed, step_Accel, arc_Brk, // Left
+		step_Fwd_R, step_Num, step_Speed, step_Accel, arc_Brk); // Right
+		return SUCCESS;
+	}
+	
+	if(arc_Radius == POINT_TURN){				
+		STEPPER_move_stnb( STEPPER_BOTH, 
+	   !step_Fwd_L, step_Num, step_Speed, step_Accel, arc_Brk, // Left
+		step_Fwd_R, step_Num, step_Speed, step_Accel, arc_Brk); // Right
+		return SUCCESS;
+	}
+		
+	int arc_Length_L;
+	int arc_Length_R;	
+	int arc_Speed_L;
+	int arc_Speed_R;	
+	int arc_Accel_L;
+	int arc_Accel_R;
+		
+	int step_Num_L;
+	int step_Num_R;	
+	int step_Speed_L;
+	int step_Speed_R;	
+	int step_Accel_L;
+	int step_Accel_R;
+	
+	if(arc_Radius > 0){
+		arc_Length_L = arc_Length * (1 - WHEEL_BASE/arc_Radius);
+		arc_Length_R = arc_Length * (1 + WHEEL_BASE/arc_Radius);
+		step_Num_L = arc_Length_L/D_STEP;
+		step_Num_R = arc_Length_R/D_STEP;
+		
+		
+		arc_Speed_L = arc_Speed * (1 - WHEEL_BASE/arc_Radius);
+		arc_Speed_R = arc_Speed * (1 + WHEEL_BASE/arc_Radius);
+		step_Speed_L = arc_Speed_L/D_STEP;
+		step_Speed_R = arc_Speed_R/D_STEP;
+		
+		
+		arc_Accel_L = arc_Accel * (1 - WHEEL_BASE/arc_Radius);
+		arc_Accel_R = arc_Accel * (1 + WHEEL_BASE/arc_Radius);
+		step_Accel_L = arc_Accel_L/D_STEP;
+		step_Accel_R = arc_Accel_R/D_STEP;
+		
+		STEPPER_move_stnb( STEPPER_BOTH, 
+		step_Fwd_L, step_Num_L, step_Speed_L, step_Accel_L, arc_Brk, // Left
+		step_Fwd_R, step_Num_R, step_Speed_R, step_Accel_R, arc_Brk); // Right
+		return SUCCESS;
+	}	
+	
+	if(arc_Radius < 0){
+		arc_Length_L = arc_Length * (1 + WHEEL_BASE/arc_Radius);
+		arc_Length_R = arc_Length * (1 - WHEEL_BASE/arc_Radius);
+		step_Num_L = arc_Length_L/D_STEP;
+		step_Num_R = arc_Length_R/D_STEP;
+		
+		
+		arc_Speed_L = arc_Speed * (1 + WHEEL_BASE/arc_Radius);
+		arc_Speed_R = arc_Speed * (1 - WHEEL_BASE/arc_Radius);
+		step_Speed_L = arc_Speed_L/D_STEP;
+		step_Speed_R = arc_Speed_R/D_STEP;
+		
+		
+		arc_Accel_L = arc_Accel * (1 + WHEEL_BASE/arc_Radius);
+		arc_Accel_R = arc_Accel * (1 - WHEEL_BASE/arc_Radius);
+		step_Accel_L = arc_Accel_L/D_STEP;
+		step_Accel_R = arc_Accel_R/D_STEP;
+		
+		STEPPER_move_stnb( STEPPER_BOTH, 
+		step_Fwd_L, step_Num_L, step_Speed_L, step_Accel_L, arc_Brk, // Left
+		step_Fwd_R, step_Num_R, step_Speed_R, step_Accel_R, arc_Brk); // Right
+		return SUCCESS;
+	}	
+	return FIAL;
 }
