@@ -26,13 +26,13 @@ int EnterTopoCommand( void )
 
 	if((ATopstat.state=SUBSYS_OPEN))
 	{
-       		// Get switch states.
+       	// Get switch states.
 		btnState1 = ATTINY_get_SW_state( ATTINY_SW3 );
 		btnState2 = ATTINY_get_SW_state( ATTINY_SW4 );
 		btnState3 = ATTINY_get_SW_state( ATTINY_SW5 );
+		
 		//LCD_printf("btnStates: %d %d %d \n", btnState1, btnState2, btnState3);
-
-		if( btnState1 == TRUE ) 
+		if( btnState1 == TRUE )
 		{
 			rtnValue=1;
 			}//end if button 1 state open

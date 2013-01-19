@@ -227,20 +227,21 @@ void worldInput( void )
 	for (unsigned char i = 0; i < WORLD_ROW_SIZE; i++){
 		// while NO buttons are pressed
 		while(btnHolder == UNPRESSED){
-			btnHolder = WaitButton();
+			btnHolder = EnterTopoCommand();
 		}
 		
 		currentCellWorld = currentCellWorld << 1;
 		currentCellWorld += (btnHolder-1);
 				
 		LCD_clear();
-		LCD_printf("Current World Cell:\n%u\n\n",currentCellWorld);
+		LCD_printf("Current World Cell:\n%d\n\n",currentCellWorld);
 		btnHolderOld = btnHolder;		
 		
+		TMRSRVC_delay(500);	//wait 0.5 seconds
+		EnterTopoCommand();
 		while(btnHolder == btnHolderOld){
-			btnHolder = WaitButton();
+			btnHolder = EnterTopoCommand();
 		}
-		TMRSRVC_delay(100);	//wait 0.5 seconds
 	}
 }
 
@@ -260,7 +261,7 @@ void movesInput( void )
 	for (unsigned char ii = 0; ii < MAX_MOVE_SIZE; ii++){
 		// while NO buttons are pressed
 		while(btnHolder == UNPRESSED){
-			btnHolder = WaitButton();
+			btnHolder = EnterTopoCommand();
 		}
 		
 		moveCommands[ii] = btnHolder;
@@ -269,10 +270,11 @@ void movesInput( void )
 		LCD_printf("Old Command: %i\nNew Command: %i\nCommand Num %i\n\n",btnHolderOld,btnHolder,ii);
 		btnHolderOld = btnHolder;		
 		
+		TMRSRVC_delay(500);	//wait 0.5 
+		EnterTopoCommand();
 		while(btnHolder == btnHolderOld){
-			btnHolder = WaitButton();
+			btnHolder = EnterTopoCommand();
 		}
-		TMRSRVC_delay(100);	//wait 0.5 seconds
 	}
 }
 
