@@ -37,8 +37,8 @@
 #define MOVE_RIGHT 3
 #define MOVE_STOP 4
 #define NO_TURN 2147483647
-#define RIGHT_TURN 18.33
-#define LEFT_TURN -18.33
+#define RIGHT_TURN 16.50
+#define LEFT_TURN -16.50
 
 // Obstacle Avoidance Threshold
 #define IR_OBST_F_THRESH 7
@@ -47,16 +47,16 @@
 #define IR_OBST_B_THRESH 7
 
 // Wall Following Threshold
-#define IR_WALL_F_THRESH 8
+#define IR_WALL_F_THRESH 0
 #define IR_WALL_R_THRESH 10
 #define IR_WALL_L_THRESH 10
 #define IR_WALL_B_THRESH 15
 
 // Gateway Thresholds
-#define FT_GATEWAY 16.78
-#define BK_GATEWAY 28.38
-#define LT_GATEWAY 19.25
-#define RT_GATEWAY 19.25
+#define FT_GATEWAY 30
+#define BK_GATEWAY 35
+#define LT_GATEWAY 30
+#define RT_GATEWAY 30
 
 // Orientation constants
 #define NORTH 0
@@ -73,9 +73,9 @@
 // PID Control Gains
 // Note: these current values are adjusted for control cycles times
 // including LCD debug print statements, but not for prefilter
-#define KP 2
+#define KP 1
 #define KI 0
-#define KD 0.5
+#define KD 0
 
 #define IR_B_KICK 1
 
@@ -94,7 +94,7 @@
 #define	LIGHT_SHY	 3
 
 // Maximum number of User Moves
-#define MAX_MOVE_SIZE 11
+#define MAX_MOVE_SIZE 12
 
 // World Size
 #define WORLD_ROW_SIZE 4
@@ -123,6 +123,7 @@ void movesInput(void);
 void worldInput(void);
 char moveBehavior(int);
 char moveWorld(void);
+char moveMetric(void);
 char move_arc_stwt(float, float, float, float, BOOL);
 char move_arc_stnb(float, float, float, float, BOOL);
 char checkOdometry(void);
@@ -184,7 +185,7 @@ unsigned char nextGateway = 0;
 
 
 // Create the Robot World
-static char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] = 	{
+static unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] = 	{
 																{0b1101,0b1111,0b1111,0b1101},
 																{0b0001,0b1010,0b1010,0b0100},
 																{0b0101,0b1111,0b1111,0b0101},
@@ -220,19 +221,19 @@ void CBOT_main( void )
 	
 	
 	// Enter the robot's current (starting) position
-	LCD_printf("ENTER start location\n\n\n\n");	
+	LCD_printf("START location\n\n\n\n");	
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
 	worldInput();
-	TMRSRVC_delay(3000);//wait 3 seconds
+	TMRSRVC_delay(1000);//wait 3 seconds
 	LCD_clear();
 	
 	// Enter the robot's current (starting) orientation
-	LCD_printf("ENTER start orientation\n\n\n\n");	
+	LCD_printf("START orientation\n\n\n\n");	
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
 	orientationInput();
-	TMRSRVC_delay(3000);//wait 3 seconds
+	TMRSRVC_delay(1000);//wait 3 seconds
 	LCD_clear();
 	
 	// Enter the robot topological commands
@@ -240,7 +241,7 @@ void CBOT_main( void )
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
 	movesInput();
-	TMRSRVC_delay(3000);//wait 1 seconds
+	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
 	
 	// Print the robot gateways
@@ -248,7 +249,7 @@ void CBOT_main( void )
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
 	getGateways();
-	TMRSRVC_delay(3000);//wait 1 seconds
+	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
 	
 	// unsigned char i = 0;
@@ -267,8 +268,9 @@ void CBOT_main( void )
 	while (1)
     {
 		checkIR();	
-		checkWorld();
-		moveWorld();	
+		// checkWorld();
+		// moveWorld();	
+		moveMetric();	
 		
 		//Test arc function
 		// LCD_printf("Move Arc\n\n\n\n");
@@ -302,8 +304,8 @@ void CBOT_main( void )
 void getGateways(void)
 {
 	// Get the start location of the robot
-	unsigned char curRow = currentCellWorld && 0b1100;
-	unsigned char curCol = currentCellWorld && 0b0011;
+	unsigned char curRow = (currentCellWorld>>2) & 0b1100;
+	unsigned char curCol = currentCellWorld & 0b0011;
 	
 	// Git the start orientation of the robot
 	unsigned char curOrient = currentOrientation;
@@ -535,7 +537,7 @@ void movesInput( void )
 	unsigned char btnHolderOld = UNPRESSED;
 	unsigned char i = 0;
 	
-	while (i < MAX_MOVE_SIZE){
+	while (i < (MAX_MOVE_SIZE-1)){
 		btnHolder = EnterTopoCommand();
 	
 		if (btnHolder == MOVE_LEFT){
@@ -557,8 +559,9 @@ void movesInput( void )
 			btnHolderOld = btnHolder;
 		}
 		TMRSRVC_delay(500);	//wait 0.5 seconds
-		moveCommands[i] = MOVE_STOP;
 	}
+	i++;
+	moveCommands[i] = MOVE_STOP;
 }
 
 /*******************************************************************
@@ -580,18 +583,18 @@ char moveWorld( void )
 	
 	if(((currentMove == MOVE_LEFT)|(currentMove == MOVE_RIGHT))&(oldMove == MOVE_FORWARD))
 	{
-		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE/2, 10, 10, 0);		
+		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(3.0/5.0), 10, 10, 0);		
 	}
 	
 	if(((oldMove == MOVE_LEFT)|(oldMove == MOVE_RIGHT))&(currentMove == MOVE_FORWARD))
 	{
-		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE/2, 10, 10, 0);		
+		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(3.0/5.0), 10, 10, 0);		
 	}
 	
 	switch(currentMove){
 		case MOVE_LEFT:
 			LCD_printf("Left\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
-			TMRSRVC_delay(1000);//wait 1 seconds
+			// TMRSRVC_delay(1000);//wait 1 seconds
 			move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
 			break;
 		case MOVE_FORWARD:
@@ -602,7 +605,7 @@ char moveWorld( void )
 			break;
 		case MOVE_RIGHT:
 			LCD_printf("Right\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
-			TMRSRVC_delay(1000);//wait 1 seconds
+			// TMRSRVC_delay(1000);//wait 1 seconds
 			move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
 			break;
 		default:
@@ -613,6 +616,51 @@ char moveWorld( void )
 	}
 	// TMRSRVC_delay(1000);//wait 1 seconds
 	oldMove = currentMove;
+	return 1;
+}
+
+/*******************************************************************
+* Function:			char moveMetric(void)
+* Input Variables:	void
+* Output Return:	char
+* Overview:		    Moves robot through the world
+********************************************************************/
+char moveMetric( void )
+{	
+	LCD_clear();
+	// LCD_printf("Current Move:\n%i\n",currentMove);
+	
+	currentMove = moveCommands[currentMoveWorld];
+	// if(currentMove != oldMove){
+		// move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE, 10, 10, 0);
+	// }
+	// LCD_clear();
+	
+	switch(currentMove){
+		case MOVE_LEFT:
+			LCD_printf("Left\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
+			// TMRSRVC_delay(1000);//wait 1 seconds
+			move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
+			break;
+		case MOVE_FORWARD:
+			LCD_printf("Forward\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
+			// TMRSRVC_delay(1000);//wait 1 seconds
+			move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(12/10), 10, 10, 0);
+			break;
+		case MOVE_RIGHT:
+			LCD_printf("Right\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
+			// TMRSRVC_delay(1000);//wait 1 seconds
+			move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
+			break;
+		default:
+			LCD_printf("What?!");
+			STEPPER_stop( STEPPER_BOTH, STEPPER_BRK_OFF);
+			while(1);
+			break;
+	}
+	// TMRSRVC_delay(1000);//wait 1 seconds
+	oldMove = currentMove;
+	currentMoveWorld++;
 	return 1;
 }
 
@@ -739,24 +787,23 @@ char moveWall( void )
 	// Check for walls
 	BOOL isWall = (ftIR < IR_WALL_F_THRESH)|(bkIR < IR_WALL_B_THRESH)|(rtIR < IR_WALL_R_THRESH)|(ltIR < IR_WALL_L_THRESH);
 	if(!isWall){	
+		move_arc_stnb(NO_TURN, 10, 10, 10, 0);
 		return isWall;
 	}
-	
-	move_arc_stnb(NO_TURN, 10, 10, 10, 0);
-	
+		
 	// A variable that contains the logic of which wall is imaginary
 	BOOL isLEFT;
 	
 	// If there is no wall on our right side
 	// place an imaginary wall just within the threshold
 	if(rtIR>IR_WALL_R_THRESH){
-		rtIR = IR_WALL_R_THRESH-15;
+		rtIR = IR_WALL_R_THRESH-18;
 		isLEFT = 0;
 	}
 	// If there is no wall on our left side
 	// place an imaginary wall just within the threshold
 	if(ltIR>IR_WALL_L_THRESH){
-		ltIR = IR_WALL_L_THRESH-15;
+		ltIR = IR_WALL_L_THRESH-18;
 		isLEFT = 1;
 	}
 	
@@ -789,7 +836,7 @@ char moveWall( void )
 	}
 
 	// Use the PID controller function to calculate error
-	float effort = pidController(error, 0);
+	float effort = pidController(-error, 0);
 	
 	// Limit the control effort to the max allowable effort
 	if((abs(effort) > MAX_EFFORT)&(effort!=0)){
