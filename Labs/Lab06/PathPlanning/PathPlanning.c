@@ -35,6 +35,7 @@
 #define MOVE_LEFT 1
 #define MOVE_FORWARD 2
 #define MOVE_RIGHT 3
+#define MOVE_STOP 4
 #define NO_TURN 2147483647
 #define RIGHT_TURN 18.33
 #define LEFT_TURN -18.33
@@ -46,16 +47,16 @@
 #define IR_OBST_B_THRESH 7
 
 // Wall Following Threshold
-#define IR_WALL_F_THRESH 23
-#define IR_WALL_R_THRESH 20
-#define IR_WALL_L_THRESH 20
-#define IR_WALL_B_THRESH 23
+#define IR_WALL_F_THRESH 8
+#define IR_WALL_R_THRESH 10
+#define IR_WALL_L_THRESH 10
+#define IR_WALL_B_THRESH 15
 
 // Gateway Thresholds
-#define FT_GATEWAY 10
-#define BK_GATEWAY 10
-#define LT_GATEWAY 10
-#define RT_GATEWAY 10
+#define FT_GATEWAY 16.78
+#define BK_GATEWAY 28.38
+#define LT_GATEWAY 19.25
+#define RT_GATEWAY 19.25
 
 // Orientation constants
 #define NORTH 0
@@ -93,7 +94,7 @@
 #define	LIGHT_SHY	 3
 
 // Maximum number of User Moves
-#define MAX_MOVE_SIZE 9
+#define MAX_MOVE_SIZE 11
 
 // World Size
 #define WORLD_ROW_SIZE 4
@@ -127,7 +128,8 @@ char move_arc_stnb(float, float, float, float, BOOL);
 char checkOdometry(void);
 void checkWorld(void);
 void getGateways(void);
-unsigned char rotateCell(unsigned char,char);
+unsigned char rotateCell(unsigned char,unsigned char);
+void orientationInput(void);
 
 /** Global Variables ***********************************************/
 // Integrator Error
@@ -166,13 +168,28 @@ unsigned char moveGateways[MAX_MOVE_SIZE];
 unsigned char currentMoveWorld = 0;
 unsigned char currentCellWorld = 0;
 unsigned char currentOrientation = 0b00;
+unsigned char currentGateway = 0;
+unsigned char nextGateway = 0;
+
+#define BYTETOBINARYPATTERN "%d%d%d%d%d%d%d%d"
+#define BYTETOBINARY(byte)  \
+  (byte & 0x80 ? 1 : 0), \
+  (byte & 0x40 ? 1 : 0), \
+  (byte & 0x20 ? 1 : 0), \
+  (byte & 0x10 ? 1 : 0), \
+  (byte & 0x08 ? 1 : 0), \
+  (byte & 0x04 ? 1 : 0), \
+  (byte & 0x02 ? 1 : 0), \
+  (byte & 0x01 ? 1 : 0) 
+
 
 // Create the Robot World
-static char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] = {
-							{0b1101,0b1111,0b1111,0b1101},
-							{0b0001,0b1010,0b1010,0b0100},
-							{0b0101,0b1111,0b1111,0b0101},
-							{0b0111,0b1111,0b1011,0b0110}};
+static char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] = 	{
+																{0b1101,0b1111,0b1111,0b1101},
+																{0b0001,0b1010,0b1010,0b0100},
+																{0b0101,0b1111,0b1111,0b0101},
+																{0b0111,0b1111,0b1011,0b0110}
+																};
 							
 // Create an shift matrix for rotating cells							
 static unsigned char shifted[16] = {0b0000, 0b0010, 0b0100, 0b0110, 
@@ -202,33 +219,62 @@ void CBOT_main( void )
 	prefilter(1);
 	
 	
-	LCD_printf("ENTER move commands\n\n\n\n");
-	TMRSRVC_delay(1000);//wait 1 seconds
-	LCD_clear();
-	movesInput();
-	TMRSRVC_delay(1000);//wait 1 seconds
-	LCD_clear();
-	
-	LCD_printf("ENTER current location\n\n\n\n");	
+	// Enter the robot's current (starting) position
+	LCD_printf("ENTER start location\n\n\n\n");	
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
 	worldInput();
 	TMRSRVC_delay(3000);//wait 3 seconds
 	LCD_clear();
+	
+	// Enter the robot's current (starting) orientation
+	LCD_printf("ENTER start orientation\n\n\n\n");	
+	TMRSRVC_delay(1000);//wait 1 seconds
+	LCD_clear();
+	orientationInput();
+	TMRSRVC_delay(3000);//wait 3 seconds
+	LCD_clear();
+	
+	// Enter the robot topological commands
+	LCD_printf("ENTER move commands\n\n\n\n");
+	TMRSRVC_delay(1000);//wait 1 seconds
+	LCD_clear();
+	movesInput();
+	TMRSRVC_delay(3000);//wait 1 seconds
+	LCD_clear();
+	
+	// Print the robot gateways
+	LCD_printf("Robot Gateways:\n\n\n\n");
+	TMRSRVC_delay(1000);//wait 1 seconds
+	LCD_clear();
+	getGateways();
+	TMRSRVC_delay(3000);//wait 1 seconds
+	LCD_clear();
+	
+	// unsigned char i = 0;
+	// unsigned char orent = 0b0001;
+	// while(1){
+		// LCD_clear();
+		// LCD_printf("Nume: %i\nOrent\n"BYTETOBINARYPATTERN,i,BYTETOBINARY(orent));
+		// TMRSRVC_delay(2000);//wait 1 seconds
+		// orent  = rotateCell (orent, 0b01);
+		// i++;
+	// }
+		
+	
 
 	// Infinite loop
 	while (1)
     {
-		// update the sensor values
-		// checkLightSensor();
-		checkIR();
-		checkContactIR();
+		checkIR();	
+		checkWorld();
+		moveWorld();	
 		
 		//Test arc function
 		// LCD_printf("Move Arc\n\n\n\n");
 		// TMRSRVC_delay(1000);//wait 1 seconds
-		// move_arc_stwt(WHEEL_BASE/2, 1000, 10, 10, 0);
-		
+		// move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
+			
 		// //Test contact Sensors
 		// LCD_printf("Right Contact: %i\nLeft Contact: %i\n\n\n",rightContact,leftContact);
 		// TMRSRVC_delay(1000);//wait 1 seconds
@@ -237,10 +283,6 @@ void CBOT_main( void )
 		// LCD_clear();
 		// LCD_printf("FrontIR = %3.2f\nBackIR = %3.2f\nLeftIR = %3.2f\nRightIR = %3.2f\n", ftIR,bkIR,ltIR,rtIR);
 		// TMRSRVC_delay(1000);//wait 1 seconds
-		
-		// run the moveBehavior FSM
-		moveBehavior(1);
-		moveWorld();	
     }
 }// end the CBOT_main()
 
@@ -254,24 +296,42 @@ void CBOT_main( void )
 * Function:			char getGateways(void)
 * Input Variables:	void
 * Output Return:	void
-* Overview:		    
+* Overview:		    Interpolates the list of gateways in the path by
+					using the map and initial conditions 
 ********************************************************************/
 void getGateways(void)
 {
-	unsigned char j = 0;
+	// Get the start location of the robot
 	unsigned char curRow = currentCellWorld && 0b1100;
 	unsigned char curCol = currentCellWorld && 0b0011;
-	unsigned char curCell = 0b0000;
+	
+	// Git the start orientation of the robot
 	unsigned char curOrient = currentOrientation;
-	unsigned char curMove = 0;
+	
+	// This will be the gatway the robot will look for
+	unsigned char curCell;
+		
+	// This will be the move the robot will preform
+	unsigned char curMove;
+	
+	// This is the index of the move we are looking at
+	unsigned char j;
 	
 	for (j = 0; j<=MAX_MOVE_SIZE; j++)
-	{
+	{	// Get the current move
 		curMove = moveCommands[j];
+		
+		// Get the current cell
 		curCell = ROBOT_WORLD[curRow][curCol];
+		
+		// Rotate the cell with reference to the robot
 		curCell = rotateCell(curCell,curOrient);
+		
+		// Store the cell as a searchable gateway
 		moveGateways[j] = curCell;
 				
+		// If we are moving forward
+		// move to the next cell with respect to our orientation
 		if (curMove == MOVE_FORWARD){
 			switch(curOrient){
 				case NORTH:
@@ -288,33 +348,57 @@ void getGateways(void)
 					break;
 				default:
 					break;
-			}
-					
+			}			
 		}
+		//	If we are turning right
+		// then rotate our map orientation appropriately
 		else if (curMove == MOVE_RIGHT){
-			curOrient = (curOrient++)&&0b0011;
-		}	
+			curOrient++;
+			curOrient = curOrient&0b11;
+			// LCD_clear();
+			// LCD_printf("Num:\n%i\curOrient:\n"BYTETOBINARYPATTERN,j,BYTETOBINARY(curOrient));
+			// TMRSRVC_delay(500);//wait 1/2 seconds
+		}
+		//	If we are turning left
+		// then rotate our map orientation appropriately
 		else if (curMove == MOVE_LEFT){
 			// if(curOrient == 0){
 				// curOrient = 0b0011;
 			// }
-			curOrient = (curOrient--)&&0b0011;
+			curOrient--;
+			curOrient = curOrient&0b11;
 		}			
+	}
+	
+	for (j = 0; j<=MAX_MOVE_SIZE; j++)
+	{
+		curCell = moveGateways[j];
+		LCD_clear();
+		LCD_printf("Num:\n%i\nCurCell:\n"BYTETOBINARYPATTERN,j,BYTETOBINARY(curCell));
+		TMRSRVC_delay(500);//wait 1/2 seconds
 	}
 }
 
 /*******************************************************************
 * Function:			void rotateCell(unsigned char,char)
-* Input Variables:	unsigned char, char
+* Input Variables:	unsigned char, unsigned char
 * Output Return:	unsigned char
-* Overview:		    Rotates the current cell to match the robot's orientation
+* Overview:		    Rotates the current cell to match the robot's
+					orientation, so the robot can recognize gateways
 ********************************************************************/
-unsigned char rotateCell (unsigned char worldCell, char orientation)
+unsigned char rotateCell (unsigned char worldCell, unsigned char orientation)
 {
-	char orient = orientation;
+	//	a temp for orientation
+	unsigned char orient = orientation;
+	
+	//	a temp for world cell
 	unsigned char cell = worldCell;
 	
+	// Use the given orientation as a counter 
+	// to know the number of rotations to correct the map
+	// for the robots current orientation
 	while (orient!=0){
+		// use the shift array to rotate
 		cell = shifted[cell];
 		orient--;
 	}
@@ -329,15 +413,17 @@ unsigned char rotateCell (unsigned char worldCell, char orientation)
 ********************************************************************/
 void checkWorld( void )
 {	
+	currentGateway = 0;
+	
 	// Acquire current gateway description
-	char currentGateway = 0;
 	currentGateway += (ftIR<FT_GATEWAY)<<3;
-	currentGateway += (rtIR<RT_GATEWAY)<<2;
-	currentGateway += (ltIR<LT_GATEWAY)<<1;
-	currentGateway += (bkIR<BK_GATEWAY)<<0;
+	currentGateway += (ltIR<LT_GATEWAY)<<2;
+	currentGateway += (bkIR<BK_GATEWAY)<<1;
+	currentGateway += (rtIR<RT_GATEWAY)<<0;
+	nextGateway = moveGateways[currentMoveWorld+1];
 	
 	// Check to see if the robot has entered the next cell of the robot world
-	if(currentGateway == moveGateways[currentMoveWorld+1]){
+	if(currentGateway == nextGateway){
 		currentMoveWorld += 1;
 	}
 }
@@ -353,32 +439,12 @@ void worldInput( void )
 {
 	// Initialize a button holder
 	unsigned char btnHolder = UNPRESSED;
-<<<<<<< HEAD
-	unsigned char btnHolderOld = UNPRESSED;
-		
-	for (unsigned char i = 0; i < WORLD_ROW_SIZE; i++){
-		// while NO buttons are pressed
-		while(btnHolder == UNPRESSED){
-			btnHolder = EnterTopoCommand();
-		}
-		
-		currentCellWorld = currentCellWorld << 1;
-		currentCellWorld += (btnHolder-1);
-				
-		LCD_clear();
-		LCD_printf("Current World Cell:\n%d\n\n",currentCellWorld);
-		btnHolderOld = btnHolder;		
-		
-		TMRSRVC_delay(500);	//wait 0.5 seconds
-		EnterTopoCommand();
-		while(btnHolder == btnHolderOld){
-			btnHolder = EnterTopoCommand();
-		}
-=======
+	// unsigned char btnHolderOld = UNPRESSED;
 	unsigned char i = 0;
+	
 	while (i < WORLD_ROW_SIZE){
 		btnHolder = EnterTopoCommand();
-		
+
 		if (btnHolder == MOVE_LEFT){
 			currentCellWorld = currentCellWorld << 1;
 			currentCellWorld += 0;
@@ -389,14 +455,70 @@ void worldInput( void )
 			currentCellWorld += 1;
 			i++;
 		}
-		
-		if (btnHolder != 0){
+
+		// if (btnHolder != 0){
 			LCD_clear();
 			LCD_printf("Current World Cell:\n%i\nCommand Num: %i\n",currentCellWorld,i);
-		}
-		TMRSRVC_delay(1000);	//wait 0.5 seconds
->>>>>>> Lab6 Code
+		// }
+		TMRSRVC_delay(500);	//wait 0.5 seconds
 	}
+}
+
+/*******************************************************************
+* Function:			void orientationInput(void)
+* Input Variables:	void
+* Output Return:	void
+* Overview:		    Enter the starting orientation of the robot
+*						NORTH = 0b00
+*						EAST = 0b01
+*						SOUTH = 0b10
+*						WEST = 0b11
+********************************************************************/
+void orientationInput(void)
+{
+	// Initialize a button holder
+	unsigned char btnHolder = UNPRESSED;
+	// unsigned char btnHolderOld = UNPRESSED;
+	unsigned char i = 0;
+	
+	while (i < 2){
+		btnHolder = EnterTopoCommand();
+
+		if (btnHolder == MOVE_LEFT){
+			currentOrientation = currentOrientation << 1;
+			currentOrientation += 0;
+			i++;
+		}
+		else if (btnHolder == MOVE_FORWARD){
+			currentOrientation = currentOrientation << 1;
+			currentOrientation += 1;
+			i++;
+		}
+
+		if (btnHolder != 0){
+			LCD_clear();
+			LCD_printf("Current World Orientation:\n%i\nCommand Num: %i\n",currentOrientation,i);	
+		}
+		TMRSRVC_delay(500);	//wait 0.5 seconds
+	}
+	LCD_clear();
+	switch(currentOrientation){
+		case NORTH:
+			LCD_printf("Current World Orientation:\nNORTH\n\n");
+			break;
+		case EAST:
+			LCD_printf("Current World Orientation:\nEAST\n\n");
+			break;
+		case SOUTH:
+			LCD_printf("Current World Orientation:\nSOUTH\n\n");
+			break;
+		case WEST:
+			LCD_printf("Current World Orientation:\nWEST\n\n");
+			break;
+		default:
+			break;
+	}
+	TMRSRVC_delay(500);	//wait 0.5 seconds
 }
 
 /*******************************************************************
@@ -412,28 +534,10 @@ void movesInput( void )
 	unsigned char btnHolder = UNPRESSED;
 	unsigned char btnHolderOld = UNPRESSED;
 	unsigned char i = 0;
+	
 	while (i < MAX_MOVE_SIZE){
 		btnHolder = EnterTopoCommand();
-		
-<<<<<<< HEAD
-	for (unsigned char ii = 0; ii < MAX_MOVE_SIZE; ii++){
-		// while NO buttons are pressed
-		while(btnHolder == UNPRESSED){
-			btnHolder = EnterTopoCommand();
-		}
-		
-		moveCommands[ii] = btnHolder;
-		
-		LCD_clear();
-		LCD_printf("Old Command: %i\nNew Command: %i\nCommand Num %i\n\n",btnHolderOld,btnHolder,ii);
-		btnHolderOld = btnHolder;		
-		
-		TMRSRVC_delay(500);	//wait 0.5 
-		EnterTopoCommand();
-		while(btnHolder == btnHolderOld){
-			btnHolder = EnterTopoCommand();
-		}
-=======
+	
 		if (btnHolder == MOVE_LEFT){
 			moveCommands[i] = MOVE_LEFT;
 			i++;
@@ -446,14 +550,14 @@ void movesInput( void )
 			moveCommands[i] = MOVE_RIGHT;
 			i++;
 		}
-		
+
 		if (btnHolder != 0){
 			LCD_clear();
 			LCD_printf("Old Command: %i\nNew Command: %i\nCommand Num %i\n\n",btnHolderOld,btnHolder,i);
 			btnHolderOld = btnHolder;
 		}
-		TMRSRVC_delay(1000);	//wait 0.5 seconds
->>>>>>> Lab6 Code
+		TMRSRVC_delay(500);	//wait 0.5 seconds
+		moveCommands[i] = MOVE_STOP;
 	}
 }
 
@@ -465,29 +569,49 @@ void movesInput( void )
 ********************************************************************/
 char moveWorld( void )
 {	
-	currentMove = moveCommands[currentMoveWorld];
-	if(currentMove != oldMove){
-		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE, 10, 10, 0);
-	}
 	LCD_clear();
+	// LCD_printf("Current Move:\n%i\n",currentMove);
+	
+	currentMove = moveCommands[currentMoveWorld];
+	// if(currentMove != oldMove){
+		// move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE, 10, 10, 0);
+	// }
+	// LCD_clear();
+	
+	if(((currentMove == MOVE_LEFT)|(currentMove == MOVE_RIGHT))&(oldMove == MOVE_FORWARD))
+	{
+		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE/2, 10, 10, 0);		
+	}
+	
+	if(((oldMove == MOVE_LEFT)|(oldMove == MOVE_RIGHT))&(currentMove == MOVE_FORWARD))
+	{
+		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE/2, 10, 10, 0);		
+	}
+	
 	switch(currentMove){
 		case MOVE_LEFT:
-			LCD_printf("Left");
+			LCD_printf("Left\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
+			TMRSRVC_delay(1000);//wait 1 seconds
 			move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
 			break;
 		case MOVE_FORWARD:
-			LCD_printf("Forward");
+			LCD_printf("Forward\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
+			// TMRSRVC_delay(1000);//wait 1 seconds
 			moveWall();
+			// move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE, 10, 10, 0);
 			break;
 		case MOVE_RIGHT:
-			LCD_printf("Right");
+			LCD_printf("Right\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
+			TMRSRVC_delay(1000);//wait 1 seconds
 			move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
 			break;
 		default:
 			LCD_printf("What?!");
+			STEPPER_stop( STEPPER_BOTH, STEPPER_BRK_OFF);
+			while(1);
 			break;
 	}
-	TMRSRVC_delay(1000);//wait 1 seconds
+	// TMRSRVC_delay(1000);//wait 1 seconds
 	oldMove = currentMove;
 	return 1;
 }
@@ -501,14 +625,14 @@ char moveWorld( void )
 char moveBehavior( int behavior)
 {
 	// Check the moveAway behavior for obstacles
-	if(moveAway()){
-		Ierror = 0;
-		return 1; 
-	}
+	// if(moveAway()){
+		// Ierror = 0;
+		// return 1; 
+	// }
 	
 	if(moveWorld()){
 		Ierror = 0;
-		return 2; 
+		return 1; 
 	}
 	
 	// if(moveWallFlagStatus){
@@ -617,6 +741,8 @@ char moveWall( void )
 	if(!isWall){	
 		return isWall;
 	}
+	
+	move_arc_stnb(NO_TURN, 10, 10, 10, 0);
 	
 	// A variable that contains the logic of which wall is imaginary
 	BOOL isLEFT;
