@@ -3,13 +3,15 @@
 * Processor:       ATmega324P
 * Compiler:        
 *
-* Code Description:
+* Code Description: This code is designed to allow the robot to 
+* navigate through world with a predefined map from a starting location 
+* to a specified goal point
 *		
 *                                                                     
 *
 * Creation and Revisions:
 *
-*      AUTHOR               DATE			COMMENTS
+*      AUTHOR               DATE	1/22/2013		COMMENTS
 *      Ander Solorzano
 *      &
 *      Ruffin White   
@@ -436,6 +438,10 @@ void checkWorld( void )
 * Output Return:	void
 * Overview:			Allows the user to initialize the location of
 *					the robot 
+*						NORTH = 0b00
+*						EAST = 0b01
+*						SOUTH = 0b10
+*						WEST = 0b11
 ********************************************************************/
 void worldInput( void )
 {
@@ -527,8 +533,7 @@ void orientationInput(void)
 * Function:			void movesInput(void)
 * Input Variables:	void
 * Output Return:	void
-* Overview:			Stores the button values pressed by user into an
-*					array of max size 32.
+* Overview:			allows the user to specify a desired path
 ********************************************************************/
 void movesInput( void )
 {
@@ -568,7 +573,7 @@ void movesInput( void )
 * Function:			char moveWorld(void)
 * Input Variables:	void
 * Output Return:	char
-* Overview:		    Moves robot through the world
+* Overview:		    Iteratively moves robot through the world
 ********************************************************************/
 char moveWorld( void )
 {	
