@@ -39,8 +39,8 @@
 #define MOVE_RIGHT 3
 #define MOVE_STOP 4
 #define NO_TURN 2147483647
-#define RIGHT_TURN 16.50
-#define LEFT_TURN -16.50
+#define RIGHT_TURN 18.00
+#define LEFT_TURN -18.00
 
 // Obstacle Avoidance Threshold
 #define IR_OBST_F_THRESH 7
@@ -55,10 +55,10 @@
 #define IR_WALL_B_THRESH 15
 
 // Gateway Thresholds
-#define FT_GATEWAY 30
+#define FT_GATEWAY 35
 #define BK_GATEWAY 35
-#define LT_GATEWAY 30
-#define RT_GATEWAY 30
+#define LT_GATEWAY 35
+#define RT_GATEWAY 35
 
 // Orientation constants
 #define NORTH 0
@@ -221,6 +221,16 @@ void CBOT_main( void )
 	checkIR();
 	prefilter(1);
 	
+	//unsigned char i = 0;
+	// unsigned char orent = 0b0001;
+	// while(1){
+		// LCD_clear();
+		// LCD_printf("Nume: %i\nOrent\n"BYTETOBINARYPATTERN,i,BYTETOBINARY(orent));
+		// TMRSRVC_delay(2000);//wait 1 seconds
+		// orent  = rotateCell (orent, 0b01);
+		// i++;
+	// }
+	
 	
 	// Enter the robot's current (starting) position
 	LCD_printf("START location\n\n\n\n");	
@@ -253,31 +263,21 @@ void CBOT_main( void )
 	getGateways();
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
-	
-	// unsigned char i = 0;
-	// unsigned char orent = 0b0001;
-	// while(1){
-		// LCD_clear();
-		// LCD_printf("Nume: %i\nOrent\n"BYTETOBINARYPATTERN,i,BYTETOBINARY(orent));
-		// TMRSRVC_delay(2000);//wait 1 seconds
-		// orent  = rotateCell (orent, 0b01);
-		// i++;
-	// }
-		
+			
 	
 
 	// Infinite loop
 	while (1)
     {
 		checkIR();	
-		// checkWorld();
-		// moveWorld();	
-		moveMetric();	
+		checkWorld();
+		moveWorld();	
+		// moveMetric();	
 		
-		//Test arc function
+		// // Test arc function
 		// LCD_printf("Move Arc\n\n\n\n");
 		// TMRSRVC_delay(1000);//wait 1 seconds
-		// move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
+		// move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
 			
 		// //Test contact Sensors
 		// LCD_printf("Right Contact: %i\nLeft Contact: %i\n\n\n",rightContact,leftContact);
@@ -591,10 +591,10 @@ char moveWorld( void )
 		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(3.0/5.0), 10, 10, 0);		
 	}
 	
-	if(((oldMove == MOVE_LEFT)|(oldMove == MOVE_RIGHT))&(currentMove == MOVE_FORWARD))
-	{
-		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(3.0/5.0), 10, 10, 0);		
-	}
+	// if(((oldMove == MOVE_LEFT)|(oldMove == MOVE_RIGHT))&(currentMove == MOVE_FORWARD))
+	// {
+		// move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(3.0/5.0), 10, 10, 0);		
+	// }
 	
 	switch(currentMove){
 		case MOVE_LEFT:
