@@ -66,9 +66,9 @@
 
 	  
 	// Integrator Error
-	float Ierror = 0;
+	float Ierror;
 	// Previous Error Value
-	float error_old = 0;
+	float error_old;
 
 	 // Range Sensor Value Arrays For Prefilter
 	float	ltIR_old[PREFILTER_SIZE];//left IR sensor
@@ -77,24 +77,29 @@
 	float 	bkIR_old[PREFILTER_SIZE];//back IR sensor
 
 	// Infrared Rangefinding Sensor Values
-	float	ltIR = 0;//left IR sensor
-	float	rtIR = 0;//right IR sensor
-	float	ftIR = 0;//front IR sensor
-	float 	bkIR = 0;//back IR sensor
+	float	ltIR;//left IR sensor
+	float	rtIR;//right IR sensor
+	float	ftIR;//front IR sensor
+	float 	bkIR;//back IR sensor
 
 	// Contact IR sensors
 	BOOL rightContact;
 	BOOL leftContact;
 	
 	// Light Range Sensor global variables
-	float	rightLightVolt	= 0;//right light sensors
-	float	leftLightVolt	= 0;//left light sensors
+	float	rightLightVolt;//right light sensors
+	float	leftLightVolt;//left light sensors
 
 	// Create an shift matrix for rotating cells							
-	static unsigned char shifted[16] = {0b0000, 0b0010, 0b0100, 0b0110, 
+	static unsigned char shiftedL[16] ={0b0000, 0b0010, 0b0100, 0b0110, 
 										0b1000, 0b1010, 0b1100, 0b1110, 
 										0b0001, 0b0011, 0b0101, 0b0111, 
 										0b1001, 0b1011, 0b1101, 0b1111};
+											
+	static unsigned char shiftedR[16] ={0b0000, 0b1000, 0b0001, 0b1001, 
+										0b0010, 0b1010, 0b0011, 0b1011, 
+										0b0100, 0b1100, 0b0101, 0b1101, 
+										0b0110, 0b1110, 0b0111, 0b1111};
 
 
 	/** Local Function Prototypes **************************************/
@@ -105,6 +110,7 @@
 	void checkContactIR(void);
 	void prefilter(char);
 	float pidController(float ,char);
+	unsigned char rotateCell(unsigned char,unsigned char, char);
 	char move_arc_stwt(float, float, float, float, BOOL);
 	char move_arc_stnb(float, float, float, float, BOOL);
 

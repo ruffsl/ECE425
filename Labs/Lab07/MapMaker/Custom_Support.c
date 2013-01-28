@@ -166,13 +166,13 @@ float pidController(float error, char reset )
 }
 
 /*******************************************************************
-* Function:			void rotateCell(unsigned char,char)
-* Input Variables:	unsigned char, unsigned char
+* Function:			void rotateCell(unsigned char,unsigned char, char)
+* Input Variables:	unsigned char, unsigned char, char
 * Output Return:	unsigned char
 * Overview:		    Rotates the current cell to match the robot's
 					orientation, so the robot can recognize gateways
 ********************************************************************/
-unsigned char rotateCell (unsigned char worldCell, unsigned char orientation)
+unsigned char rotateCell (unsigned char worldCell, unsigned char orientation, char L)
 {
 	//	a temp for orientation
 	unsigned char orient = orientation;
@@ -183,10 +183,19 @@ unsigned char rotateCell (unsigned char worldCell, unsigned char orientation)
 	// Use the given orientation as a counter 
 	// to know the number of rotations to correct the map
 	// for the robots current orientation
-	while (orient!=0){
-		// use the shift array to rotate
-		cell = shifted[cell];
-		orient--;
+	if(L){
+		while (orient!=0){
+			// use the shift array to left rotate
+			cell = shiftedL[cell];
+			orient--;
+		}
+	}
+	else{
+		while (orient!=0){
+			// use the shift array to right rotate
+			cell = shiftedR[cell];
+			orient--;
+		}
 	}
 	return cell;
 }
