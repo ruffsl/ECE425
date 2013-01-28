@@ -1,4 +1,4 @@
-CEEN_Interfaces.o: ../CEEN_Interfaces.c \
+MapMaker.o: ../MapMaker.c \
   C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Lab07\MapMaker\..\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/capi324v221.h \
   C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Lab07\MapMaker\..\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/utils324v221.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h \
@@ -41,7 +41,7 @@ CEEN_Interfaces.o: ../CEEN_Interfaces.c \
   C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Lab07\MapMaker\..\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/i2c324v221.h \
   C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Lab07\MapMaker\..\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/cbot324v221.h \
   C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Lab07\MapMaker\..\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/capi324v221.h \
-  ../CEEN_Interfaces.h
+  ../CEEN_Interfaces.h ../Custom_Support.h
 
 C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Lab07\MapMaker\..\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/capi324v221.h:
 
@@ -128,3 +128,5 @@ C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Lab07\MapMaker\..\..\..\..\..\..\
 C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Lab07\MapMaker\..\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/capi324v221.h:
 
 ../CEEN_Interfaces.h:
+
+../Custom_Support.h:
