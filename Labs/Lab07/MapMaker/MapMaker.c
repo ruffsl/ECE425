@@ -45,6 +45,10 @@
 #define WORLD_COLUMN_SIZE 4
 #define WORLD_RESOLUTION_SIZE 45.72
 
+// Print Size
+#define LCD_OFFSET 31
+#define LCD_CELL_OFFSET 8
+
 
 /** Local Function Prototypes **************************************/
 char moveWall(void);
@@ -101,7 +105,13 @@ unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE];
 void CBOT_main( void )
 {
 	// initialize the robot
+	
 	initializeRobot();
+	printMap();
+	TMRSRVC_delay(1000);//wait 1 seconds
+	LCD_clear();	
+	
+	
 	
 	// Enter the robot's current (starting) position
 	LCD_printf("START Map/nlocation\n\n\n");	
@@ -122,6 +132,8 @@ void CBOT_main( void )
 	odometryTrigger = WORLD_RESOLUTION_SIZE;
 	isMapping = 1;
 	
+	/*
+	
 	while(isMapping)
 	{
 		checkIR();	
@@ -130,6 +142,8 @@ void CBOT_main( void )
 		mapWorld();
 		isMapping = !((currentCellWorldStart == currentCellWorld)&(currentOrientationStart == currentOrientation));
 	}
+	
+	
 	
 	// Enter the robot's current (starting) position
 	LCD_printf("START Path\nlocation\n\n\n");	
@@ -162,6 +176,10 @@ void CBOT_main( void )
 	getGateways();
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
+	*/
+	
+	
+	
 	
 	// unsigned char i = 0;
 	// unsigned char orent = 0b0001;
@@ -219,7 +237,7 @@ void printMap(void)
 	
 	BOOL isrobot;
 	for(r = 0; r < WORLD_ROW_SIZE; r++){
-		for(c = 0; c < WORLD_COL_SIZE; c++){
+		for(c = 0; c < WORLD_COLUMN_SIZE; c++){
 			cell = ROBOT_WORLD[r][c];
 			isrobot = (r == curRow)&&(c == curCol);
 			printCell(cell, r, c, isrobot);
@@ -235,51 +253,51 @@ void printMap(void)
 ********************************************************************/
 void printCell(unsigned char cell, unsigned char r, unsigned char c, BOOL isrobot){
 
-	r = r*8;
-	c = c*8;
+	r = r*LCD_CELL_OFFSET;
+	c = c*LCD_CELL_OFFSET;
 	
-	LCD_set_pixel(r,   c,   1);
-	LCD_set_pixel(r+7, c,   1);
-	LCD_set_pixel(r,   c+7, 1);
-	LCD_set_pixel(r+7, c+7, 1);
+	LCD_set_pixel(LCD_OFFSET - r,   c,   1);
+	LCD_set_pixel(LCD_OFFSET - (r+7), c,   1);
+	LCD_set_pixel(LCD_OFFSET - r,   c+7, 1);
+	LCD_set_pixel(LCD_OFFSET - (r+7), c+7, 1);
 	
 	if(cell&0b1000){
-		LCD_set_pixel(r, c+1, 1);
-		LCD_set_pixel(r, c+2, 1);
-		LCD_set_pixel(r, c+3, 1);
-		LCD_set_pixel(r, c+4, 1);
-		LCD_set_pixel(r, c+5, 1);		
-		LCD_set_pixel(r, c+6, 1);		
+		LCD_set_pixel(LCD_OFFSET - r, c+1, 1);
+		LCD_set_pixel(LCD_OFFSET - r, c+2, 1);
+		LCD_set_pixel(LCD_OFFSET - r, c+3, 1);
+		LCD_set_pixel(LCD_OFFSET - r, c+4, 1);
+		LCD_set_pixel(LCD_OFFSET - r, c+5, 1);		
+		LCD_set_pixel(LCD_OFFSET - r, c+6, 1);		
 	}
 	if(cell&0b0100){
-		LCD_set_pixel(r+1, c+7, 1);
-		LCD_set_pixel(r+2, c+7, 1);
-		LCD_set_pixel(r+3, c+7, 1);
-		LCD_set_pixel(r+4, c+7, 1);
-		LCD_set_pixel(r+5, c+7, 1);		
-		LCD_set_pixel(r+6, c+7, 1);			
+		LCD_set_pixel(LCD_OFFSET - (r+1), c+7, 1);
+		LCD_set_pixel(LCD_OFFSET - (r+2), c+7, 1);
+		LCD_set_pixel(LCD_OFFSET - (r+3), c+7, 1);
+		LCD_set_pixel(LCD_OFFSET - (r+4), c+7, 1);
+		LCD_set_pixel(LCD_OFFSET - (r+5), c+7, 1);		
+		LCD_set_pixel(LCD_OFFSET - (r+6), c+7, 1);			
 	}
 	if(cell&0b0010){
-		LCD_set_pixel(r+7, c+1, 1);
-		LCD_set_pixel(r+7, c+2, 1);
-		LCD_set_pixel(r+7, c+3, 1);
-		LCD_set_pixel(r+7, c+4, 1);
-		LCD_set_pixel(r+7, c+5, 1);		
-		LCD_set_pixel(r+7, c+6, 1);		
+		LCD_set_pixel(LCD_OFFSET - (r+7), c+1, 1);
+		LCD_set_pixel(LCD_OFFSET - (r+7), c+2, 1);
+		LCD_set_pixel(LCD_OFFSET - (r+7), c+3, 1);
+		LCD_set_pixel(LCD_OFFSET - (r+7), c+4, 1);
+		LCD_set_pixel(LCD_OFFSET - (r+7), c+5, 1);		
+		LCD_set_pixel(LCD_OFFSET - (r+7), c+6, 1);		
 	}
 	if(cell&0b0001){
-		LCD_set_pixel(r+1, c, 1);
-		LCD_set_pixel(r+2, c, 1);
-		LCD_set_pixel(r+3, c, 1);
-		LCD_set_pixel(r+4, c, 1);
-		LCD_set_pixel(r+5, c, 1);		
-		LCD_set_pixel(r+6, c, 1);		
+		LCD_set_pixel(LCD_OFFSET - (r+1), c, 1);
+		LCD_set_pixel(LCD_OFFSET - (r+2), c, 1);
+		LCD_set_pixel(LCD_OFFSET - (r+3), c, 1);
+		LCD_set_pixel(LCD_OFFSET - (r+4), c, 1);
+		LCD_set_pixel(LCD_OFFSET - (r+5), c, 1);		
+		LCD_set_pixel(LCD_OFFSET - (r+6), c, 1);		
 	}	
 	if(isrobot){
-		LCD_set_pixel(r+3, c+3, isrobot);
-		LCD_set_pixel(r+4, c+3, isrobot);
-		LCD_set_pixel(r+3, c+4, isrobot);
-		LCD_set_pixel(r+4, c+4, isrobot);
+		LCD_set_pixel(LCD_OFFSET - (r+3), c+3, isrobot);
+		LCD_set_pixel(LCD_OFFSET - (r+4), c+3, isrobot);
+		LCD_set_pixel(LCD_OFFSET - (r+3), c+4, isrobot);
+		LCD_set_pixel(LCD_OFFSET - (r+4), c+4, isrobot);
 	}
 }
 
