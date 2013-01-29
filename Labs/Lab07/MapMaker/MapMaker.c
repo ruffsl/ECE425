@@ -28,6 +28,7 @@
 #define IR_WALL_L_THRESH 10
 #define IR_WALL_B_THRESH 15
 #define MAX_SPEED 200
+#define WALL_STEP 50
 
 // Gateway Thresholds
 #define FT_GATEWAY 30
@@ -58,30 +59,37 @@ void checkWorld(void);
 void getGateways(void);
 void setGateways(void);
 void orientationInput(void);
-char checkOdometry(void);
+void checkOdometry(unsigned char);
 
 /** Global Variables ***********************************************/
 
 // moveBehavior Global Flag Variables
-char moveWallFlagStatus = 0;
-char currentMove = 0;
-char oldMove = 0;
-char isMapping ;
+char currentMove;
+char oldMove;
+char isMapping;
 
 // Create an array for button value commands
 unsigned char moveCommands[MAX_MOVE_SIZE];
 unsigned char moveGateways[MAX_MOVE_SIZE];
-unsigned char currentMoveWorld = 0;
+unsigned char currentMoveWorld;
 unsigned char currentCellWorld;
 unsigned char currentCellWorldStart;
 unsigned char currentOrientation;
 unsigned char currentOrientationStart;
-unsigned char currentGateway = 0;
-unsigned char nextGateway = 0;
+unsigned char currentGateway;
+unsigned char nextGateway;
+
+// odometry values
+unsigned char odometryStepL;
+unsigned char odometryStepR;
+unsigned char odometryTrigger;
+unsigned char odometryFlag;
+STEPPER_STEPS curr_step;
+
 
 
 // Map of the Robot World
-static unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE];
+unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE];
 
 																
 /*******************************************************************
@@ -116,12 +124,13 @@ void CBOT_main( void )
 	{
 		checkIR();	
 		checkWorld();
+		checkOdometry(0);
 		mapWorld();
 		isMapping = !((currentCellWorldStart == currentCellWorld)&(currentOrientationStart == currentOrientation));
 	}
 	
 	// Enter the robot's current (starting) position
-	LCD_printf("START location\n\n\n\n");	
+	LCD_printf("START Path\nlocation\n\n\n");	
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
 	worldInput();
@@ -129,7 +138,7 @@ void CBOT_main( void )
 	LCD_clear();
 	
 	// Enter the robot's current (starting) orientation
-	LCD_printf("START orientation\n\n\n\n");	
+	LCD_printf("START Path\norientation\n\n\n");
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
 	orientationInput();
@@ -137,7 +146,7 @@ void CBOT_main( void )
 	LCD_clear();
 	
 	// Enter the robot topological commands
-	LCD_printf("ENTER move commands\n\n\n\n");
+	LCD_printf("ENTER Path\ncommands\n\n\n");
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
 	movesInput();
@@ -190,6 +199,28 @@ void CBOT_main( void )
 /*******************************************************************
 * Additional Helper Functions
 ********************************************************************/
+
+/*******************************************************************
+* Function:			void checkOdometry(unsigned char)
+* Input Variables:	void
+* Output Return:	unsigned char reset resets the odometry
+* Overview:		    Checks the current odometry to the trigger and
+*					sets the flag whe appropriate
+********************************************************************/
+void checkOdometry( unsigned char reset )
+{	
+	// Update the avrage 
+	unsigned char odometry = ((odometryStepL + odometryStepR)/2)*D_STEP;
+	// check to see if we have traveresed the trigger distance
+	// or that a reset has been called
+	if((odometry > odometryTrigger)||(reset))
+	{
+		odometryFlag = 1;
+		odometryStepL = 0;
+		odometryStepR = 0;
+	}
+}
+
 /*******************************************************************
 * Function:			char mapWorld(void)
 * Input Variables:	void
@@ -197,18 +228,33 @@ void CBOT_main( void )
 * Overview:		    maps the world as it moves through it
 ********************************************************************/
 char mapWorld( void )
-{		
-	if(!(currentGateway&0b0001)){
+{	
+	if(!(currentGateway&0b0001)){	
+		// If we can make a left turn,
+		// then turn left
 		currentMove = MOVE_LEFT;
+		// Reset Odometry
+		checkOdometry(1);
 	}
 	else if(!(currentGateway&0b1000)){
+		// If we can't make a left turn,
+		// but we can go forward,
+		// go forward
 		currentMove = MOVE_FORWARD;
 	}
 	else {
+		// If we can't turn left or go forward
+		// spin right
 		currentMove = MOVE_RIGHT;
+		// Reset Odometry
+		checkOdometry(1);
 	}
 	
-	setGateways();
+	if(odometryFlag)
+	{
+		// Only update the map if we are done moving
+		setGateways();
+	}
 	
 	LCD_clear();
 	switch(currentMove){
@@ -221,8 +267,8 @@ char mapWorld( void )
 		case MOVE_FORWARD:
 			LCD_printf("Forward\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
 			// TMRSRVC_delay(1000);//wait 1 seconds
-			// moveWall();
-			move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE, 10, 10, 0);
+			moveWall();
+			// move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE, 10, 10, 0);
 			break;
 		case MOVE_RIGHT:
 			LCD_printf("Right\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
@@ -239,7 +285,6 @@ char mapWorld( void )
 	return 1;
 }
 
-
 /*******************************************************************
 * Function:			char setGateways(void)
 * Input Variables:	void
@@ -250,7 +295,7 @@ char mapWorld( void )
 void setGateways(void)
 {
 	// This will be the gatway the robot will look for
-	unsigned char curCell;
+	unsigned char curCell = currentGateway;
 		
 	// Get the start location of the robot
 	unsigned char curRow = (currentCellWorld>>2) & 0b1100;
@@ -619,14 +664,6 @@ char moveBehavior( int behavior)
 		Ierror = 0;
 		return 1; 
 	}
-	
-	// if(moveWallFlagStatus){
-		// // Run the moveWall behavior
-		// if(moveWall()){
-			// Ierror = 0;
-			// return 3;
-		// }
-	// }
 	return 0;	
 }
 
@@ -703,10 +740,15 @@ char moveWall( void )
 	float stepper_speed_L = MAX_SPEED/2 + (MAX_SPEED/2)*(effort/MAX_EFFORT);
 	float stepper_speed_R = MAX_SPEED/2 - (MAX_SPEED/2)*(effort/MAX_EFFORT);
 	
+	// Update odometry
+	curr_step = STEPPER_get_nSteps();
+	odometryStepL += WALL_STEP - curr_step.left;
+	odometryStepR += WALL_STEP - curr_step.right;
+	
 	// Move with wall
 	STEPPER_move_stnb( STEPPER_BOTH, 
-	STEPPER_REV, 50, stepper_speed_L, 450, STEPPER_BRK_OFF, // Left
-	STEPPER_REV, 50, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
+	STEPPER_REV, WALL_STEP, stepper_speed_L, 450, STEPPER_BRK_OFF, // Left
+	STEPPER_REV, WALL_STEP, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
 	
 	// debug LCP print statement
 	// LCD_clear();
