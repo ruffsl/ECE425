@@ -100,6 +100,9 @@
 										0b0010, 0b1010, 0b0011, 0b1011, 
 										0b0100, 0b1100, 0b0101, 0b1101, 
 										0b0110, 0b1110, 0b0111, 0b1111};
+										
+
+	unsigned char pix_arr[4][128]; // keeps track of on/off LCD pixels
 
 
 	/** Local Function Prototypes **************************************/
@@ -113,5 +116,6 @@
 	unsigned char rotateCell(unsigned char,unsigned char, char);
 	char move_arc_stwt(float, float, float, float, BOOL);
 	char move_arc_stnb(float, float, float, float, BOOL);
+	void LCD_set_pixel(unsigned char row, unsigned char col, BOOL val);
 
 #endif

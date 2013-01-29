@@ -60,6 +60,8 @@ void getGateways(void);
 void setGateways(void);
 void orientationInput(void);
 void checkOdometry(unsigned char);
+void printMap(void);
+void printCell(unsigned char, unsigned char, unsigned char, BOOL);
 
 /** Global Variables ***********************************************/
 
@@ -199,6 +201,87 @@ void CBOT_main( void )
 /*******************************************************************
 * Additional Helper Functions
 ********************************************************************/
+
+/*******************************************************************
+* Function:			void printMap(void)
+* Input Variables:	void
+* Output Return:	void
+* Overview:		    Print the map
+********************************************************************/
+void printMap(void)
+{
+	unsigned char r;
+	unsigned char c;
+	unsigned char cell;
+	
+	unsigned char curRow = currentCellWorld >> 2;
+	unsigned char curCol = currentCellWorld & 0b0011;
+	
+	BOOL isrobot;
+	for(r = 0; r < WORLD_ROW_SIZE; r++){
+		for(c = 0; c < WORLD_COL_SIZE; c++){
+			cell = ROBOT_WORLD[r][c];
+			isrobot = (r == curRow)&&(c == curCol);
+			printCell(cell, r, c, isrobot);
+		}	
+	}
+}
+
+/*******************************************************************
+* Function:			void printCell(unsigned char, unsigned char, unsigned char)
+* Input Variables:	void
+* Output Return:	unsigned char, unsigned char, unsigned char
+* Overview:		    Prints the cell
+********************************************************************/
+void printCell(unsigned char cell, unsigned char r, unsigned char c, BOOL isrobot){
+
+	r = r*8;
+	c = c*8;
+	
+	LCD_set_pixel(r,   c,   1);
+	LCD_set_pixel(r+7, c,   1);
+	LCD_set_pixel(r,   c+7, 1);
+	LCD_set_pixel(r+7, c+7, 1);
+	
+	if(cell&0b1000){
+		LCD_set_pixel(r, c+1, 1);
+		LCD_set_pixel(r, c+2, 1);
+		LCD_set_pixel(r, c+3, 1);
+		LCD_set_pixel(r, c+4, 1);
+		LCD_set_pixel(r, c+5, 1);		
+		LCD_set_pixel(r, c+6, 1);		
+	}
+	if(cell&0b0100){
+		LCD_set_pixel(r+1, c+7, 1);
+		LCD_set_pixel(r+2, c+7, 1);
+		LCD_set_pixel(r+3, c+7, 1);
+		LCD_set_pixel(r+4, c+7, 1);
+		LCD_set_pixel(r+5, c+7, 1);		
+		LCD_set_pixel(r+6, c+7, 1);			
+	}
+	if(cell&0b0010){
+		LCD_set_pixel(r+7, c+1, 1);
+		LCD_set_pixel(r+7, c+2, 1);
+		LCD_set_pixel(r+7, c+3, 1);
+		LCD_set_pixel(r+7, c+4, 1);
+		LCD_set_pixel(r+7, c+5, 1);		
+		LCD_set_pixel(r+7, c+6, 1);		
+	}
+	if(cell&0b0001){
+		LCD_set_pixel(r+1, c, 1);
+		LCD_set_pixel(r+2, c, 1);
+		LCD_set_pixel(r+3, c, 1);
+		LCD_set_pixel(r+4, c, 1);
+		LCD_set_pixel(r+5, c, 1);		
+		LCD_set_pixel(r+6, c, 1);		
+	}	
+	if(isrobot){
+		LCD_set_pixel(r+3, c+3, isrobot);
+		LCD_set_pixel(r+4, c+3, isrobot);
+		LCD_set_pixel(r+3, c+4, isrobot);
+		LCD_set_pixel(r+4, c+4, isrobot);
+	}
+}
 
 /*******************************************************************
 * Function:			void checkOdometry(unsigned char)

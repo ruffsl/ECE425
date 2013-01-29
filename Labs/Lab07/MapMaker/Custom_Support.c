@@ -26,17 +26,60 @@ void initializeRobot(void)
 	LEopstat = LED_open(); //open the LED module
 	LCopstat = LCD_open(); //open the LCD module
 	STEPPER_open(); // Open STEPPER module for use
-	SPKR_open(SPKR_BEEP_MODE);//open the speaker in beep mode
+	SPKR_open(SPKR_TONE_MODE);//open the speaker in tone mode
 	
 	LED_open();
 	I2C_open();
 	ADC_open();//open the ADC module
  	ADC_set_VREF( ADC_VREF_AVCC );// Set the Voltage Reference first so VREF=5V.
-
+	
 	// Initialize IR Values and Reset Prefilter
 	checkIR();
 	prefilter(1);
+	
+	// pixel array for the LCD screen
+	for(int i = 0; i < 4; i++) {
+		for(int j = 0; j < 128; j++) {
+			pix_arr[i][j] = 0x00;
+		}
+	}
 }
+
+/*******************************************************************
+* Function:			void LCD_set_pixel(unsigned char , unsigned char , BOOL)
+* Input Variables:	void
+* Output Return:	unsigned char row, unsigned char col, BOOL val
+* Overview:			a function that sets a single pixel on/off for the LCD
+ * 					@param row an unsigned char that specifies the lcd row
+ * 					@param col an unsigned char that specifies the lcd column
+ * 					@param val a boolean that specifies the pixel value to be set
+ *					LCD text print size (4 rows, 22 columns)
+ *					LCD pixel print size (32 rows, 128 columns)
+********************************************************************/
+void LCD_set_pixel(unsigned char row, unsigned char col, BOOL val) {
+	row &= 0x1F; // Limit row 0-31
+	col &= 0x7F; // Limit column 0-127
+
+	// Divide row by 8 to restrict to 0-3
+	unsigned char page = row >> 3;
+
+	// Set page and column to write next
+	LCD_set_PGC_addr( page, col );
+	LCD_set_next_PGC( page, col );
+
+	// Determine new pixel value by shifting 1 into place determined
+	// by remainder of divding by 8. And/or determined if pixel is on
+	// or off
+	if(val) {
+		pix_arr[page][col] |= (1 << (row & 7));
+	} else {
+		pix_arr[page][col] &= ~(1 << (row & 7));
+	}
+
+	// Write the pixel data out to the lcd
+	LCD_write_data( pix_arr[page][col] );
+}
+
 
 /*******************************************************************
 * Function:			void checkIR(void)
