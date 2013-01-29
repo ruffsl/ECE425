@@ -37,7 +37,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Include Directories
-INCLUDES = -I"C:\Users\solorzaa\Documents\GitHub\ECE425\Labs\Lab07\MapMaker\..\..\..\..\..\..\..\..\Program Files\AVR Libraries\lib-includes" 
+INCLUDES = -I"C:\Users\solorzaa\Documents\GitHub\ECE425\Labs\Pixel Demo\..\..\..\..\..\..\..\..\Program Files\AVR Libraries\lib-includes" 
 
 ## Library Directories
 LIBDIRS = -L"C:\Program Files\AVR Libraries" -L"C:\WinAVR-20100110\avr\lib\avr4" 
@@ -46,20 +46,14 @@ LIBDIRS = -L"C:\Program Files\AVR Libraries" -L"C:\WinAVR-20100110\avr\lib\avr4"
 LIBS = -lcapi324v221 -lm -lprintf_flt 
 
 ## Objects that must be built in order to link
-OBJECTS = CEEN_Interfaces.o MapMaker.o Custom_Support.o 
+OBJECTS = Pixel_Demo.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
 
 ## Build
 all: $(TARGET) WallFollowing.hex WallFollowing.eep WallFollowing.lss## Compile
-CEEN_Interfaces.o: ../CEEN_Interfaces.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-MapMaker.o: ../MapMaker.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-Custom_Support.o: ../Custom_Support.c
+Pixel_Demo.o: ../Pixel_Demo.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link
