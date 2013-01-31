@@ -26,6 +26,12 @@
 	#define RIGHT_TURN 16.50
 	#define LEFT_TURN -16.50
 	
+	// Obstacle Avoidance Threshold
+	#define IR_OBST_F_THRESH 7
+	#define IR_OBST_R_THRESH 10
+	#define IR_OBST_L_THRESH 10
+	#define IR_OBST_B_THRESH 7
+	
 	// Movement Commands for pathplanning
 	#define MOVE_LEFT 1
 	#define MOVE_FORWARD 2
@@ -52,6 +58,18 @@
 	// Button States
 	#define PRESSED 0
 	#define UNPRESSED 1
+	
+	// World Size
+	#define WORLD_ROW_SIZE 4
+	#define WORLD_COLUMN_SIZE 4
+	#define WORLD_RESOLUTION_SIZE 45.72
+	
+	// Maximum number of User Moves
+	#define MAX_MOVE_SIZE 12
+	
+	// Print Size
+	#define LCD_OFFSET 31
+	#define LCD_CELL_OFFSET 8
 
 	#define BYTETOBINARYPATTERN "%d%d%d%d%d%d%d%d"
 	#define BYTETOBINARY(byte)  \
@@ -101,8 +119,32 @@
 										0b0100, 0b1100, 0b0101, 0b1101, 
 										0b0110, 0b1110, 0b0111, 0b1111};
 										
-
-	unsigned char pix_arr[4][32]; // keeps track of on/off LCD pixels
+	
+	// Keeps track of on/off LCD pixels
+	unsigned char pix_arr[4][32];
+	
+	
+	// Map of the Robot World
+	unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE];
+		
+	// Create an array for button value commands
+	unsigned char moveCommands[MAX_MOVE_SIZE];
+	unsigned char moveGateways[MAX_MOVE_SIZE];
+	unsigned char currentMoveWorld;
+	unsigned char currentCellWorld;
+	unsigned char currentCellWorldStart;
+	unsigned char currentOrientation;
+	unsigned char currentOrientationStart;
+	unsigned char currentGateway;
+	unsigned char nextGateway;
+	
+	
+	// odometry values
+	unsigned char odometryStepL;
+	unsigned char odometryStepR;
+	float odometryTrigger;
+	unsigned char odometryFlag;
+	STEPPER_STEPS curr_step;
 
 
 	/** Local Function Prototypes **************************************/
@@ -114,8 +156,13 @@
 	void prefilter(char);
 	float pidController(float ,char);
 	unsigned char rotateCell(unsigned char,unsigned char, char);
+	char moveWander(void);
+	char moveAway(void);
 	char move_arc_stwt(float, float, float, float, BOOL);
 	char move_arc_stnb(float, float, float, float, BOOL);
 	void LCD_set_pixel(unsigned char row, unsigned char col, BOOL val);
+	void printCell(unsigned char, unsigned char, unsigned char, BOOL, unsigned char);
+	void printMap(void);
+	void checkOdometry(unsigned char);
 
 #endif
