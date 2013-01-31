@@ -111,8 +111,6 @@ void CBOT_main( void )
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();	
 	
-	
-	
 	// Enter the robot's current (starting) position
 	LCD_printf("START Map/nlocation\n\n\n");	
 	TMRSRVC_delay(1000);//wait 1 seconds
@@ -132,7 +130,7 @@ void CBOT_main( void )
 	odometryTrigger = WORLD_RESOLUTION_SIZE;
 	isMapping = 1;
 	
-	/*
+	
 	
 	while(isMapping)
 	{
@@ -140,9 +138,13 @@ void CBOT_main( void )
 		checkWorld();
 		checkOdometry(0);
 		mapWorld();
-		isMapping = !((currentCellWorldStart == currentCellWorld)&(currentOrientationStart == currentOrientation));
+		isMapping = !((currentCellWorldStart == currentCellWorld)&&(currentOrientationStart == currentOrientation));
 	}
 	
+	
+	printMap();
+	TMRSRVC_delay(10000);//wait 10 seconds
+	LCD_clear();	
 	
 	
 	// Enter the robot's current (starting) position
@@ -176,9 +178,7 @@ void CBOT_main( void )
 	getGateways();
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
-	*/
-	
-	
+		
 	
 	
 	// unsigned char i = 0;
@@ -351,29 +351,47 @@ char mapWorld( void )
 		checkOdometry(1);
 	}
 	
+	if(oldMove == MOVE_LEFT){
+		// Move forward half a rezolution
+		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(2.0/3.0), 10, 10, 0);		
+		// Set Odomitry
+		odometryStepL = (WORLD_RESOLUTION_SIZE*(2.0/3.0))/D_STEP;
+		odometryStepR = (WORLD_RESOLUTION_SIZE*(2.0/3.0))/D_STEP;		
+		// Clear Odomity Flag
+		odometryFlag = 0;		
+		// Override Move to go forward
+		currentMove = MOVE_FORWARD;
+	}
+	
 	if(odometryFlag)
 	{
 		// Only update the map if we are done moving
 		setGateways();
 	}
 	
+	// if(currentMove != oldMove){
+		LCD_clear();
+		LCD_printf("Move: BYTETOBINARYPATTERN\nCell: BYTETOBINARYPATTERN\nOrientation: BYTETOBINARYPATTERN\n\n",BYTETOBINARY(currentMove),BYTETOBINARY(currentCellWorld),BYTETOBINARY(currentOrientation));
+		TMRSRVC_delay(3000);//wait 1 seconds
+	// }
+	
 	LCD_clear();
 	switch(currentMove){
 		case MOVE_LEFT:
-			LCD_printf("Left\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
+			// LCD_printf("Left\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
 			// TMRSRVC_delay(1000);//wait 1 seconds
 			move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(2.8/5.0), 10, 10, 0);
 			move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
-			move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE, 10, 10, 0);
 			break;
 		case MOVE_FORWARD:
-			LCD_printf("Forward\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
+			// LCD_printf("Forward\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
 			// TMRSRVC_delay(1000);//wait 1 seconds
-			moveWall();
-			// move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE, 10, 10, 0);
+			// moveWall();
+			move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE, 10, 10, 0);
+			checkOdometry(1);
 			break;
 		case MOVE_RIGHT:
-			LCD_printf("Right\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
+			// LCD_printf("Right\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
 			// TMRSRVC_delay(1000);//wait 1 seconds
 			move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
 			break;
@@ -384,6 +402,7 @@ char mapWorld( void )
 	}
 	
 	// TMRSRVC_delay(1000);//wait 1 seconds
+	oldMove = currentMove;
 	return 1;
 }
 
