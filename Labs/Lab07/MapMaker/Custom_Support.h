@@ -23,8 +23,8 @@
 	#define WHEEL_BASE 21.3
 	#define POINT_TURN 0
 	#define NO_TURN 2147483647
-	#define RIGHT_TURN 16.50
-	#define LEFT_TURN -16.50
+	#define RIGHT_TURN 17.50
+	#define LEFT_TURN -17.50
 	
 	// Obstacle Avoidance Threshold
 	#define IR_OBST_F_THRESH 7
@@ -70,6 +70,9 @@
 	// Print Size
 	#define LCD_OFFSET 31
 	#define LCD_CELL_OFFSET 8
+	
+	#define MAX_SPEED 200
+	#define WALL_STEP 20
 
 	#define BYTETOBINARYPATTERN "%d%d%d%d%d%d%d%d"
 	#define BYTETOBINARY(byte)  \

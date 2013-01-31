@@ -37,7 +37,8 @@ void initializeRobot(void)
 	checkIR();
 	prefilter(1);
 	
-	odometryTrigger = WORLD_RESOLUTION_SIZE/D_STEP;
+	// Mistake? odometryTrigger = WORLD_RESOLUTION_SIZE*D_STEP which is about 6
+	odometryTrigger = WORLD_RESOLUTION_SIZE/2.75;
 	
 	// pixel array for the LCD screen
 	for(int i = 0; i < 4; i++) {
@@ -56,16 +57,33 @@ void initializeRobot(void)
 ********************************************************************/
 void checkOdometry( unsigned char reset )
 {	
+	
 	// Update the avrage 
 	float odometry = ((odometryStepL + odometryStepR)/2.0)*D_STEP;
 	// check to see if we have traveresed the trigger distance
 	// or that a reset has been called
-	if((odometry > odometryTrigger)||(reset))
+	
+	// AT START: odometry is REALLY SMALL & odometryTrigger is at approx 343
+	// Suggest breaking apart the IF case?
+	if((odometry > odometryTrigger))
 	{
 		odometryFlag = 1;
 		odometryStepL = 0;
 		odometryStepR = 0;
 	}
+	if (reset){
+		STEPPER_set_steps(STEPPER_BOTH,0);
+		odometryFlag = 0;
+		odometryStepL = 0;
+		odometryStepR = 0;
+	}
+	
+	
+	
+	// // Else the flag RESETS to ZERO?!
+	// else{
+		// odometryFlag = 0;
+	// }
 }
 
 /*******************************************************************

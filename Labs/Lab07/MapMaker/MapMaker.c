@@ -18,11 +18,11 @@
 
 // Wall Following Threshold
 #define IR_WALL_F_THRESH 0
-#define IR_WALL_R_THRESH 10
-#define IR_WALL_L_THRESH 10
+#define IR_WALL_R_THRESH 15
+#define IR_WALL_L_THRESH 15
 #define IR_WALL_B_THRESH 15
 #define MAX_SPEED 200
-#define WALL_STEP 50
+#define WALL_STEP 20
 
 // Gateway Thresholds
 #define FT_GATEWAY 13
@@ -62,17 +62,22 @@ void CBOT_main( void )
 	// initialize the robot
 	initializeRobot();
 	
-	odometryTrigger = WORLD_RESOLUTION_SIZE;
 	checkOdometry(1);
-	while(odometryFlag){
+	
+	/*
+	while(!odometryFlag){
 		moveWall();
 		checkOdometry(0);
+		// LCD_clear();
+		// LCD_printf("%5.5f\n%5.5f\n",odometryStepL,odometryStepL);
+		// TMRSRVC_delay(1000);//wait 3 seconds
 	}
 	
 	LCD_clear();
 	LCD_printf("LOLZ\nI'm done!");
 	TMRSRVC_delay(3000);//wait 3 seconds
 	while(1){}
+	*/
 		
 	
 	
@@ -136,7 +141,7 @@ void CBOT_main( void )
 		LCD_clear();
 		LCD_printf("      Move"BYTETOBINARYPATTERN"\n      Cell"BYTETOBINARYPATTERN"\n      Ornt"BYTETOBINARYPATTERN"\n\n",BYTETOBINARY(currentMove),BYTETOBINARY(currentCellWorld),BYTETOBINARY(currentOrientation));
 		printMap();
-		TMRSRVC_delay(3000);//wait 3 seconds
+		TMRSRVC_delay(500);//wait 3 seconds
 	}
 	
 	// Print the map
@@ -182,8 +187,8 @@ void CBOT_main( void )
 	while (1)
     {
 		checkIR();	
-		// checkWorld();
-		// moveWorld();	
+		checkWorld();
+		moveWorld();
 		
 		//Test arc function
 		// LCD_printf("Move Arc\n\n\n\n");
@@ -266,7 +271,7 @@ void moveMap( void )
 			break;
 		case MOVE_FORWARD:
 			checkOdometry(1);
-			while(odometryFlag){
+			while(!odometryFlag){
 				moveWall();
 				checkOdometry(0);
 			}
@@ -454,7 +459,7 @@ void getGateways(void)
 		curCell = moveGateways[j];
 		LCD_clear();
 		LCD_printf("Num:\n%i\nCurCell:\n"BYTETOBINARYPATTERN,j,BYTETOBINARY(curCell));
-		TMRSRVC_delay(500);//wait 1/2 seconds
+		TMRSRVC_delay(1000);//wait 1 second
 	}
 }
 
@@ -708,8 +713,24 @@ char moveWall( void )
 {	
 	// Check for walls
 	BOOL isWall = (ftIR < IR_WALL_F_THRESH)|(bkIR < IR_WALL_B_THRESH)|(rtIR < IR_WALL_R_THRESH)|(ltIR < IR_WALL_L_THRESH);
-	if(!isWall){	
-		move_arc_stnb(NO_TURN, 10, 10, 10, 0);
+	if(!isWall){
+	
+		// Update odometry
+		curr_step = STEPPER_get_nSteps();
+		
+		if(curr_step.left != 0){
+			odometryStepL += WALL_STEP - curr_step.left;
+		}
+		if(curr_step.right != 0){
+			odometryStepR += WALL_STEP - curr_step.right;
+		}
+		
+		STEPPER_set_steps(STEPPER_BOTH,0);
+	
+		// Move with wall
+		STEPPER_move_stnb( STEPPER_BOTH, 
+		STEPPER_REV, WALL_STEP, 200, 450, STEPPER_BRK_OFF, // Left
+		STEPPER_REV, WALL_STEP, 200, 450, STEPPER_BRK_OFF ); // Right
 		return isWall;
 	}
 		
@@ -771,8 +792,15 @@ char moveWall( void )
 	
 	// Update odometry
 	curr_step = STEPPER_get_nSteps();
-	odometryStepL += WALL_STEP - curr_step.left;
-	odometryStepR += WALL_STEP - curr_step.right;
+	
+	if(curr_step.left != 0){
+		odometryStepL += WALL_STEP - (curr_step.left);
+	}
+	if(curr_step.right != 0){
+		odometryStepR += WALL_STEP - (curr_step.right);
+	}
+	
+	STEPPER_set_steps(STEPPER_BOTH,0);
 	
 	// Move with wall
 	STEPPER_move_stnb( STEPPER_BOTH, 
