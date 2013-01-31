@@ -330,7 +330,7 @@ CBOT_system         0x13              C:\Program Files\AVR Libraries\libcapi324v
 error_old           0x4               MapMaker.o
 tmrNodes            0x3               C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_globals.o)
 ftIR_old            0x78              MapMaker.o
-pix_arr             0x200             MapMaker.o
+pix_arr             0x80              MapMaker.o
 curr_step           0x4               MapMaker.o
 currentCellWorld    0x1               MapMaker.o
 currentCellWorldStart
@@ -1218,7 +1218,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x00800396                _edata = .
                 0x00800396                PROVIDE (__data_end, .)
 
-.bss            0x00800396      0x53b
+.bss            0x00800396      0x3bb
                 0x00800396                PROVIDE (__bss_start, .)
  *(.bss)
  .bss           0x00800396        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
@@ -1392,7 +1392,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x0080040d                LCopstat
                 0x0080040f                LEopstat
                 0x00800411                ATopstat
- COMMON         0x00800413      0x43c MapMaker.o
+ COMMON         0x00800413      0x2bc MapMaker.o
                 0x00800413                currentMove
                 0x00800414                odometryStepR
                 0x00800415                oldMove
@@ -1413,49 +1413,49 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x00800538                error_old
                 0x0080053c                ftIR_old
                 0x008005b4                pix_arr
-                0x008007b4                curr_step
-                0x008007b8                currentCellWorld
-                0x008007b9                currentCellWorldStart
-                0x008007ba                rightContact
-                0x008007bb                leftContact
-                0x008007bc                ltIR
-                0x008007c0                odometryFlag
-                0x008007c1                rtIR
-                0x008007c5                rtIR_old
-                0x0080083d                moveGateways
-                0x00800849                leftLightVolt
-                0x0080084d                isMapping
-                0x0080084e                odometryStepL
- COMMON         0x0080084f       0x39 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_globals.o)
-                0x0080084f                STEPPER_params
-                0x00800886                step_done
- COMMON         0x00800888       0x13 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_globals.o)
-                0x00800888                CBOT_system
- COMMON         0x0080089b        0x5 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_globals.o)
-                0x0080089b                LCD_params
- COMMON         0x008008a0        0x1 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_globals.o)
-                0x008008a0                curr_spi_addr
- COMMON         0x008008a1       0x1e C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_globals.o)
-                0x008008a1                ATTINY_params
- COMMON         0x008008bf        0x3 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_globals.o)
-                0x008008bf                tmrNodes
- COMMON         0x008008c2        0x5 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_globals.o)
-                0x008008c2                I2C_params
- COMMON         0x008008c7        0x4 C:\WinAVR-20100110\avr\lib\avr4\libc.a(malloc.o)
-                0x008008c7                __brkval
-                0x008008c9                __flp
- COMMON         0x008008cb        0x6 C:\WinAVR-20100110\avr\lib\avr4\libc.a(iob.o)
-                0x008008cb                __iob
-                0x008008d1                PROVIDE (__bss_end, .)
+                0x00800634                curr_step
+                0x00800638                currentCellWorld
+                0x00800639                currentCellWorldStart
+                0x0080063a                rightContact
+                0x0080063b                leftContact
+                0x0080063c                ltIR
+                0x00800640                odometryFlag
+                0x00800641                rtIR
+                0x00800645                rtIR_old
+                0x008006bd                moveGateways
+                0x008006c9                leftLightVolt
+                0x008006cd                isMapping
+                0x008006ce                odometryStepL
+ COMMON         0x008006cf       0x39 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_globals.o)
+                0x008006cf                STEPPER_params
+                0x00800706                step_done
+ COMMON         0x00800708       0x13 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_globals.o)
+                0x00800708                CBOT_system
+ COMMON         0x0080071b        0x5 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_globals.o)
+                0x0080071b                LCD_params
+ COMMON         0x00800720        0x1 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_globals.o)
+                0x00800720                curr_spi_addr
+ COMMON         0x00800721       0x1e C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_globals.o)
+                0x00800721                ATTINY_params
+ COMMON         0x0080073f        0x3 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_globals.o)
+                0x0080073f                tmrNodes
+ COMMON         0x00800742        0x5 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_globals.o)
+                0x00800742                I2C_params
+ COMMON         0x00800747        0x4 C:\WinAVR-20100110\avr\lib\avr4\libc.a(malloc.o)
+                0x00800747                __brkval
+                0x00800749                __flp
+ COMMON         0x0080074b        0x6 C:\WinAVR-20100110\avr\lib\avr4\libc.a(iob.o)
+                0x0080074b                __iob
+                0x00800751                PROVIDE (__bss_end, .)
                 0x00006d26                __data_load_start = LOADADDR (.data)
                 0x00006fbc                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x008008d1        0x0
-                0x008008d1                PROVIDE (__noinit_start, .)
+.noinit         0x00800751        0x0
+                0x00800751                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x008008d1                PROVIDE (__noinit_end, .)
-                0x008008d1                _end = .
-                0x008008d1                PROVIDE (__heap_start, .)
+                0x00800751                PROVIDE (__noinit_end, .)
+                0x00800751                _end = .
+                0x00800751                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)

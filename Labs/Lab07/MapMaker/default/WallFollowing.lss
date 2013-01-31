@@ -7,7 +7,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, DATA
   1 .text         00006d26  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          0000053b  00800396  00800396  00007050  2**0
+  2 .bss          000003bb  00800396  00800396  00007050  2**0
                   ALLOC
   3 .debug_aranges 00000060  00000000  00000000  00007050  2**0
                   CONTENTS, READONLY, DEBUGGING
@@ -282,7 +282,7 @@ Disassembly of section .text:
      682:	d9 f7       	brne	.-10     	; 0x67a <.do_copy_data_loop>
 
 00000684 <__do_clear_bss>:
-     684:	18 e0       	ldi	r17, 0x08	; 8
+     684:	17 e0       	ldi	r17, 0x07	; 7
      686:	a6 e9       	ldi	r26, 0x96	; 150
      688:	b3 e0       	ldi	r27, 0x03	; 3
      68a:	01 c0       	rjmp	.+2      	; 0x68e <.do_clear_bss_start>
@@ -291,7 +291,7 @@ Disassembly of section .text:
      68c:	1d 92       	st	X+, r1
 
 0000068e <.do_clear_bss_start>:
-     68e:	a1 3d       	cpi	r26, 0xD1	; 209
+     68e:	a1 35       	cpi	r26, 0x51	; 81
      690:	b1 07       	cpc	r27, r17
      692:	e1 f7       	brne	.-8      	; 0x68c <.do_clear_bss_loop>
      694:	0e 94 d8 18 	call	0x31b0	; 0x31b0 <main>
@@ -1428,7 +1428,7 @@ void checkOdometry( unsigned char reset )
 	// or that a reset has been called
 	if((odometry > odometryTrigger)||(reset))
      c18:	20 91 14 04 	lds	r18, 0x0414
-     c1c:	60 91 4e 08 	lds	r22, 0x084E
+     c1c:	60 91 ce 06 	lds	r22, 0x06CE
      c20:	70 e0       	ldi	r23, 0x00	; 0
      c22:	62 0f       	add	r22, r18
      c24:	71 1d       	adc	r23, r1
@@ -1453,9 +1453,9 @@ void checkOdometry( unsigned char reset )
 	{
 		odometryFlag = 1;
      c52:	81 e0       	ldi	r24, 0x01	; 1
-     c54:	80 93 c0 07 	sts	0x07C0, r24
+     c54:	80 93 40 06 	sts	0x0640, r24
 		odometryStepL = 0;
-     c58:	10 92 4e 08 	sts	0x084E, r1
+     c58:	10 92 ce 06 	sts	0x06CE, r1
 		odometryStepR = 0;
      c5c:	10 92 14 04 	sts	0x0414, r1
 	}
@@ -1495,10 +1495,10 @@ void checkWorld( void )
      c92:	ff 0c       	add	r15, r15
      c94:	ff 0c       	add	r15, r15
 	currentGateway += (ltIR<LT_GATEWAY)<<2;
-     c96:	60 91 bc 07 	lds	r22, 0x07BC
-     c9a:	70 91 bd 07 	lds	r23, 0x07BD
-     c9e:	80 91 be 07 	lds	r24, 0x07BE
-     ca2:	90 91 bf 07 	lds	r25, 0x07BF
+     c96:	60 91 3c 06 	lds	r22, 0x063C
+     c9a:	70 91 3d 06 	lds	r23, 0x063D
+     c9e:	80 91 3e 06 	lds	r24, 0x063E
+     ca2:	90 91 3f 06 	lds	r25, 0x063F
      ca6:	20 e0       	ldi	r18, 0x00	; 0
      ca8:	30 e0       	ldi	r19, 0x00	; 0
      caa:	40 ef       	ldi	r20, 0xF0	; 240
@@ -1527,10 +1527,10 @@ void checkWorld( void )
      ce2:	11 0f       	add	r17, r17
 	currentGateway += (rtIR<RT_GATEWAY)<<0;
      ce4:	ee 24       	eor	r14, r14
-     ce6:	60 91 c1 07 	lds	r22, 0x07C1
-     cea:	70 91 c2 07 	lds	r23, 0x07C2
-     cee:	80 91 c3 07 	lds	r24, 0x07C3
-     cf2:	90 91 c4 07 	lds	r25, 0x07C4
+     ce6:	60 91 41 06 	lds	r22, 0x0641
+     cea:	70 91 42 06 	lds	r23, 0x0642
+     cee:	80 91 43 06 	lds	r24, 0x0643
+     cf2:	90 91 44 06 	lds	r25, 0x0644
      cf6:	20 e0       	ldi	r18, 0x00	; 0
      cf8:	30 e0       	ldi	r19, 0x00	; 0
      cfa:	40 ef       	ldi	r20, 0xF0	; 240
@@ -1549,8 +1549,8 @@ void checkWorld( void )
      d16:	20 91 97 04 	lds	r18, 0x0497
      d1a:	e2 2f       	mov	r30, r18
      d1c:	f0 e0       	ldi	r31, 0x00	; 0
-     d1e:	e3 5c       	subi	r30, 0xC3	; 195
-     d20:	f7 4f       	sbci	r31, 0xF7	; 247
+     d1e:	e3 54       	subi	r30, 0x43	; 67
+     d20:	f9 4f       	sbci	r31, 0xF9	; 249
      d22:	91 81       	ldd	r25, Z+1	; 0x01
      d24:	90 93 9c 04 	sts	0x049C, r25
 	
@@ -1612,14 +1612,14 @@ char moveAway ( void )
      d80:	c0 90 9a 04 	lds	r12, 0x049A
      d84:	d0 90 9b 04 	lds	r13, 0x049B
 	float moveX = rtIR - ltIR;
-     d88:	e0 90 c1 07 	lds	r14, 0x07C1
-     d8c:	f0 90 c2 07 	lds	r15, 0x07C2
-     d90:	00 91 c3 07 	lds	r16, 0x07C3
-     d94:	10 91 c4 07 	lds	r17, 0x07C4
-     d98:	80 91 bc 07 	lds	r24, 0x07BC
-     d9c:	90 91 bd 07 	lds	r25, 0x07BD
-     da0:	a0 91 be 07 	lds	r26, 0x07BE
-     da4:	b0 91 bf 07 	lds	r27, 0x07BF
+     d88:	e0 90 41 06 	lds	r14, 0x0641
+     d8c:	f0 90 42 06 	lds	r15, 0x0642
+     d90:	00 91 43 06 	lds	r16, 0x0643
+     d94:	10 91 44 06 	lds	r17, 0x0644
+     d98:	80 91 3c 06 	lds	r24, 0x063C
+     d9c:	90 91 3d 06 	lds	r25, 0x063D
+     da0:	a0 91 3e 06 	lds	r26, 0x063E
+     da4:	b0 91 3f 06 	lds	r27, 0x063F
      da8:	89 83       	std	Y+1, r24	; 0x01
      daa:	9a 83       	std	Y+2, r25	; 0x02
      dac:	ab 83       	std	Y+3, r26	; 0x03
@@ -2167,14 +2167,14 @@ char moveWall( void )
     1170:	14 f4       	brge	.+4      	; 0x1176 <moveWall+0x4a>
     1172:	33 24       	eor	r3, r3
     1174:	33 94       	inc	r3
-    1176:	a0 90 c1 07 	lds	r10, 0x07C1
-    117a:	b0 90 c2 07 	lds	r11, 0x07C2
-    117e:	c0 90 c3 07 	lds	r12, 0x07C3
-    1182:	d0 90 c4 07 	lds	r13, 0x07C4
-    1186:	40 90 bc 07 	lds	r4, 0x07BC
-    118a:	50 90 bd 07 	lds	r5, 0x07BD
-    118e:	60 90 be 07 	lds	r6, 0x07BE
-    1192:	70 90 bf 07 	lds	r7, 0x07BF
+    1176:	a0 90 41 06 	lds	r10, 0x0641
+    117a:	b0 90 42 06 	lds	r11, 0x0642
+    117e:	c0 90 43 06 	lds	r12, 0x0643
+    1182:	d0 90 44 06 	lds	r13, 0x0644
+    1186:	40 90 3c 06 	lds	r4, 0x063C
+    118a:	50 90 3d 06 	lds	r5, 0x063D
+    118e:	60 90 3e 06 	lds	r6, 0x063E
+    1192:	70 90 3f 06 	lds	r7, 0x063F
     1196:	88 24       	eor	r8, r8
     1198:	60 91 98 04 	lds	r22, 0x0498
     119c:	70 91 99 04 	lds	r23, 0x0499
@@ -2256,10 +2256,10 @@ char moveWall( void )
     1232:	90 e0       	ldi	r25, 0x00	; 0
     1234:	a0 e0       	ldi	r26, 0x00	; 0
     1236:	b1 ec       	ldi	r27, 0xC1	; 193
-    1238:	80 93 c1 07 	sts	0x07C1, r24
-    123c:	90 93 c2 07 	sts	0x07C2, r25
-    1240:	a0 93 c3 07 	sts	0x07C3, r26
-    1244:	b0 93 c4 07 	sts	0x07C4, r27
+    1238:	80 93 41 06 	sts	0x0641, r24
+    123c:	90 93 42 06 	sts	0x0642, r25
+    1240:	a0 93 43 06 	sts	0x0643, r26
+    1244:	b0 93 44 06 	sts	0x0644, r27
 		isLEFT = 0;
 	}
 	// If there is no wall on our left side
@@ -2281,10 +2281,10 @@ char moveWall( void )
     1262:	90 e0       	ldi	r25, 0x00	; 0
     1264:	a0 e0       	ldi	r26, 0x00	; 0
     1266:	b1 ec       	ldi	r27, 0xC1	; 193
-    1268:	80 93 bc 07 	sts	0x07BC, r24
-    126c:	90 93 bd 07 	sts	0x07BD, r25
-    1270:	a0 93 be 07 	sts	0x07BE, r26
-    1274:	b0 93 bf 07 	sts	0x07BF, r27
+    1268:	80 93 3c 06 	sts	0x063C, r24
+    126c:	90 93 3d 06 	sts	0x063D, r25
+    1270:	a0 93 3e 06 	sts	0x063E, r26
+    1274:	b0 93 3f 06 	sts	0x063F, r27
     1278:	81 e0       	ldi	r24, 0x01	; 1
 	}
 	
@@ -2320,17 +2320,17 @@ char moveWall( void )
     1294:	a8 01       	movw	r20, r16
     1296:	97 01       	movw	r18, r14
     1298:	0e 94 01 2c 	call	0x5802	; 0x5802 <__divsf3>
-    129c:	20 91 bc 07 	lds	r18, 0x07BC
-    12a0:	30 91 bd 07 	lds	r19, 0x07BD
-    12a4:	40 91 be 07 	lds	r20, 0x07BE
-    12a8:	50 91 bf 07 	lds	r21, 0x07BF
+    129c:	20 91 3c 06 	lds	r18, 0x063C
+    12a0:	30 91 3d 06 	lds	r19, 0x063D
+    12a4:	40 91 3e 06 	lds	r20, 0x063E
+    12a8:	50 91 3f 06 	lds	r21, 0x063F
     12ac:	0e 94 99 2b 	call	0x5732	; 0x5732 <__addsf3>
     12b0:	9b 01       	movw	r18, r22
     12b2:	ac 01       	movw	r20, r24
-    12b4:	60 91 c1 07 	lds	r22, 0x07C1
-    12b8:	70 91 c2 07 	lds	r23, 0x07C2
-    12bc:	80 91 c3 07 	lds	r24, 0x07C3
-    12c0:	90 91 c4 07 	lds	r25, 0x07C4
+    12b4:	60 91 41 06 	lds	r22, 0x0641
+    12b8:	70 91 42 06 	lds	r23, 0x0642
+    12bc:	80 91 43 06 	lds	r24, 0x0643
+    12c0:	90 91 44 06 	lds	r25, 0x0644
     12c4:	10 c0       	rjmp	.+32     	; 0x12e6 <moveWall+0x1ba>
 	// the air is simply the right distance minus the left left distance
 	// this ensures symmetry that the robot will follow in between the two walls
@@ -2338,14 +2338,14 @@ char moveWall( void )
 	else 
 	{
 		error = rtIR - ltIR;
-    12c6:	60 91 c1 07 	lds	r22, 0x07C1
-    12ca:	70 91 c2 07 	lds	r23, 0x07C2
-    12ce:	80 91 c3 07 	lds	r24, 0x07C3
-    12d2:	90 91 c4 07 	lds	r25, 0x07C4
-    12d6:	20 91 bc 07 	lds	r18, 0x07BC
-    12da:	30 91 bd 07 	lds	r19, 0x07BD
-    12de:	40 91 be 07 	lds	r20, 0x07BE
-    12e2:	50 91 bf 07 	lds	r21, 0x07BF
+    12c6:	60 91 41 06 	lds	r22, 0x0641
+    12ca:	70 91 42 06 	lds	r23, 0x0642
+    12ce:	80 91 43 06 	lds	r24, 0x0643
+    12d2:	90 91 44 06 	lds	r25, 0x0644
+    12d6:	20 91 3c 06 	lds	r18, 0x063C
+    12da:	30 91 3d 06 	lds	r19, 0x063D
+    12de:	40 91 3e 06 	lds	r20, 0x063E
+    12e2:	50 91 3f 06 	lds	r21, 0x063F
     12e6:	0e 94 98 2b 	call	0x5730	; 0x5730 <__subsf3>
 	}
 
@@ -2415,19 +2415,19 @@ char moveWall( void )
 	// Update odometry
 	curr_step = STEPPER_get_nSteps();
     135e:	0e 94 fa 1a 	call	0x35f4	; 0x35f4 <STEPPER_get_nSteps>
-    1362:	60 93 b4 07 	sts	0x07B4, r22
-    1366:	70 93 b5 07 	sts	0x07B5, r23
-    136a:	80 93 b6 07 	sts	0x07B6, r24
-    136e:	90 93 b7 07 	sts	0x07B7, r25
+    1362:	60 93 34 06 	sts	0x0634, r22
+    1366:	70 93 35 06 	sts	0x0635, r23
+    136a:	80 93 36 06 	sts	0x0636, r24
+    136e:	90 93 37 06 	sts	0x0637, r25
 	odometryStepL += WALL_STEP - curr_step.left;
-    1372:	80 91 4e 08 	lds	r24, 0x084E
+    1372:	80 91 ce 06 	lds	r24, 0x06CE
     1376:	8e 5c       	subi	r24, 0xCE	; 206
     1378:	86 1b       	sub	r24, r22
-    137a:	80 93 4e 08 	sts	0x084E, r24
+    137a:	80 93 ce 06 	sts	0x06CE, r24
 	odometryStepR += WALL_STEP - curr_step.right;
     137e:	80 91 14 04 	lds	r24, 0x0414
     1382:	8e 5c       	subi	r24, 0xCE	; 206
-    1384:	90 91 b6 07 	lds	r25, 0x07B6
+    1384:	90 91 36 06 	lds	r25, 0x0636
     1388:	89 1b       	sub	r24, r25
     138a:	80 93 14 04 	sts	0x0414, r24
 	
@@ -3068,7 +3068,7 @@ void worldInput( void )
     17ae:	81 30       	cpi	r24, 0x01	; 1
     17b0:	21 f4       	brne	.+8      	; 0x17ba <worldInput+0x1c>
 			currentCellWorld = currentCellWorld << 1;
-    17b2:	80 91 b8 07 	lds	r24, 0x07B8
+    17b2:	80 91 38 06 	lds	r24, 0x0638
     17b6:	88 0f       	add	r24, r24
     17b8:	06 c0       	rjmp	.+12     	; 0x17c6 <worldInput+0x28>
 			currentCellWorld += 0;
@@ -3078,11 +3078,11 @@ void worldInput( void )
     17ba:	82 30       	cpi	r24, 0x02	; 2
     17bc:	39 f4       	brne	.+14     	; 0x17cc <worldInput+0x2e>
 			currentCellWorld = currentCellWorld << 1;
-    17be:	80 91 b8 07 	lds	r24, 0x07B8
+    17be:	80 91 38 06 	lds	r24, 0x0638
     17c2:	88 0f       	add	r24, r24
 			currentCellWorld += 1;
     17c4:	8f 5f       	subi	r24, 0xFF	; 255
-    17c6:	80 93 b8 07 	sts	0x07B8, r24
+    17c6:	80 93 38 06 	sts	0x0638, r24
 			i++;
     17ca:	1f 5f       	subi	r17, 0xFF	; 255
 		}
@@ -3103,7 +3103,7 @@ void worldInput( void )
     17e2:	dc 93       	st	X, r29
     17e4:	ce 93       	st	-X, r28
     17e6:	11 97       	sbiw	r26, 0x01	; 1
-    17e8:	80 91 b8 07 	lds	r24, 0x07B8
+    17e8:	80 91 38 06 	lds	r24, 0x0638
     17ec:	82 83       	std	Z+2, r24	; 0x02
     17ee:	13 82       	std	Z+3, r1	; 0x03
     17f0:	14 83       	std	Z+4, r17	; 0x04
@@ -3111,8 +3111,8 @@ void worldInput( void )
     17f4:	0e 94 d1 35 	call	0x6ba2	; 0x6ba2 <printf>
 		// }
 		currentCellWorldStart = currentCellWorld;
-    17f8:	80 91 b8 07 	lds	r24, 0x07B8
-    17fc:	80 93 b9 07 	sts	0x07B9, r24
+    17f8:	80 91 38 06 	lds	r24, 0x0638
+    17fc:	80 93 39 06 	sts	0x0639, r24
 		TMRSRVC_delay(500);	//wait 0.5 seconds
     1800:	8d b7       	in	r24, 0x3d	; 61
     1802:	9e b7       	in	r25, 0x3e	; 62
@@ -3318,7 +3318,7 @@ void getGateways(void)
 	// unsigned char curCol = currentCellWorld & 0b0011;
 	
 	unsigned char curRow = currentCellWorld >> 2;
-    18fa:	80 91 b8 07 	lds	r24, 0x07B8
+    18fa:	80 91 38 06 	lds	r24, 0x0638
     18fe:	f8 2e       	mov	r15, r24
     1900:	f6 94       	lsr	r15
     1902:	f6 94       	lsr	r15
@@ -3366,8 +3366,8 @@ void getGateways(void)
 		// Store the cell as a searchable gateway
 		moveGateways[j] = curCell;
     1938:	f6 01       	movw	r30, r12
-    193a:	e3 5c       	subi	r30, 0xC3	; 195
-    193c:	f7 4f       	sbci	r31, 0xF7	; 247
+    193a:	e3 54       	subi	r30, 0x43	; 67
+    193c:	f9 4f       	sbci	r31, 0xF9	; 249
     193e:	80 83       	st	Z, r24
 				
 		// If we are moving forward
@@ -3463,8 +3463,8 @@ void getGateways(void)
 	{
 		curCell = moveGateways[j];
     1992:	f6 01       	movw	r30, r12
-    1994:	e3 5c       	subi	r30, 0xC3	; 195
-    1996:	f7 4f       	sbci	r31, 0xF7	; 247
+    1994:	e3 54       	subi	r30, 0x43	; 67
+    1996:	f9 4f       	sbci	r31, 0xF9	; 249
     1998:	00 81       	ld	r16, Z
 		LCD_clear();
     199a:	0e 94 e1 18 	call	0x31c2	; 0x31c2 <LCD_clear>
@@ -3616,7 +3616,7 @@ void setGateways(void)
 		
 	// Get the start location of the robot
 	unsigned char curRow = currentCellWorld >> 2;
-    1a94:	80 91 b8 07 	lds	r24, 0x07B8
+    1a94:	80 91 38 06 	lds	r24, 0x0638
     1a98:	08 2f       	mov	r16, r24
     1a9a:	06 95       	lsr	r16
     1a9c:	06 95       	lsr	r16
@@ -3726,7 +3726,7 @@ void setGateways(void)
     1b1a:	00 0f       	add	r16, r16
     1b1c:	00 0f       	add	r16, r16
     1b1e:	0f 0d       	add	r16, r15
-    1b20:	00 93 b8 07 	sts	0x07B8, r16
+    1b20:	00 93 38 06 	sts	0x0638, r16
 }
     1b24:	1f 91       	pop	r17
     1b26:	0f 91       	pop	r16
@@ -3786,7 +3786,7 @@ char mapWorld( void )
 	}
 	
 	if(odometryFlag)
-    1b66:	80 91 c0 07 	lds	r24, 0x07C0
+    1b66:	80 91 40 06 	lds	r24, 0x0640
     1b6a:	88 23       	and	r24, r24
     1b6c:	11 f0       	breq	.+4      	; 0x1b72 <mapWorld+0x46>
 	{
@@ -4327,7 +4327,7 @@ void printMap(void)
 	unsigned char cell;
 	
 	unsigned char curRow = currentCellWorld >> 2;
-    1f3e:	80 91 b8 07 	lds	r24, 0x07B8
+    1f3e:	80 91 38 06 	lds	r24, 0x0638
     1f42:	d8 2e       	mov	r13, r24
     1f44:	d6 94       	lsr	r13
     1f46:	d6 94       	lsr	r13
@@ -4480,7 +4480,7 @@ void CBOT_main( void )
     201c:	80 93 15 05 	sts	0x0515, r24
 	isMapping = 1;
     2020:	81 e0       	ldi	r24, 0x01	; 1
-    2022:	80 93 4d 08 	sts	0x084D, r24
+    2022:	80 93 cd 06 	sts	0x06CD, r24
 		
 		
 	// Infinite loop
@@ -4533,8 +4533,8 @@ void prefilter(char reset)
     2066:	94 e0       	ldi	r25, 0x04	; 4
     2068:	9c 8b       	std	Y+20, r25	; 0x14
     206a:	8b 8b       	std	Y+19, r24	; 0x13
-    206c:	a5 e3       	ldi	r26, 0x35	; 53
-    206e:	b8 e0       	ldi	r27, 0x08	; 8
+    206c:	a5 eb       	ldi	r26, 0xB5	; 181
+    206e:	b6 e0       	ldi	r27, 0x06	; 6
     2070:	be 83       	std	Y+6, r27	; 0x06
     2072:	ad 83       	std	Y+5, r26	; 0x05
     2074:	ec ea       	ldi	r30, 0xAC	; 172
@@ -4572,15 +4572,15 @@ void prefilter(char reset)
 		for (i = 0; i < PREFILTER_SIZE; i++)
 		{
 			ltIR_old[i] = ltIR;
-    20b2:	a0 90 bc 07 	lds	r10, 0x07BC
-    20b6:	b0 90 bd 07 	lds	r11, 0x07BD
-    20ba:	c0 90 be 07 	lds	r12, 0x07BE
-    20be:	d0 90 bf 07 	lds	r13, 0x07BF
+    20b2:	a0 90 3c 06 	lds	r10, 0x063C
+    20b6:	b0 90 3d 06 	lds	r11, 0x063D
+    20ba:	c0 90 3e 06 	lds	r12, 0x063E
+    20be:	d0 90 3f 06 	lds	r13, 0x063F
 			rtIR_old[i] = rtIR;
-    20c2:	e0 90 c1 07 	lds	r14, 0x07C1
-    20c6:	f0 90 c2 07 	lds	r15, 0x07C2
-    20ca:	00 91 c3 07 	lds	r16, 0x07C3
-    20ce:	10 91 c4 07 	lds	r17, 0x07C4
+    20c2:	e0 90 41 06 	lds	r14, 0x0641
+    20c6:	f0 90 42 06 	lds	r15, 0x0642
+    20ca:	00 91 43 06 	lds	r16, 0x0643
+    20ce:	10 91 44 06 	lds	r17, 0x0644
 			ftIR_old[i] = ftIR;
     20d2:	20 90 8e 04 	lds	r2, 0x048E
     20d6:	30 90 8f 04 	lds	r3, 0x048F
@@ -4608,8 +4608,8 @@ void prefilter(char reset)
     2102:	d3 82       	std	Z+3, r13	; 0x03
 			rtIR_old[i] = rtIR;
     2104:	fc 01       	movw	r30, r24
-    2106:	eb 53       	subi	r30, 0x3B	; 59
-    2108:	f8 4f       	sbci	r31, 0xF8	; 248
+    2106:	eb 5b       	subi	r30, 0xBB	; 187
+    2108:	f9 4f       	sbci	r31, 0xF9	; 249
     210a:	e0 82       	st	Z, r14
     210c:	f1 82       	std	Z+1, r15	; 0x01
     210e:	02 83       	std	Z+2, r16	; 0x02
@@ -4778,10 +4778,10 @@ void prefilter(char reset)
 	// Set the current reading to the first element 
 	// within the historical array
 	ltIR_old[0] = ltIR;
-    2220:	80 91 bc 07 	lds	r24, 0x07BC
-    2224:	90 91 bd 07 	lds	r25, 0x07BD
-    2228:	a0 91 be 07 	lds	r26, 0x07BE
-    222c:	b0 91 bf 07 	lds	r27, 0x07BF
+    2220:	80 91 3c 06 	lds	r24, 0x063C
+    2224:	90 91 3d 06 	lds	r25, 0x063D
+    2228:	a0 91 3e 06 	lds	r26, 0x063E
+    222c:	b0 91 3f 06 	lds	r27, 0x063F
     2230:	eb 89       	ldd	r30, Y+19	; 0x13
     2232:	fc 89       	ldd	r31, Y+20	; 0x14
     2234:	80 87       	std	Z+8, r24	; 0x08
@@ -4789,14 +4789,14 @@ void prefilter(char reset)
     2238:	a2 87       	std	Z+10, r26	; 0x0a
     223a:	b3 87       	std	Z+11, r27	; 0x0b
 	rtIR_old[0] = rtIR;
-    223c:	80 91 c1 07 	lds	r24, 0x07C1
-    2240:	90 91 c2 07 	lds	r25, 0x07C2
-    2244:	a0 91 c3 07 	lds	r26, 0x07C3
-    2248:	b0 91 c4 07 	lds	r27, 0x07C4
-    224c:	80 93 c5 07 	sts	0x07C5, r24
-    2250:	90 93 c6 07 	sts	0x07C6, r25
-    2254:	a0 93 c7 07 	sts	0x07C7, r26
-    2258:	b0 93 c8 07 	sts	0x07C8, r27
+    223c:	80 91 41 06 	lds	r24, 0x0641
+    2240:	90 91 42 06 	lds	r25, 0x0642
+    2244:	a0 91 43 06 	lds	r26, 0x0643
+    2248:	b0 91 44 06 	lds	r27, 0x0644
+    224c:	80 93 45 06 	sts	0x0645, r24
+    2250:	90 93 46 06 	sts	0x0646, r25
+    2254:	a0 93 47 06 	sts	0x0647, r26
+    2258:	b0 93 48 06 	sts	0x0648, r27
 	ftIR_old[0] = ftIR;
     225c:	80 91 8e 04 	lds	r24, 0x048E
     2260:	90 91 8f 04 	lds	r25, 0x048F
@@ -4826,10 +4826,10 @@ void prefilter(char reset)
     22a4:	40 ef       	ldi	r20, 0xF0	; 240
     22a6:	51 e4       	ldi	r21, 0x41	; 65
     22a8:	0e 94 01 2c 	call	0x5802	; 0x5802 <__divsf3>
-    22ac:	60 93 bc 07 	sts	0x07BC, r22
-    22b0:	70 93 bd 07 	sts	0x07BD, r23
-    22b4:	80 93 be 07 	sts	0x07BE, r24
-    22b8:	90 93 bf 07 	sts	0x07BF, r25
+    22ac:	60 93 3c 06 	sts	0x063C, r22
+    22b0:	70 93 3d 06 	sts	0x063D, r23
+    22b4:	80 93 3e 06 	sts	0x063E, r24
+    22b8:	90 93 3f 06 	sts	0x063F, r25
 	rtIR = rtIR_new/PREFILTER_SIZE;
     22bc:	6f 85       	ldd	r22, Y+15	; 0x0f
     22be:	78 89       	ldd	r23, Y+16	; 0x10
@@ -4840,10 +4840,10 @@ void prefilter(char reset)
     22c8:	40 ef       	ldi	r20, 0xF0	; 240
     22ca:	51 e4       	ldi	r21, 0x41	; 65
     22cc:	0e 94 01 2c 	call	0x5802	; 0x5802 <__divsf3>
-    22d0:	60 93 c1 07 	sts	0x07C1, r22
-    22d4:	70 93 c2 07 	sts	0x07C2, r23
-    22d8:	80 93 c3 07 	sts	0x07C3, r24
-    22dc:	90 93 c4 07 	sts	0x07C4, r25
+    22d0:	60 93 41 06 	sts	0x0641, r22
+    22d4:	70 93 42 06 	sts	0x0642, r23
+    22d8:	80 93 43 06 	sts	0x0643, r24
+    22dc:	90 93 44 06 	sts	0x0644, r25
 	ftIR = ftIR_new/PREFILTER_SIZE;
     22e0:	6b 85       	ldd	r22, Y+11	; 0x0b
     22e2:	7c 85       	ldd	r23, Y+12	; 0x0c
@@ -6422,14 +6422,14 @@ void checkContactIR(void)
 	rightContact = 0b00000001 & sensors;
     2f06:	28 2f       	mov	r18, r24
     2f08:	21 70       	andi	r18, 0x01	; 1
-    2f0a:	20 93 ba 07 	sts	0x07BA, r18
+    2f0a:	20 93 3a 06 	sts	0x063A, r18
 	leftContact =  (0b00000010 & sensors)>>1;
     2f0e:	90 e0       	ldi	r25, 0x00	; 0
     2f10:	82 70       	andi	r24, 0x02	; 2
     2f12:	90 70       	andi	r25, 0x00	; 0
     2f14:	95 95       	asr	r25
     2f16:	87 95       	ror	r24
-    2f18:	80 93 bb 07 	sts	0x07BB, r24
+    2f18:	80 93 3b 06 	sts	0x063B, r24
 }
     2f1c:	08 95       	ret
 
@@ -6447,10 +6447,10 @@ void checkLightSensor( void )
     2f2e:	90 93 25 05 	sts	0x0525, r25
 	leftLightVolt = getLeftLight();
     2f32:	0e 94 6d 05 	call	0xada	; 0xada <getLeftLight>
-    2f36:	60 93 49 08 	sts	0x0849, r22
-    2f3a:	70 93 4a 08 	sts	0x084A, r23
-    2f3e:	80 93 4b 08 	sts	0x084B, r24
-    2f42:	90 93 4c 08 	sts	0x084C, r25
+    2f36:	60 93 c9 06 	sts	0x06C9, r22
+    2f3a:	70 93 ca 06 	sts	0x06CA, r23
+    2f3e:	80 93 cb 06 	sts	0x06CB, r24
+    2f42:	90 93 cc 06 	sts	0x06CC, r25
 	// LCD_printf("R Voltage: %3.2f\nL Voltage: %3.2f\n\n\n", voltageR, voltageL);
 	// TMRSRVC_delay(2000);//wait 2 seconds
 	// LCD_clear();
@@ -6477,16 +6477,16 @@ void checkIR( void )
     2f6c:	90 93 9b 04 	sts	0x049B, r25
 	ltIR = getLeftIR();
     2f70:	0e 94 35 05 	call	0xa6a	; 0xa6a <getLeftIR>
-    2f74:	60 93 bc 07 	sts	0x07BC, r22
-    2f78:	70 93 bd 07 	sts	0x07BD, r23
-    2f7c:	80 93 be 07 	sts	0x07BE, r24
-    2f80:	90 93 bf 07 	sts	0x07BF, r25
+    2f74:	60 93 3c 06 	sts	0x063C, r22
+    2f78:	70 93 3d 06 	sts	0x063D, r23
+    2f7c:	80 93 3e 06 	sts	0x063E, r24
+    2f80:	90 93 3f 06 	sts	0x063F, r25
 	rtIR = getRightIR();
     2f84:	0e 94 12 05 	call	0xa24	; 0xa24 <getRightIR>
-    2f88:	60 93 c1 07 	sts	0x07C1, r22
-    2f8c:	70 93 c2 07 	sts	0x07C2, r23
-    2f90:	80 93 c3 07 	sts	0x07C3, r24
-    2f94:	90 93 c4 07 	sts	0x07C4, r25
+    2f88:	60 93 41 06 	sts	0x0641, r22
+    2f8c:	70 93 42 06 	sts	0x0642, r23
+    2f90:	80 93 43 06 	sts	0x0643, r24
+    2f94:	90 93 44 06 	sts	0x0644, r25
 }
     2f98:	08 95       	ret
 
@@ -6535,11 +6535,11 @@ void LCD_set_pixel(unsigned char row, unsigned char col, BOOL val) {
     2fd0:	61 2f       	mov	r22, r17
     2fd2:	0e 94 a0 19 	call	0x3340	; 0x3340 <LCD_set_next_PGC>
     2fd6:	fe 01       	movw	r30, r28
-    2fd8:	f6 95       	lsr	r31
-    2fda:	fe 2f       	mov	r31, r30
-    2fdc:	ee 27       	eor	r30, r30
-    2fde:	f7 95       	ror	r31
-    2fe0:	e7 95       	ror	r30
+    2fd8:	45 e0       	ldi	r20, 0x05	; 5
+    2fda:	ee 0f       	add	r30, r30
+    2fdc:	ff 1f       	adc	r31, r31
+    2fde:	4a 95       	dec	r20
+    2fe0:	e1 f7       	brne	.-8      	; 0x2fda <LCD_set_pixel+0x40>
     2fe2:	2f 2d       	mov	r18, r15
     2fe4:	30 e0       	ldi	r19, 0x00	; 0
 
@@ -6590,11 +6590,11 @@ void LCD_set_pixel(unsigned char row, unsigned char col, BOOL val) {
 
 	// Write the pixel data out to the lcd
 	LCD_write_data( pix_arr[page][col] );
-    302e:	d6 95       	lsr	r29
-    3030:	dc 2f       	mov	r29, r28
-    3032:	cc 27       	eor	r28, r28
-    3034:	d7 95       	ror	r29
-    3036:	c7 95       	ror	r28
+    302e:	35 e0       	ldi	r19, 0x05	; 5
+    3030:	cc 0f       	add	r28, r28
+    3032:	dd 1f       	adc	r29, r29
+    3034:	3a 95       	dec	r19
+    3036:	e1 f7       	brne	.-8      	; 0x3030 <LCD_set_pixel+0x96>
     3038:	cc 0d       	add	r28, r12
     303a:	dd 1d       	adc	r29, r13
     303c:	cc 54       	subi	r28, 0x4C	; 76
@@ -6659,7 +6659,7 @@ void initializeRobot(void)
 	
 	// pixel array for the LCD screen
 	for(int i = 0; i < 4; i++) {
-		for(int j = 0; j < 128; j++) {
+		for(int j = 0; j < 32; j++) {
 			pix_arr[i][j] = 0x00;
     30aa:	11 92       	st	Z+, r1
 	checkIR();
@@ -6667,9 +6667,9 @@ void initializeRobot(void)
 	
 	// pixel array for the LCD screen
 	for(int i = 0; i < 4; i++) {
-		for(int j = 0; j < 128; j++) {
+		for(int j = 0; j < 32; j++) {
     30ac:	01 96       	adiw	r24, 0x01	; 1
-    30ae:	80 38       	cpi	r24, 0x80	; 128
+    30ae:	80 32       	cpi	r24, 0x20	; 32
     30b0:	91 05       	cpc	r25, r1
     30b2:	d9 f7       	brne	.-10     	; 0x30aa <initializeRobot+0x50>
 	// Initialize IR Values and Reset Prefilter
@@ -6684,11 +6684,11 @@ void initializeRobot(void)
     30ba:	31 05       	cpc	r19, r1
     30bc:	59 f0       	breq	.+22     	; 0x30d4 <initializeRobot+0x7a>
     30be:	f9 01       	movw	r30, r18
-    30c0:	f6 95       	lsr	r31
-    30c2:	fe 2f       	mov	r31, r30
-    30c4:	ee 27       	eor	r30, r30
-    30c6:	f7 95       	ror	r31
-    30c8:	e7 95       	ror	r30
+    30c0:	65 e0       	ldi	r22, 0x05	; 5
+    30c2:	ee 0f       	add	r30, r30
+    30c4:	ff 1f       	adc	r31, r31
+    30c6:	6a 95       	dec	r22
+    30c8:	e1 f7       	brne	.-8      	; 0x30c2 <initializeRobot+0x68>
     30ca:	ec 54       	subi	r30, 0x4C	; 76
     30cc:	fa 4f       	sbci	r31, 0xFA	; 250
     30ce:	80 e0       	ldi	r24, 0x00	; 0
@@ -6914,13 +6914,13 @@ void initializeRobot(void)
     32c2:	83 e0       	ldi	r24, 0x03	; 3
     32c4:	60 e0       	ldi	r22, 0x00	; 0
     32c6:	0e 94 a0 19 	call	0x3340	; 0x3340 <LCD_set_next_PGC>
-    32ca:	10 92 9d 08 	sts	0x089D, r1
-    32ce:	10 92 9f 08 	sts	0x089F, r1
-    32d2:	10 92 9e 08 	sts	0x089E, r1
+    32ca:	10 92 1d 07 	sts	0x071D, r1
+    32ce:	10 92 1f 07 	sts	0x071F, r1
+    32d2:	10 92 1e 07 	sts	0x071E, r1
     32d6:	86 e4       	ldi	r24, 0x46	; 70
     32d8:	93 e0       	ldi	r25, 0x03	; 3
-    32da:	90 93 ce 08 	sts	0x08CE, r25
-    32de:	80 93 cd 08 	sts	0x08CD, r24
+    32da:	90 93 4e 07 	sts	0x074E, r25
+    32de:	80 93 4d 07 	sts	0x074D, r24
     32e2:	88 e1       	ldi	r24, 0x18	; 24
     32e4:	0e 94 7f 19 	call	0x32fe	; 0x32fe <LCD_set_backlight>
     32e8:	0e 94 e1 18 	call	0x31c2	; 0x31c2 <LCD_clear>
@@ -6965,8 +6965,8 @@ void initializeRobot(void)
 00003340 <LCD_set_next_PGC>:
     3340:	83 70       	andi	r24, 0x03	; 3
     3342:	6f 77       	andi	r22, 0x7F	; 127
-    3344:	60 93 9b 08 	sts	0x089B, r22
-    3348:	80 93 9c 08 	sts	0x089C, r24
+    3344:	60 93 1b 07 	sts	0x071B, r22
+    3348:	80 93 1c 07 	sts	0x071C, r24
     334c:	08 95       	ret
 
 0000334e <LCD_set_PGC_addr>:
@@ -7063,11 +7063,11 @@ void initializeRobot(void)
     3406:	47 c0       	rjmp	.+142    	; 0x3496 <SPI_set_slave_addr+0x9e>
     3408:	91 2f       	mov	r25, r17
     340a:	97 70       	andi	r25, 0x07	; 7
-    340c:	80 91 a0 08 	lds	r24, 0x08A0
+    340c:	80 91 20 07 	lds	r24, 0x0720
     3410:	98 17       	cp	r25, r24
     3412:	09 f4       	brne	.+2      	; 0x3416 <SPI_set_slave_addr+0x1e>
     3414:	40 c0       	rjmp	.+128    	; 0x3496 <SPI_set_slave_addr+0x9e>
-    3416:	90 93 a0 08 	sts	0x08A0, r25
+    3416:	90 93 20 07 	sts	0x0720, r25
     341a:	85 b1       	in	r24, 0x05	; 5
     341c:	88 7f       	andi	r24, 0xF8	; 248
     341e:	89 2b       	or	r24, r25
@@ -7270,10 +7270,10 @@ void initializeRobot(void)
     35f2:	08 95       	ret
 
 000035f4 <STEPPER_get_nSteps>:
-    35f4:	80 91 61 08 	lds	r24, 0x0861
-    35f8:	90 91 62 08 	lds	r25, 0x0862
-    35fc:	20 91 63 08 	lds	r18, 0x0863
-    3600:	30 91 64 08 	lds	r19, 0x0864
+    35f4:	80 91 e1 06 	lds	r24, 0x06E1
+    35f8:	90 91 e2 06 	lds	r25, 0x06E2
+    35fc:	20 91 e3 06 	lds	r18, 0x06E3
+    3600:	30 91 e4 06 	lds	r19, 0x06E4
     3604:	bc 01       	movw	r22, r24
     3606:	c9 01       	movw	r24, r18
     3608:	08 95       	ret
@@ -7330,9 +7330,9 @@ void initializeRobot(void)
     366e:	03 2d       	mov	r16, r3
     3670:	ee 24       	eor	r14, r14
     3672:	e3 94       	inc	r14
-    3674:	e6 e8       	ldi	r30, 0x86	; 134
+    3674:	e6 e0       	ldi	r30, 0x06	; 6
     3676:	ce 2e       	mov	r12, r30
-    3678:	e8 e0       	ldi	r30, 0x08	; 8
+    3678:	e7 e0       	ldi	r30, 0x07	; 7
     367a:	de 2e       	mov	r13, r30
     367c:	0e 94 45 1d 	call	0x3a8a	; 0x3a8a <STEPPER_step>
     3680:	55 20       	and	r5, r5
@@ -7361,9 +7361,9 @@ void initializeRobot(void)
     36b2:	02 2d       	mov	r16, r2
     36b4:	ee 24       	eor	r14, r14
     36b6:	e3 94       	inc	r14
-    36b8:	76 e8       	ldi	r23, 0x86	; 134
+    36b8:	76 e0       	ldi	r23, 0x06	; 6
     36ba:	c7 2e       	mov	r12, r23
-    36bc:	78 e0       	ldi	r23, 0x08	; 8
+    36bc:	77 e0       	ldi	r23, 0x07	; 7
     36be:	d7 2e       	mov	r13, r23
     36c0:	0e 94 45 1d 	call	0x3a8a	; 0x3a8a <STEPPER_step>
     36c4:	55 20       	and	r5, r5
@@ -7399,9 +7399,9 @@ void initializeRobot(void)
     3708:	03 2d       	mov	r16, r3
     370a:	ee 24       	eor	r14, r14
     370c:	e3 94       	inc	r14
-    370e:	96 e8       	ldi	r25, 0x86	; 134
+    370e:	96 e0       	ldi	r25, 0x06	; 6
     3710:	c9 2e       	mov	r12, r25
-    3712:	98 e0       	ldi	r25, 0x08	; 8
+    3712:	97 e0       	ldi	r25, 0x07	; 7
     3714:	d9 2e       	mov	r13, r25
     3716:	0e 94 45 1d 	call	0x3a8a	; 0x3a8a <STEPPER_step>
     371a:	81 e0       	ldi	r24, 0x01	; 1
@@ -7618,9 +7618,9 @@ void initializeRobot(void)
 000038d2 <STEPPER_open>:
     38d2:	0e 94 d8 25 	call	0x4bb0	; 0x4bb0 <__STEPPER_init>
     38d6:	81 e0       	ldi	r24, 0x01	; 1
-    38d8:	80 93 85 08 	sts	0x0885, r24
-    38dc:	ef e4       	ldi	r30, 0x4F	; 79
-    38de:	f8 e0       	ldi	r31, 0x08	; 8
+    38d8:	80 93 05 07 	sts	0x0705, r24
+    38dc:	ef ec       	ldi	r30, 0xCF	; 207
+    38de:	f6 e0       	ldi	r31, 0x06	; 6
     38e0:	11 92       	st	Z+, r1
     38e2:	11 92       	st	Z+, r1
     38e4:	11 82       	std	Z+1, r1	; 0x01
@@ -7688,9 +7688,9 @@ void initializeRobot(void)
     3960:	32 96       	adiw	r30, 0x02	; 2
     3962:	11 82       	std	Z+1, r1	; 0x01
     3964:	10 82       	st	Z, r1
-    3966:	10 92 84 08 	sts	0x0884, r1
-    396a:	10 92 83 08 	sts	0x0883, r1
-    396e:	10 92 85 08 	sts	0x0885, r1
+    3966:	10 92 04 07 	sts	0x0704, r1
+    396a:	10 92 03 07 	sts	0x0703, r1
+    396e:	10 92 05 07 	sts	0x0705, r1
     3972:	87 e0       	ldi	r24, 0x07	; 7
     3974:	61 e0       	ldi	r22, 0x01	; 1
     3976:	0e 94 8c 1e 	call	0x3d18	; 0x3d18 <SYS_set_state>
@@ -7723,7 +7723,7 @@ void initializeRobot(void)
 000039ae <STEPPER_set_accel>:
     39ae:	48 2f       	mov	r20, r24
     39b0:	81 e0       	ldi	r24, 0x01	; 1
-    39b2:	80 93 85 08 	sts	0x0885, r24
+    39b2:	80 93 05 07 	sts	0x0705, r24
     39b6:	cb 01       	movw	r24, r22
     39b8:	23 e0       	ldi	r18, 0x03	; 3
     39ba:	69 3e       	cpi	r22, 0xE9	; 233
@@ -7738,20 +7738,20 @@ void initializeRobot(void)
     39cc:	42 30       	cpi	r20, 0x02	; 2
     39ce:	71 f4       	brne	.+28     	; 0x39ec <STEPPER_set_accel+0x3e>
     39d0:	05 c0       	rjmp	.+10     	; 0x39dc <STEPPER_set_accel+0x2e>
-    39d2:	90 93 5a 08 	sts	0x085A, r25
-    39d6:	80 93 59 08 	sts	0x0859, r24
+    39d2:	90 93 da 06 	sts	0x06DA, r25
+    39d6:	80 93 d9 06 	sts	0x06D9, r24
     39da:	08 c0       	rjmp	.+16     	; 0x39ec <STEPPER_set_accel+0x3e>
-    39dc:	90 93 5a 08 	sts	0x085A, r25
-    39e0:	80 93 59 08 	sts	0x0859, r24
-    39e4:	90 93 5c 08 	sts	0x085C, r25
-    39e8:	80 93 5b 08 	sts	0x085B, r24
-    39ec:	10 92 85 08 	sts	0x0885, r1
+    39dc:	90 93 da 06 	sts	0x06DA, r25
+    39e0:	80 93 d9 06 	sts	0x06D9, r24
+    39e4:	90 93 dc 06 	sts	0x06DC, r25
+    39e8:	80 93 db 06 	sts	0x06DB, r24
+    39ec:	10 92 05 07 	sts	0x0705, r1
     39f0:	08 95       	ret
 
 000039f2 <STEPPER_set_dir>:
     39f2:	98 2f       	mov	r25, r24
     39f4:	81 e0       	ldi	r24, 0x01	; 1
-    39f6:	80 93 85 08 	sts	0x0885, r24
+    39f6:	80 93 05 07 	sts	0x0705, r24
     39fa:	91 30       	cpi	r25, 0x01	; 1
     39fc:	51 f0       	breq	.+20     	; 0x3a12 <STEPPER_set_dir+0x20>
     39fe:	91 30       	cpi	r25, 0x01	; 1
@@ -7759,17 +7759,17 @@ void initializeRobot(void)
     3a02:	92 30       	cpi	r25, 0x02	; 2
     3a04:	41 f4       	brne	.+16     	; 0x3a16 <STEPPER_set_dir+0x24>
     3a06:	03 c0       	rjmp	.+6      	; 0x3a0e <STEPPER_set_dir+0x1c>
-    3a08:	60 93 72 08 	sts	0x0872, r22
+    3a08:	60 93 f2 06 	sts	0x06F2, r22
     3a0c:	04 c0       	rjmp	.+8      	; 0x3a16 <STEPPER_set_dir+0x24>
-    3a0e:	60 93 72 08 	sts	0x0872, r22
-    3a12:	60 93 73 08 	sts	0x0873, r22
-    3a16:	10 92 85 08 	sts	0x0885, r1
+    3a0e:	60 93 f2 06 	sts	0x06F2, r22
+    3a12:	60 93 f3 06 	sts	0x06F3, r22
+    3a16:	10 92 05 07 	sts	0x0705, r1
     3a1a:	08 95       	ret
 
 00003a1c <STEPPER_set_mode>:
     3a1c:	98 2f       	mov	r25, r24
     3a1e:	81 e0       	ldi	r24, 0x01	; 1
-    3a20:	80 93 85 08 	sts	0x0885, r24
+    3a20:	80 93 05 07 	sts	0x0705, r24
     3a24:	91 30       	cpi	r25, 0x01	; 1
     3a26:	51 f0       	breq	.+20     	; 0x3a3c <STEPPER_set_mode+0x20>
     3a28:	91 30       	cpi	r25, 0x01	; 1
@@ -7777,17 +7777,17 @@ void initializeRobot(void)
     3a2c:	92 30       	cpi	r25, 0x02	; 2
     3a2e:	41 f4       	brne	.+16     	; 0x3a40 <STEPPER_set_mode+0x24>
     3a30:	03 c0       	rjmp	.+6      	; 0x3a38 <STEPPER_set_mode+0x1c>
-    3a32:	60 93 4f 08 	sts	0x084F, r22
+    3a32:	60 93 cf 06 	sts	0x06CF, r22
     3a36:	04 c0       	rjmp	.+8      	; 0x3a40 <STEPPER_set_mode+0x24>
-    3a38:	60 93 4f 08 	sts	0x084F, r22
-    3a3c:	60 93 50 08 	sts	0x0850, r22
-    3a40:	10 92 85 08 	sts	0x0885, r1
+    3a38:	60 93 cf 06 	sts	0x06CF, r22
+    3a3c:	60 93 d0 06 	sts	0x06D0, r22
+    3a40:	10 92 05 07 	sts	0x0705, r1
     3a44:	08 95       	ret
 
 00003a46 <STEPPER_set_speed>:
     3a46:	48 2f       	mov	r20, r24
     3a48:	81 e0       	ldi	r24, 0x01	; 1
-    3a4a:	80 93 85 08 	sts	0x0885, r24
+    3a4a:	80 93 05 07 	sts	0x0705, r24
     3a4e:	cb 01       	movw	r24, r22
     3a50:	21 e0       	ldi	r18, 0x01	; 1
     3a52:	61 39       	cpi	r22, 0x91	; 145
@@ -7802,14 +7802,14 @@ void initializeRobot(void)
     3a64:	42 30       	cpi	r20, 0x02	; 2
     3a66:	71 f4       	brne	.+28     	; 0x3a84 <STEPPER_set_speed+0x3e>
     3a68:	05 c0       	rjmp	.+10     	; 0x3a74 <STEPPER_set_speed+0x2e>
-    3a6a:	90 93 52 08 	sts	0x0852, r25
-    3a6e:	80 93 51 08 	sts	0x0851, r24
+    3a6a:	90 93 d2 06 	sts	0x06D2, r25
+    3a6e:	80 93 d1 06 	sts	0x06D1, r24
     3a72:	08 c0       	rjmp	.+16     	; 0x3a84 <STEPPER_set_speed+0x3e>
-    3a74:	90 93 52 08 	sts	0x0852, r25
-    3a78:	80 93 51 08 	sts	0x0851, r24
-    3a7c:	90 93 54 08 	sts	0x0854, r25
-    3a80:	80 93 53 08 	sts	0x0853, r24
-    3a84:	10 92 85 08 	sts	0x0885, r1
+    3a74:	90 93 d2 06 	sts	0x06D2, r25
+    3a78:	80 93 d1 06 	sts	0x06D1, r24
+    3a7c:	90 93 d4 06 	sts	0x06D4, r25
+    3a80:	80 93 d3 06 	sts	0x06D3, r24
+    3a84:	10 92 05 07 	sts	0x0705, r1
     3a88:	08 95       	ret
 
 00003a8a <STEPPER_step>:
@@ -7856,22 +7856,22 @@ void initializeRobot(void)
     3ae4:	69 f4       	brne	.+26     	; 0x3b00 <STEPPER_step+0x76>
     3ae6:	06 c0       	rjmp	.+12     	; 0x3af4 <STEPPER_step+0x6a>
     3ae8:	18 82       	st	Y, r1
-    3aea:	10 92 81 08 	sts	0x0881, r1
+    3aea:	10 92 01 07 	sts	0x0701, r1
     3aee:	08 c0       	rjmp	.+16     	; 0x3b00 <STEPPER_step+0x76>
     3af0:	19 82       	std	Y+1, r1	; 0x01
     3af2:	04 c0       	rjmp	.+8      	; 0x3afc <STEPPER_step+0x72>
     3af4:	18 82       	st	Y, r1
     3af6:	19 82       	std	Y+1, r1	; 0x01
-    3af8:	10 92 81 08 	sts	0x0881, r1
-    3afc:	10 92 82 08 	sts	0x0882, r1
-    3b00:	d0 93 84 08 	sts	0x0884, r29
-    3b04:	c0 93 83 08 	sts	0x0883, r28
+    3af8:	10 92 01 07 	sts	0x0701, r1
+    3afc:	10 92 02 07 	sts	0x0702, r1
+    3b00:	d0 93 04 07 	sts	0x0704, r29
+    3b04:	c0 93 03 07 	sts	0x0703, r28
     3b08:	ee 20       	and	r14, r14
     3b0a:	b9 f5       	brne	.+110    	; 0x3b7a <STEPPER_step+0xf0>
     3b0c:	86 e9       	ldi	r24, 0x96	; 150
     3b0e:	93 e0       	ldi	r25, 0x03	; 3
-    3b10:	90 93 84 08 	sts	0x0884, r25
-    3b14:	80 93 83 08 	sts	0x0883, r24
+    3b10:	90 93 04 07 	sts	0x0704, r25
+    3b14:	80 93 03 07 	sts	0x0703, r24
     3b18:	81 2f       	mov	r24, r17
     3b1a:	b4 01       	movw	r22, r8
     3b1c:	0e 94 23 1d 	call	0x3a46	; 0x3a46 <STEPPER_set_speed>
@@ -7885,21 +7885,21 @@ void initializeRobot(void)
     3b30:	59 f5       	brne	.+86     	; 0x3b88 <STEPPER_step+0xfe>
     3b32:	12 c0       	rjmp	.+36     	; 0x3b58 <STEPPER_step+0xce>
     3b34:	10 92 96 03 	sts	0x0396, r1
-    3b38:	10 92 81 08 	sts	0x0881, r1
+    3b38:	10 92 01 07 	sts	0x0701, r1
     3b3c:	80 91 96 03 	lds	r24, 0x0396
     3b40:	88 23       	and	r24, r24
     3b42:	e1 f3       	breq	.-8      	; 0x3b3c <STEPPER_step+0xb2>
     3b44:	21 c0       	rjmp	.+66     	; 0x3b88 <STEPPER_step+0xfe>
     3b46:	10 92 97 03 	sts	0x0397, r1
-    3b4a:	10 92 82 08 	sts	0x0882, r1
+    3b4a:	10 92 02 07 	sts	0x0702, r1
     3b4e:	80 91 97 03 	lds	r24, 0x0397
     3b52:	88 23       	and	r24, r24
     3b54:	e1 f3       	breq	.-8      	; 0x3b4e <STEPPER_step+0xc4>
     3b56:	18 c0       	rjmp	.+48     	; 0x3b88 <STEPPER_step+0xfe>
     3b58:	10 92 96 03 	sts	0x0396, r1
     3b5c:	10 92 97 03 	sts	0x0397, r1
-    3b60:	10 92 81 08 	sts	0x0881, r1
-    3b64:	10 92 82 08 	sts	0x0882, r1
+    3b60:	10 92 01 07 	sts	0x0701, r1
+    3b64:	10 92 02 07 	sts	0x0702, r1
     3b68:	80 91 96 03 	lds	r24, 0x0396
     3b6c:	88 23       	and	r24, r24
     3b6e:	e1 f3       	breq	.-8      	; 0x3b68 <STEPPER_step+0xde>
@@ -7941,7 +7941,7 @@ void initializeRobot(void)
     3bba:	70 e0       	ldi	r23, 0x00	; 0
     3bbc:	0e 94 e2 25 	call	0x4bc4	; 0x4bc4 <STEPPER_set_steps>
     3bc0:	81 e0       	ldi	r24, 0x01	; 1
-    3bc2:	80 93 85 08 	sts	0x0885, r24
+    3bc2:	80 93 05 07 	sts	0x0705, r24
     3bc6:	11 30       	cpi	r17, 0x01	; 1
     3bc8:	51 f0       	breq	.+20     	; 0x3bde <STEPPER_stop+0x3c>
     3bca:	11 30       	cpi	r17, 0x01	; 1
@@ -7949,11 +7949,11 @@ void initializeRobot(void)
     3bce:	12 30       	cpi	r17, 0x02	; 2
     3bd0:	41 f4       	brne	.+16     	; 0x3be2 <STEPPER_stop+0x40>
     3bd2:	03 c0       	rjmp	.+6      	; 0x3bda <STEPPER_stop+0x38>
-    3bd4:	00 93 6d 08 	sts	0x086D, r16
+    3bd4:	00 93 ed 06 	sts	0x06ED, r16
     3bd8:	04 c0       	rjmp	.+8      	; 0x3be2 <STEPPER_stop+0x40>
-    3bda:	00 93 6d 08 	sts	0x086D, r16
-    3bde:	00 93 6e 08 	sts	0x086E, r16
-    3be2:	10 92 85 08 	sts	0x0885, r1
+    3bda:	00 93 ed 06 	sts	0x06ED, r16
+    3bde:	00 93 ee 06 	sts	0x06EE, r16
+    3be2:	10 92 05 07 	sts	0x0705, r1
     3be6:	1f 91       	pop	r17
     3be8:	0f 91       	pop	r16
     3bea:	08 95       	ret
@@ -7979,13 +7979,13 @@ void initializeRobot(void)
     3c0e:	11 c0       	rjmp	.+34     	; 0x3c32 <STEPPER_wait_and_then+0x46>
     3c10:	ec 85       	ldd	r30, Y+12	; 0x0c
     3c12:	fd 85       	ldd	r31, Y+13	; 0x0d
-    3c14:	80 91 86 08 	lds	r24, 0x0886
+    3c14:	80 91 06 07 	lds	r24, 0x0706
     3c18:	88 23       	and	r24, r24
     3c1a:	e1 f3       	breq	.-8      	; 0x3c14 <STEPPER_wait_and_then+0x28>
     3c1c:	06 c0       	rjmp	.+12     	; 0x3c2a <STEPPER_wait_and_then+0x3e>
     3c1e:	ec 85       	ldd	r30, Y+12	; 0x0c
     3c20:	fd 85       	ldd	r31, Y+13	; 0x0d
-    3c22:	80 91 87 08 	lds	r24, 0x0887
+    3c22:	80 91 07 07 	lds	r24, 0x0707
     3c26:	88 23       	and	r24, r24
     3c28:	e1 f3       	breq	.-8      	; 0x3c22 <STEPPER_wait_and_then+0x36>
     3c2a:	30 97       	sbiw	r30, 0x00	; 0
@@ -8000,7 +8000,7 @@ void initializeRobot(void)
     3c3c:	10 e0       	ldi	r17, 0x00	; 0
     3c3e:	00 23       	and	r16, r16
     3c40:	51 f4       	brne	.+20     	; 0x3c56 <STEPPER_wait_and_then+0x6a>
-    3c42:	80 91 86 08 	lds	r24, 0x0886
+    3c42:	80 91 06 07 	lds	r24, 0x0706
     3c46:	88 23       	and	r24, r24
     3c48:	31 f0       	breq	.+12     	; 0x3c56 <STEPPER_wait_and_then+0x6a>
     3c4a:	c1 14       	cp	r12, r1
@@ -8011,7 +8011,7 @@ void initializeRobot(void)
     3c54:	01 e0       	ldi	r16, 0x01	; 1
     3c56:	11 23       	and	r17, r17
     3c58:	51 f4       	brne	.+20     	; 0x3c6e <STEPPER_wait_and_then+0x82>
-    3c5a:	80 91 87 08 	lds	r24, 0x0887
+    3c5a:	80 91 07 07 	lds	r24, 0x0707
     3c5e:	88 23       	and	r24, r24
     3c60:	31 f0       	breq	.+12     	; 0x3c6e <STEPPER_wait_and_then+0x82>
     3c62:	e1 14       	cp	r14, r1
@@ -8050,43 +8050,43 @@ void initializeRobot(void)
     3ca0:	09 94       	ijmp
     3ca2:	80 e0       	ldi	r24, 0x00	; 0
     3ca4:	08 95       	ret
-    3ca6:	80 91 88 08 	lds	r24, 0x0888
+    3ca6:	80 91 08 07 	lds	r24, 0x0708
     3caa:	08 95       	ret
-    3cac:	80 91 89 08 	lds	r24, 0x0889
+    3cac:	80 91 09 07 	lds	r24, 0x0709
     3cb0:	08 95       	ret
-    3cb2:	80 91 8a 08 	lds	r24, 0x088A
+    3cb2:	80 91 0a 07 	lds	r24, 0x070A
     3cb6:	08 95       	ret
-    3cb8:	80 91 8b 08 	lds	r24, 0x088B
+    3cb8:	80 91 0b 07 	lds	r24, 0x070B
     3cbc:	08 95       	ret
-    3cbe:	80 91 8c 08 	lds	r24, 0x088C
+    3cbe:	80 91 0c 07 	lds	r24, 0x070C
     3cc2:	08 95       	ret
-    3cc4:	80 91 8e 08 	lds	r24, 0x088E
+    3cc4:	80 91 0e 07 	lds	r24, 0x070E
     3cc8:	08 95       	ret
-    3cca:	80 91 8d 08 	lds	r24, 0x088D
+    3cca:	80 91 0d 07 	lds	r24, 0x070D
     3cce:	08 95       	ret
-    3cd0:	80 91 8f 08 	lds	r24, 0x088F
+    3cd0:	80 91 0f 07 	lds	r24, 0x070F
     3cd4:	08 95       	ret
-    3cd6:	80 91 90 08 	lds	r24, 0x0890
+    3cd6:	80 91 10 07 	lds	r24, 0x0710
     3cda:	08 95       	ret
-    3cdc:	80 91 91 08 	lds	r24, 0x0891
+    3cdc:	80 91 11 07 	lds	r24, 0x0711
     3ce0:	08 95       	ret
-    3ce2:	80 91 92 08 	lds	r24, 0x0892
+    3ce2:	80 91 12 07 	lds	r24, 0x0712
     3ce6:	08 95       	ret
-    3ce8:	80 91 93 08 	lds	r24, 0x0893
+    3ce8:	80 91 13 07 	lds	r24, 0x0713
     3cec:	08 95       	ret
-    3cee:	80 91 94 08 	lds	r24, 0x0894
+    3cee:	80 91 14 07 	lds	r24, 0x0714
     3cf2:	08 95       	ret
-    3cf4:	80 91 95 08 	lds	r24, 0x0895
+    3cf4:	80 91 15 07 	lds	r24, 0x0715
     3cf8:	08 95       	ret
-    3cfa:	80 91 96 08 	lds	r24, 0x0896
+    3cfa:	80 91 16 07 	lds	r24, 0x0716
     3cfe:	08 95       	ret
-    3d00:	80 91 97 08 	lds	r24, 0x0897
+    3d00:	80 91 17 07 	lds	r24, 0x0717
     3d04:	08 95       	ret
-    3d06:	80 91 98 08 	lds	r24, 0x0898
+    3d06:	80 91 18 07 	lds	r24, 0x0718
     3d0a:	08 95       	ret
-    3d0c:	80 91 99 08 	lds	r24, 0x0899
+    3d0c:	80 91 19 07 	lds	r24, 0x0719
     3d10:	08 95       	ret
-    3d12:	80 91 9a 08 	lds	r24, 0x089A
+    3d12:	80 91 1a 07 	lds	r24, 0x071A
     3d16:	08 95       	ret
 
 00003d18 <SYS_set_state>:
@@ -8104,43 +8104,43 @@ void initializeRobot(void)
     3d2e:	f4 91       	lpm	r31, Z+
     3d30:	e0 2d       	mov	r30, r0
     3d32:	09 94       	ijmp
-    3d34:	60 93 88 08 	sts	0x0888, r22
+    3d34:	60 93 08 07 	sts	0x0708, r22
     3d38:	08 95       	ret
-    3d3a:	60 93 89 08 	sts	0x0889, r22
+    3d3a:	60 93 09 07 	sts	0x0709, r22
     3d3e:	08 95       	ret
-    3d40:	60 93 8a 08 	sts	0x088A, r22
+    3d40:	60 93 0a 07 	sts	0x070A, r22
     3d44:	08 95       	ret
-    3d46:	60 93 8b 08 	sts	0x088B, r22
+    3d46:	60 93 0b 07 	sts	0x070B, r22
     3d4a:	08 95       	ret
-    3d4c:	60 93 8c 08 	sts	0x088C, r22
+    3d4c:	60 93 0c 07 	sts	0x070C, r22
     3d50:	08 95       	ret
-    3d52:	60 93 8e 08 	sts	0x088E, r22
+    3d52:	60 93 0e 07 	sts	0x070E, r22
     3d56:	08 95       	ret
-    3d58:	60 93 8d 08 	sts	0x088D, r22
+    3d58:	60 93 0d 07 	sts	0x070D, r22
     3d5c:	08 95       	ret
-    3d5e:	60 93 8f 08 	sts	0x088F, r22
+    3d5e:	60 93 0f 07 	sts	0x070F, r22
     3d62:	08 95       	ret
-    3d64:	60 93 90 08 	sts	0x0890, r22
+    3d64:	60 93 10 07 	sts	0x0710, r22
     3d68:	08 95       	ret
-    3d6a:	60 93 91 08 	sts	0x0891, r22
+    3d6a:	60 93 11 07 	sts	0x0711, r22
     3d6e:	08 95       	ret
-    3d70:	60 93 92 08 	sts	0x0892, r22
+    3d70:	60 93 12 07 	sts	0x0712, r22
     3d74:	08 95       	ret
-    3d76:	60 93 93 08 	sts	0x0893, r22
+    3d76:	60 93 13 07 	sts	0x0713, r22
     3d7a:	08 95       	ret
-    3d7c:	60 93 94 08 	sts	0x0894, r22
+    3d7c:	60 93 14 07 	sts	0x0714, r22
     3d80:	08 95       	ret
-    3d82:	60 93 95 08 	sts	0x0895, r22
+    3d82:	60 93 15 07 	sts	0x0715, r22
     3d86:	08 95       	ret
-    3d88:	60 93 96 08 	sts	0x0896, r22
+    3d88:	60 93 16 07 	sts	0x0716, r22
     3d8c:	08 95       	ret
-    3d8e:	60 93 97 08 	sts	0x0897, r22
+    3d8e:	60 93 17 07 	sts	0x0717, r22
     3d92:	08 95       	ret
-    3d94:	60 93 98 08 	sts	0x0898, r22
+    3d94:	60 93 18 07 	sts	0x0718, r22
     3d98:	08 95       	ret
-    3d9a:	60 93 99 08 	sts	0x0899, r22
+    3d9a:	60 93 19 07 	sts	0x0719, r22
     3d9e:	08 95       	ret
-    3da0:	60 93 98 08 	sts	0x0898, r22
+    3da0:	60 93 18 07 	sts	0x0718, r22
     3da4:	08 95       	ret
 
 00003da6 <ATTINY_get_sensors>:
@@ -8266,40 +8266,40 @@ void initializeRobot(void)
     3eae:	90 e0       	ldi	r25, 0x00	; 0
     3eb0:	82 e0       	ldi	r24, 0x02	; 2
     3eb2:	08 95       	ret
-    3eb4:	10 92 b6 08 	sts	0x08B6, r1
-    3eb8:	10 92 b5 08 	sts	0x08B5, r1
-    3ebc:	10 92 b8 08 	sts	0x08B8, r1
-    3ec0:	10 92 b7 08 	sts	0x08B7, r1
-    3ec4:	10 92 ba 08 	sts	0x08BA, r1
-    3ec8:	10 92 b9 08 	sts	0x08B9, r1
-    3ecc:	10 92 bc 08 	sts	0x08BC, r1
-    3ed0:	10 92 bb 08 	sts	0x08BB, r1
-    3ed4:	10 92 be 08 	sts	0x08BE, r1
-    3ed8:	10 92 bd 08 	sts	0x08BD, r1
+    3eb4:	10 92 36 07 	sts	0x0736, r1
+    3eb8:	10 92 35 07 	sts	0x0735, r1
+    3ebc:	10 92 38 07 	sts	0x0738, r1
+    3ec0:	10 92 37 07 	sts	0x0737, r1
+    3ec4:	10 92 3a 07 	sts	0x073A, r1
+    3ec8:	10 92 39 07 	sts	0x0739, r1
+    3ecc:	10 92 3c 07 	sts	0x073C, r1
+    3ed0:	10 92 3b 07 	sts	0x073B, r1
+    3ed4:	10 92 3e 07 	sts	0x073E, r1
+    3ed8:	10 92 3d 07 	sts	0x073D, r1
     3edc:	80 e9       	ldi	r24, 0x90	; 144
     3ede:	91 e0       	ldi	r25, 0x01	; 1
-    3ee0:	90 93 a2 08 	sts	0x08A2, r25
-    3ee4:	80 93 a1 08 	sts	0x08A1, r24
-    3ee8:	90 93 a4 08 	sts	0x08A4, r25
-    3eec:	80 93 a3 08 	sts	0x08A3, r24
-    3ef0:	90 93 a6 08 	sts	0x08A6, r25
-    3ef4:	80 93 a5 08 	sts	0x08A5, r24
-    3ef8:	90 93 a8 08 	sts	0x08A8, r25
-    3efc:	80 93 a7 08 	sts	0x08A7, r24
-    3f00:	90 93 aa 08 	sts	0x08AA, r25
-    3f04:	80 93 a9 08 	sts	0x08A9, r24
+    3ee0:	90 93 22 07 	sts	0x0722, r25
+    3ee4:	80 93 21 07 	sts	0x0721, r24
+    3ee8:	90 93 24 07 	sts	0x0724, r25
+    3eec:	80 93 23 07 	sts	0x0723, r24
+    3ef0:	90 93 26 07 	sts	0x0726, r25
+    3ef4:	80 93 25 07 	sts	0x0725, r24
+    3ef8:	90 93 28 07 	sts	0x0728, r25
+    3efc:	80 93 27 07 	sts	0x0727, r24
+    3f00:	90 93 2a 07 	sts	0x072A, r25
+    3f04:	80 93 29 07 	sts	0x0729, r24
     3f08:	84 e3       	ldi	r24, 0x34	; 52
     3f0a:	98 e0       	ldi	r25, 0x08	; 8
-    3f0c:	90 93 ac 08 	sts	0x08AC, r25
-    3f10:	80 93 ab 08 	sts	0x08AB, r24
-    3f14:	90 93 ae 08 	sts	0x08AE, r25
-    3f18:	80 93 ad 08 	sts	0x08AD, r24
-    3f1c:	90 93 b0 08 	sts	0x08B0, r25
-    3f20:	80 93 af 08 	sts	0x08AF, r24
-    3f24:	90 93 b2 08 	sts	0x08B2, r25
-    3f28:	80 93 b1 08 	sts	0x08B1, r24
-    3f2c:	90 93 b4 08 	sts	0x08B4, r25
-    3f30:	80 93 b3 08 	sts	0x08B3, r24
+    3f0c:	90 93 2c 07 	sts	0x072C, r25
+    3f10:	80 93 2b 07 	sts	0x072B, r24
+    3f14:	90 93 2e 07 	sts	0x072E, r25
+    3f18:	80 93 2d 07 	sts	0x072D, r24
+    3f1c:	90 93 30 07 	sts	0x0730, r25
+    3f20:	80 93 2f 07 	sts	0x072F, r24
+    3f24:	90 93 32 07 	sts	0x0732, r25
+    3f28:	80 93 31 07 	sts	0x0731, r24
+    3f2c:	90 93 34 07 	sts	0x0734, r25
+    3f30:	80 93 33 07 	sts	0x0733, r24
     3f34:	81 e0       	ldi	r24, 0x01	; 1
     3f36:	61 e0       	ldi	r22, 0x01	; 1
     3f38:	0e 94 8c 1e 	call	0x3d18	; 0x3d18 <SYS_set_state>
@@ -8402,12 +8402,12 @@ void initializeRobot(void)
 
 00004000 <I2C_MSTR_get>:
     4000:	fc 01       	movw	r30, r24
-    4002:	80 91 c2 08 	lds	r24, 0x08C2
+    4002:	80 91 42 07 	lds	r24, 0x0742
     4006:	81 30       	cpi	r24, 0x01	; 1
     4008:	11 f0       	breq	.+4      	; 0x400e <I2C_MSTR_get+0xe>
     400a:	85 e0       	ldi	r24, 0x05	; 5
     400c:	08 95       	ret
-    400e:	80 91 c3 08 	lds	r24, 0x08C3
+    400e:	80 91 43 07 	lds	r24, 0x0743
     4012:	81 30       	cpi	r24, 0x01	; 1
     4014:	11 f0       	breq	.+4      	; 0x401a <I2C_MSTR_get+0x1a>
     4016:	8a e0       	ldi	r24, 0x0A	; 10
@@ -8441,12 +8441,12 @@ void initializeRobot(void)
 
 00004058 <I2C_MSTR_send>:
     4058:	98 2f       	mov	r25, r24
-    405a:	80 91 c2 08 	lds	r24, 0x08C2
+    405a:	80 91 42 07 	lds	r24, 0x0742
     405e:	81 30       	cpi	r24, 0x01	; 1
     4060:	11 f0       	breq	.+4      	; 0x4066 <I2C_MSTR_send+0xe>
     4062:	85 e0       	ldi	r24, 0x05	; 5
     4064:	08 95       	ret
-    4066:	80 91 c3 08 	lds	r24, 0x08C3
+    4066:	80 91 43 07 	lds	r24, 0x0743
     406a:	81 30       	cpi	r24, 0x01	; 1
     406c:	11 f0       	breq	.+4      	; 0x4072 <I2C_MSTR_send+0x1a>
     406e:	8a e0       	ldi	r24, 0x0A	; 10
@@ -8475,17 +8475,17 @@ void initializeRobot(void)
 
 000040a4 <I2C_MSTR_start>:
     40a4:	98 2f       	mov	r25, r24
-    40a6:	20 91 c2 08 	lds	r18, 0x08C2
+    40a6:	20 91 42 07 	lds	r18, 0x0742
     40aa:	21 30       	cpi	r18, 0x01	; 1
     40ac:	11 f0       	breq	.+4      	; 0x40b2 <I2C_MSTR_start+0xe>
     40ae:	85 e0       	ldi	r24, 0x05	; 5
     40b0:	08 95       	ret
-    40b2:	80 91 c4 08 	lds	r24, 0x08C4
+    40b2:	80 91 44 07 	lds	r24, 0x0744
     40b6:	81 30       	cpi	r24, 0x01	; 1
     40b8:	11 f4       	brne	.+4      	; 0x40be <I2C_MSTR_start+0x1a>
     40ba:	89 e0       	ldi	r24, 0x09	; 9
     40bc:	08 95       	ret
-    40be:	20 93 c3 08 	sts	0x08C3, r18
+    40be:	20 93 43 07 	sts	0x0743, r18
     40c2:	84 ea       	ldi	r24, 0xA4	; 164
     40c4:	80 93 bc 00 	sts	0x00BC, r24
     40c8:	80 91 bc 00 	lds	r24, 0x00BC
@@ -8534,12 +8534,12 @@ void initializeRobot(void)
     412e:	08 95       	ret
 
 00004130 <I2C_MSTR_stop>:
-    4130:	80 91 c3 08 	lds	r24, 0x08C3
+    4130:	80 91 43 07 	lds	r24, 0x0743
     4134:	81 30       	cpi	r24, 0x01	; 1
     4136:	11 f0       	breq	.+4      	; 0x413c <I2C_MSTR_stop+0xc>
     4138:	8a e0       	ldi	r24, 0x0A	; 10
     413a:	08 95       	ret
-    413c:	80 91 c5 08 	lds	r24, 0x08C5
+    413c:	80 91 45 07 	lds	r24, 0x0745
     4140:	81 30       	cpi	r24, 0x01	; 1
     4142:	29 f4       	brne	.+10     	; 0x414e <I2C_MSTR_stop+0x1e>
     4144:	85 e9       	ldi	r24, 0x95	; 149
@@ -8556,11 +8556,11 @@ void initializeRobot(void)
     415a:	0e 94 44 1e 	call	0x3c88	; 0x3c88 <SYS_get_state>
     415e:	88 23       	and	r24, r24
     4160:	b1 f4       	brne	.+44     	; 0x418e <I2C_open+0x36>
-    4162:	10 92 c2 08 	sts	0x08C2, r1
-    4166:	10 92 c3 08 	sts	0x08C3, r1
-    416a:	10 92 c4 08 	sts	0x08C4, r1
-    416e:	10 92 c5 08 	sts	0x08C5, r1
-    4172:	10 92 c6 08 	sts	0x08C6, r1
+    4162:	10 92 42 07 	sts	0x0742, r1
+    4166:	10 92 43 07 	sts	0x0743, r1
+    416a:	10 92 44 07 	sts	0x0744, r1
+    416e:	10 92 45 07 	sts	0x0745, r1
+    4172:	10 92 46 07 	sts	0x0746, r1
     4176:	0e 94 0e 27 	call	0x4e1c	; 0x4e1c <__I2C_init>
     417a:	87 e1       	ldi	r24, 0x17	; 23
     417c:	60 e0       	ldi	r22, 0x00	; 0
@@ -8578,7 +8578,7 @@ void initializeRobot(void)
     4196:	60 93 b9 00 	sts	0x00B9, r22
     419a:	80 93 b8 00 	sts	0x00B8, r24
     419e:	81 e0       	ldi	r24, 0x01	; 1
-    41a0:	80 93 c2 08 	sts	0x08C2, r24
+    41a0:	80 93 42 07 	sts	0x0742, r24
     41a4:	08 95       	ret
 
 000041a6 <__ADC_init>:
@@ -9259,38 +9259,38 @@ void initializeRobot(void)
     46e4:	41 f0       	breq	.+16     	; 0x46f6 <__LCD_putchar+0x4a>
     46e6:	01 e0       	ldi	r16, 0x01	; 1
     46e8:	41 c0       	rjmp	.+130    	; 0x476c <__LCD_putchar+0xc0>
-    46ea:	10 92 9b 08 	sts	0x089B, r1
+    46ea:	10 92 1b 07 	sts	0x071B, r1
     46ee:	03 c0       	rjmp	.+6      	; 0x46f6 <__LCD_putchar+0x4a>
-    46f0:	10 92 9b 08 	sts	0x089B, r1
+    46f0:	10 92 1b 07 	sts	0x071B, r1
     46f4:	3a c0       	rjmp	.+116    	; 0x476a <__LCD_putchar+0xbe>
-    46f6:	80 91 9c 08 	lds	r24, 0x089C
+    46f6:	80 91 1c 07 	lds	r24, 0x071C
     46fa:	81 50       	subi	r24, 0x01	; 1
-    46fc:	80 93 9c 08 	sts	0x089C, r24
+    46fc:	80 93 1c 07 	sts	0x071C, r24
     4700:	34 c0       	rjmp	.+104    	; 0x476a <__LCD_putchar+0xbe>
     4702:	0e 94 e1 18 	call	0x31c2	; 0x31c2 <LCD_clear>
     4706:	14 c0       	rjmp	.+40     	; 0x4730 <__LCD_putchar+0x84>
     4708:	80 e0       	ldi	r24, 0x00	; 0
     470a:	61 e0       	ldi	r22, 0x01	; 1
     470c:	0e 94 c0 19 	call	0x3380	; 0x3380 <LCD_write>
-    4710:	80 91 9b 08 	lds	r24, 0x089B
+    4710:	80 91 1b 07 	lds	r24, 0x071B
     4714:	8f 5f       	subi	r24, 0xFF	; 255
-    4716:	80 93 9b 08 	sts	0x089B, r24
-    471a:	80 91 9b 08 	lds	r24, 0x089B
+    4716:	80 93 1b 07 	sts	0x071B, r24
+    471a:	80 91 1b 07 	lds	r24, 0x071B
     471e:	87 ff       	sbrs	r24, 7
     4720:	f3 cf       	rjmp	.-26     	; 0x4708 <__LCD_putchar+0x5c>
-    4722:	10 92 9b 08 	sts	0x089B, r1
-    4726:	80 91 9c 08 	lds	r24, 0x089C
+    4722:	10 92 1b 07 	sts	0x071B, r1
+    4726:	80 91 1c 07 	lds	r24, 0x071C
     472a:	81 50       	subi	r24, 0x01	; 1
-    472c:	80 93 9c 08 	sts	0x089C, r24
+    472c:	80 93 1c 07 	sts	0x071C, r24
     4730:	00 e0       	ldi	r16, 0x00	; 0
     4732:	11 e0       	ldi	r17, 0x01	; 1
     4734:	1c c0       	rjmp	.+56     	; 0x476e <__LCD_putchar+0xc2>
-    4736:	80 91 9b 08 	lds	r24, 0x089B
+    4736:	80 91 1b 07 	lds	r24, 0x071B
     473a:	88 23       	and	r24, r24
     473c:	b1 f0       	breq	.+44     	; 0x476a <__LCD_putchar+0xbe>
-    473e:	80 91 9b 08 	lds	r24, 0x089B
+    473e:	80 91 1b 07 	lds	r24, 0x071B
     4742:	86 50       	subi	r24, 0x06	; 6
-    4744:	80 93 9b 08 	sts	0x089B, r24
+    4744:	80 93 1b 07 	sts	0x071B, r24
     4748:	10 c0       	rjmp	.+32     	; 0x476a <__LCD_putchar+0xbe>
     474a:	81 e0       	ldi	r24, 0x01	; 1
     474c:	0e 94 ed 1a 	call	0x35da	; 0x35da <SPKR_open>
@@ -9307,8 +9307,8 @@ void initializeRobot(void)
     4766:	0e 94 3c 25 	call	0x4a78	; 0x4a78 <SPKR_close>
     476a:	00 e0       	ldi	r16, 0x00	; 0
     476c:	10 e0       	ldi	r17, 0x00	; 0
-    476e:	80 91 9c 08 	lds	r24, 0x089C
-    4772:	60 91 9b 08 	lds	r22, 0x089B
+    476e:	80 91 1c 07 	lds	r24, 0x071C
+    4772:	60 91 1b 07 	lds	r22, 0x071B
     4776:	0e 94 a7 19 	call	0x334e	; 0x334e <LCD_set_PGC_addr>
     477a:	00 23       	and	r16, r16
     477c:	51 f1       	breq	.+84     	; 0x47d2 <__LCD_putchar+0x126>
@@ -9333,29 +9333,29 @@ void initializeRobot(void)
     47a4:	80 e0       	ldi	r24, 0x00	; 0
     47a6:	61 e0       	ldi	r22, 0x01	; 1
     47a8:	0e 94 c0 19 	call	0x3380	; 0x3380 <LCD_write>
-    47ac:	80 91 9b 08 	lds	r24, 0x089B
+    47ac:	80 91 1b 07 	lds	r24, 0x071B
     47b0:	8a 5f       	subi	r24, 0xFA	; 250
-    47b2:	80 93 9b 08 	sts	0x089B, r24
-    47b6:	80 91 9b 08 	lds	r24, 0x089B
+    47b2:	80 93 1b 07 	sts	0x071B, r24
+    47b6:	80 91 1b 07 	lds	r24, 0x071B
     47ba:	90 e0       	ldi	r25, 0x00	; 0
     47bc:	8c 37       	cpi	r24, 0x7C	; 124
     47be:	91 05       	cpc	r25, r1
     47c0:	3c f0       	brlt	.+14     	; 0x47d0 <__LCD_putchar+0x124>
-    47c2:	10 92 9b 08 	sts	0x089B, r1
-    47c6:	80 91 9c 08 	lds	r24, 0x089C
+    47c2:	10 92 1b 07 	sts	0x071B, r1
+    47c6:	80 91 1c 07 	lds	r24, 0x071C
     47ca:	81 50       	subi	r24, 0x01	; 1
-    47cc:	80 93 9c 08 	sts	0x089C, r24
+    47cc:	80 93 1c 07 	sts	0x071C, r24
     47d0:	11 e0       	ldi	r17, 0x01	; 1
-    47d2:	80 91 9c 08 	lds	r24, 0x089C
+    47d2:	80 91 1c 07 	lds	r24, 0x071C
     47d6:	83 70       	andi	r24, 0x03	; 3
-    47d8:	80 93 9c 08 	sts	0x089C, r24
+    47d8:	80 93 1c 07 	sts	0x071C, r24
     47dc:	11 30       	cpi	r17, 0x01	; 1
     47de:	59 f4       	brne	.+22     	; 0x47f6 <__LCD_putchar+0x14a>
-    47e0:	80 91 9d 08 	lds	r24, 0x089D
+    47e0:	80 91 1d 07 	lds	r24, 0x071D
     47e4:	81 30       	cpi	r24, 0x01	; 1
     47e6:	39 f4       	brne	.+14     	; 0x47f6 <__LCD_putchar+0x14a>
-    47e8:	e0 91 9e 08 	lds	r30, 0x089E
-    47ec:	f0 91 9f 08 	lds	r31, 0x089F
+    47e8:	e0 91 1e 07 	lds	r30, 0x071E
+    47ec:	f0 91 1f 07 	lds	r31, 0x071F
     47f0:	30 97       	sbiw	r30, 0x00	; 0
     47f2:	09 f0       	breq	.+2      	; 0x47f6 <__LCD_putchar+0x14a>
     47f4:	09 95       	icall
@@ -9513,7 +9513,7 @@ void initializeRobot(void)
     4940:	61 e0       	ldi	r22, 0x01	; 1
     4942:	0e 94 8c 1e 	call	0x3d18	; 0x3d18 <SYS_set_state>
     4946:	8f ef       	ldi	r24, 0xFF	; 255
-    4948:	80 93 a0 08 	sts	0x08A0, r24
+    4948:	80 93 20 07 	sts	0x0720, r24
     494c:	87 e0       	ldi	r24, 0x07	; 7
     494e:	0e 94 fc 19 	call	0x33f8	; 0x33f8 <SPI_set_slave_addr>
     4952:	82 e0       	ldi	r24, 0x02	; 2
@@ -9759,7 +9759,7 @@ void initializeRobot(void)
 00004b86 <STEPPER_go>:
     4b86:	98 2f       	mov	r25, r24
     4b88:	81 e0       	ldi	r24, 0x01	; 1
-    4b8a:	80 93 85 08 	sts	0x0885, r24
+    4b8a:	80 93 05 07 	sts	0x0705, r24
     4b8e:	91 30       	cpi	r25, 0x01	; 1
     4b90:	51 f0       	breq	.+20     	; 0x4ba6 <STEPPER_go+0x20>
     4b92:	91 30       	cpi	r25, 0x01	; 1
@@ -9767,11 +9767,11 @@ void initializeRobot(void)
     4b96:	92 30       	cpi	r25, 0x02	; 2
     4b98:	41 f4       	brne	.+16     	; 0x4baa <STEPPER_go+0x24>
     4b9a:	03 c0       	rjmp	.+6      	; 0x4ba2 <STEPPER_go+0x1c>
-    4b9c:	10 92 6d 08 	sts	0x086D, r1
+    4b9c:	10 92 ed 06 	sts	0x06ED, r1
     4ba0:	04 c0       	rjmp	.+8      	; 0x4baa <STEPPER_go+0x24>
-    4ba2:	10 92 6d 08 	sts	0x086D, r1
-    4ba6:	10 92 6e 08 	sts	0x086E, r1
-    4baa:	10 92 85 08 	sts	0x0885, r1
+    4ba2:	10 92 ed 06 	sts	0x06ED, r1
+    4ba6:	10 92 ee 06 	sts	0x06EE, r1
+    4baa:	10 92 05 07 	sts	0x0705, r1
     4bae:	08 95       	ret
 
 00004bb0 <__STEPPER_init>:
@@ -9789,7 +9789,7 @@ void initializeRobot(void)
 00004bc4 <STEPPER_set_steps>:
     4bc4:	98 2f       	mov	r25, r24
     4bc6:	81 e0       	ldi	r24, 0x01	; 1
-    4bc8:	80 93 85 08 	sts	0x0885, r24
+    4bc8:	80 93 05 07 	sts	0x0705, r24
     4bcc:	91 30       	cpi	r25, 0x01	; 1
     4bce:	71 f0       	breq	.+28     	; 0x4bec <STEPPER_set_steps+0x28>
     4bd0:	91 30       	cpi	r25, 0x01	; 1
@@ -9797,20 +9797,20 @@ void initializeRobot(void)
     4bd4:	92 30       	cpi	r25, 0x02	; 2
     4bd6:	71 f4       	brne	.+28     	; 0x4bf4 <STEPPER_set_steps+0x30>
     4bd8:	05 c0       	rjmp	.+10     	; 0x4be4 <STEPPER_set_steps+0x20>
-    4bda:	70 93 62 08 	sts	0x0862, r23
-    4bde:	60 93 61 08 	sts	0x0861, r22
+    4bda:	70 93 e2 06 	sts	0x06E2, r23
+    4bde:	60 93 e1 06 	sts	0x06E1, r22
     4be2:	08 c0       	rjmp	.+16     	; 0x4bf4 <STEPPER_set_steps+0x30>
-    4be4:	70 93 62 08 	sts	0x0862, r23
-    4be8:	60 93 61 08 	sts	0x0861, r22
-    4bec:	70 93 64 08 	sts	0x0864, r23
-    4bf0:	60 93 63 08 	sts	0x0863, r22
-    4bf4:	10 92 85 08 	sts	0x0885, r1
+    4be4:	70 93 e2 06 	sts	0x06E2, r23
+    4be8:	60 93 e1 06 	sts	0x06E1, r22
+    4bec:	70 93 e4 06 	sts	0x06E4, r23
+    4bf0:	60 93 e3 06 	sts	0x06E3, r22
+    4bf4:	10 92 05 07 	sts	0x0705, r1
     4bf8:	08 95       	ret
 
 00004bfa <STEPPER_set_stop_mode>:
     4bfa:	98 2f       	mov	r25, r24
     4bfc:	81 e0       	ldi	r24, 0x01	; 1
-    4bfe:	80 93 85 08 	sts	0x0885, r24
+    4bfe:	80 93 05 07 	sts	0x0705, r24
     4c02:	91 30       	cpi	r25, 0x01	; 1
     4c04:	51 f0       	breq	.+20     	; 0x4c1a <STEPPER_set_stop_mode+0x20>
     4c06:	91 30       	cpi	r25, 0x01	; 1
@@ -9818,11 +9818,11 @@ void initializeRobot(void)
     4c0a:	92 30       	cpi	r25, 0x02	; 2
     4c0c:	41 f4       	brne	.+16     	; 0x4c1e <STEPPER_set_stop_mode+0x24>
     4c0e:	03 c0       	rjmp	.+6      	; 0x4c16 <STEPPER_set_stop_mode+0x1c>
-    4c10:	60 93 6f 08 	sts	0x086F, r22
+    4c10:	60 93 ef 06 	sts	0x06EF, r22
     4c14:	04 c0       	rjmp	.+8      	; 0x4c1e <STEPPER_set_stop_mode+0x24>
-    4c16:	60 93 6f 08 	sts	0x086F, r22
-    4c1a:	60 93 70 08 	sts	0x0870, r22
-    4c1e:	10 92 85 08 	sts	0x0885, r1
+    4c16:	60 93 ef 06 	sts	0x06EF, r22
+    4c1a:	60 93 f0 06 	sts	0x06F0, r22
+    4c1e:	10 92 05 07 	sts	0x0705, r1
     4c22:	08 95       	ret
 
 00004c24 <STEPPER_setup_decels>:
@@ -9839,26 +9839,26 @@ void initializeRobot(void)
     4c38:	82 30       	cpi	r24, 0x02	; 2
     4c3a:	61 f5       	brne	.+88     	; 0x4c94 <STEPPER_setup_decels+0x70>
     4c3c:	0d c0       	rjmp	.+26     	; 0x4c58 <STEPPER_setup_decels+0x34>
-    4c3e:	80 91 59 08 	lds	r24, 0x0859
-    4c42:	90 91 5a 08 	lds	r25, 0x085A
+    4c3e:	80 91 d9 06 	lds	r24, 0x06D9
+    4c42:	90 91 da 06 	lds	r25, 0x06DA
     4c46:	89 2b       	or	r24, r25
     4c48:	11 f0       	breq	.+4      	; 0x4c4e <STEPPER_setup_decels+0x2a>
     4c4a:	80 e0       	ldi	r24, 0x00	; 0
     4c4c:	1a c0       	rjmp	.+52     	; 0x4c82 <STEPPER_setup_decels+0x5e>
-    4c4e:	10 92 66 08 	sts	0x0866, r1
-    4c52:	10 92 65 08 	sts	0x0865, r1
+    4c4e:	10 92 e6 06 	sts	0x06E6, r1
+    4c52:	10 92 e5 06 	sts	0x06E5, r1
     4c56:	1e c0       	rjmp	.+60     	; 0x4c94 <STEPPER_setup_decels+0x70>
-    4c58:	80 91 59 08 	lds	r24, 0x0859
-    4c5c:	90 91 5a 08 	lds	r25, 0x085A
+    4c58:	80 91 d9 06 	lds	r24, 0x06D9
+    4c5c:	90 91 da 06 	lds	r25, 0x06DA
     4c60:	89 2b       	or	r24, r25
     4c62:	21 f0       	breq	.+8      	; 0x4c6c <STEPPER_setup_decels+0x48>
     4c64:	80 e0       	ldi	r24, 0x00	; 0
     4c66:	0e 94 88 27 	call	0x4f10	; 0x4f10 <STEPPER_set_decel_step_values>
     4c6a:	04 c0       	rjmp	.+8      	; 0x4c74 <STEPPER_setup_decels+0x50>
-    4c6c:	10 92 66 08 	sts	0x0866, r1
-    4c70:	10 92 65 08 	sts	0x0865, r1
-    4c74:	80 91 5b 08 	lds	r24, 0x085B
-    4c78:	90 91 5c 08 	lds	r25, 0x085C
+    4c6c:	10 92 e6 06 	sts	0x06E6, r1
+    4c70:	10 92 e5 06 	sts	0x06E5, r1
+    4c74:	80 91 db 06 	lds	r24, 0x06DB
+    4c78:	90 91 dc 06 	lds	r25, 0x06DC
     4c7c:	89 2b       	or	r24, r25
     4c7e:	31 f0       	breq	.+12     	; 0x4c8c <STEPPER_setup_decels+0x68>
     4c80:	81 e0       	ldi	r24, 0x01	; 1
@@ -9866,8 +9866,8 @@ void initializeRobot(void)
     4c84:	a8 01       	movw	r20, r16
     4c86:	0e 94 88 27 	call	0x4f10	; 0x4f10 <STEPPER_set_decel_step_values>
     4c8a:	04 c0       	rjmp	.+8      	; 0x4c94 <STEPPER_setup_decels+0x70>
-    4c8c:	10 92 68 08 	sts	0x0868, r1
-    4c90:	10 92 67 08 	sts	0x0867, r1
+    4c8c:	10 92 e8 06 	sts	0x06E8, r1
+    4c90:	10 92 e7 06 	sts	0x06E7, r1
     4c94:	df 91       	pop	r29
     4c96:	cf 91       	pop	r28
     4c98:	1f 91       	pop	r17
@@ -9875,23 +9875,23 @@ void initializeRobot(void)
     4c9c:	08 95       	ret
 
 00004c9e <SYS_init>:
-    4c9e:	10 92 88 08 	sts	0x0888, r1
-    4ca2:	10 92 89 08 	sts	0x0889, r1
-    4ca6:	10 92 8d 08 	sts	0x088D, r1
-    4caa:	10 92 8a 08 	sts	0x088A, r1
-    4cae:	10 92 8c 08 	sts	0x088C, r1
-    4cb2:	10 92 8e 08 	sts	0x088E, r1
-    4cb6:	10 92 8f 08 	sts	0x088F, r1
-    4cba:	10 92 90 08 	sts	0x0890, r1
-    4cbe:	10 92 91 08 	sts	0x0891, r1
-    4cc2:	10 92 92 08 	sts	0x0892, r1
-    4cc6:	10 92 93 08 	sts	0x0893, r1
-    4cca:	10 92 94 08 	sts	0x0894, r1
-    4cce:	10 92 95 08 	sts	0x0895, r1
-    4cd2:	10 92 96 08 	sts	0x0896, r1
-    4cd6:	10 92 97 08 	sts	0x0897, r1
-    4cda:	10 92 98 08 	sts	0x0898, r1
-    4cde:	10 92 99 08 	sts	0x0899, r1
+    4c9e:	10 92 08 07 	sts	0x0708, r1
+    4ca2:	10 92 09 07 	sts	0x0709, r1
+    4ca6:	10 92 0d 07 	sts	0x070D, r1
+    4caa:	10 92 0a 07 	sts	0x070A, r1
+    4cae:	10 92 0c 07 	sts	0x070C, r1
+    4cb2:	10 92 0e 07 	sts	0x070E, r1
+    4cb6:	10 92 0f 07 	sts	0x070F, r1
+    4cba:	10 92 10 07 	sts	0x0710, r1
+    4cbe:	10 92 11 07 	sts	0x0711, r1
+    4cc2:	10 92 12 07 	sts	0x0712, r1
+    4cc6:	10 92 13 07 	sts	0x0713, r1
+    4cca:	10 92 14 07 	sts	0x0714, r1
+    4cce:	10 92 15 07 	sts	0x0715, r1
+    4cd2:	10 92 16 07 	sts	0x0716, r1
+    4cd6:	10 92 17 07 	sts	0x0717, r1
+    4cda:	10 92 18 07 	sts	0x0718, r1
+    4cde:	10 92 19 07 	sts	0x0719, r1
     4ce2:	08 95       	ret
 
 00004ce4 <TMRSRVC_insert>:
@@ -9904,15 +9904,15 @@ void initializeRobot(void)
     4cf0:	cf 93       	push	r28
     4cf2:	df 93       	push	r29
     4cf4:	ec 01       	movw	r28, r24
-    4cf6:	80 91 bf 08 	lds	r24, 0x08BF
+    4cf6:	80 91 3f 07 	lds	r24, 0x073F
     4cfa:	88 23       	and	r24, r24
     4cfc:	39 f4       	brne	.+14     	; 0x4d0c <TMRSRVC_insert+0x28>
-    4cfe:	d0 93 c1 08 	sts	0x08C1, r29
-    4d02:	c0 93 c0 08 	sts	0x08C0, r28
+    4cfe:	d0 93 41 07 	sts	0x0741, r29
+    4d02:	c0 93 40 07 	sts	0x0740, r28
     4d06:	0e 94 00 27 	call	0x4e00	; 0x4e00 <TMRSRVC_start>
     4d0a:	47 c0       	rjmp	.+142    	; 0x4d9a <TMRSRVC_insert+0xb6>
-    4d0c:	c0 90 c0 08 	lds	r12, 0x08C0
-    4d10:	d0 90 c1 08 	lds	r13, 0x08C1
+    4d0c:	c0 90 40 07 	lds	r12, 0x0740
+    4d10:	d0 90 41 07 	lds	r13, 0x0741
     4d14:	00 e0       	ldi	r16, 0x00	; 0
     4d16:	10 e0       	ldi	r17, 0x00	; 0
     4d18:	ee 24       	eor	r14, r14
@@ -9942,8 +9942,8 @@ void initializeRobot(void)
     4d48:	ca 82       	std	Y+2, r12	; 0x02
     4d4a:	01 2b       	or	r16, r17
     4d4c:	29 f4       	brne	.+10     	; 0x4d58 <TMRSRVC_insert+0x74>
-    4d4e:	d0 93 c1 08 	sts	0x08C1, r29
-    4d52:	c0 93 c0 08 	sts	0x08C0, r28
+    4d4e:	d0 93 41 07 	sts	0x0741, r29
+    4d52:	c0 93 40 07 	sts	0x0740, r28
     4d56:	21 c0       	rjmp	.+66     	; 0x4d9a <TMRSRVC_insert+0xb6>
     4d58:	f7 01       	movw	r30, r14
     4d5a:	0c c0       	rjmp	.+24     	; 0x4d74 <TMRSRVC_insert+0x90>
@@ -9971,15 +9971,15 @@ void initializeRobot(void)
     4d86:	1f 4f       	sbci	r17, 0xFF	; 255
     4d88:	76 01       	movw	r14, r12
     4d8a:	6c 01       	movw	r12, r24
-    4d8c:	80 91 bf 08 	lds	r24, 0x08BF
+    4d8c:	80 91 3f 07 	lds	r24, 0x073F
     4d90:	90 e0       	ldi	r25, 0x00	; 0
     4d92:	08 17       	cp	r16, r24
     4d94:	19 07       	cpc	r17, r25
     4d96:	18 f2       	brcs	.-122    	; 0x4d1e <TMRSRVC_insert+0x3a>
     4d98:	ec cf       	rjmp	.-40     	; 0x4d72 <TMRSRVC_insert+0x8e>
-    4d9a:	80 91 bf 08 	lds	r24, 0x08BF
+    4d9a:	80 91 3f 07 	lds	r24, 0x073F
     4d9e:	8f 5f       	subi	r24, 0xFF	; 255
-    4da0:	80 93 bf 08 	sts	0x08BF, r24
+    4da0:	80 93 3f 07 	sts	0x073F, r24
     4da4:	df 91       	pop	r29
     4da6:	cf 91       	pop	r28
     4da8:	1f 91       	pop	r17
@@ -9995,9 +9995,9 @@ void initializeRobot(void)
     4db8:	0e 94 44 1e 	call	0x3c88	; 0x3c88 <SYS_get_state>
     4dbc:	88 23       	and	r24, r24
     4dbe:	b9 f4       	brne	.+46     	; 0x4dee <TMRSRVC_open+0x38>
-    4dc0:	10 92 bf 08 	sts	0x08BF, r1
-    4dc4:	10 92 c1 08 	sts	0x08C1, r1
-    4dc8:	10 92 c0 08 	sts	0x08C0, r1
+    4dc0:	10 92 3f 07 	sts	0x073F, r1
+    4dc4:	10 92 41 07 	sts	0x0741, r1
+    4dc8:	10 92 40 07 	sts	0x0740, r1
     4dcc:	10 92 06 04 	sts	0x0406, r1
     4dd0:	10 92 07 04 	sts	0x0407, r1
     4dd4:	80 e1       	ldi	r24, 0x10	; 16
@@ -10027,7 +10027,7 @@ void initializeRobot(void)
     4e06:	08 95       	ret
 
 00004e08 <I2C_enable>:
-    4e08:	80 91 c2 08 	lds	r24, 0x08C2
+    4e08:	80 91 42 07 	lds	r24, 0x0742
     4e0c:	81 30       	cpi	r24, 0x01	; 1
     4e0e:	29 f4       	brne	.+10     	; 0x4e1a <I2C_enable+0x12>
     4e10:	80 91 bc 00 	lds	r24, 0x00BC
@@ -10190,8 +10190,8 @@ void initializeRobot(void)
     4f30:	ca 01       	movw	r24, r20
     4f32:	b9 01       	movw	r22, r18
     4f34:	0e 94 ba 32 	call	0x6574	; 0x6574 <__mulsi3>
-    4f38:	20 91 59 08 	lds	r18, 0x0859
-    4f3c:	30 91 5a 08 	lds	r19, 0x085A
+    4f38:	20 91 d9 06 	lds	r18, 0x06D9
+    4f3c:	30 91 da 06 	lds	r19, 0x06DA
     4f40:	22 0f       	add	r18, r18
     4f42:	33 1f       	adc	r19, r19
     4f44:	40 e0       	ldi	r20, 0x00	; 0
@@ -10213,13 +10213,13 @@ void initializeRobot(void)
     4f66:	a4 07       	cpc	r26, r20
     4f68:	b5 07       	cpc	r27, r21
     4f6a:	28 f0       	brcs	.+10     	; 0x4f76 <STEPPER_set_decel_step_values+0x66>
-    4f6c:	f0 92 66 08 	sts	0x0866, r15
-    4f70:	e0 92 65 08 	sts	0x0865, r14
+    4f6c:	f0 92 e6 06 	sts	0x06E6, r15
+    4f70:	e0 92 e5 06 	sts	0x06E5, r14
     4f74:	33 c0       	rjmp	.+102    	; 0x4fdc <STEPPER_set_decel_step_values+0xcc>
     4f76:	d6 95       	lsr	r29
     4f78:	c7 95       	ror	r28
-    4f7a:	d0 93 66 08 	sts	0x0866, r29
-    4f7e:	c0 93 65 08 	sts	0x0865, r28
+    4f7a:	d0 93 e6 06 	sts	0x06E6, r29
+    4f7e:	c0 93 e5 06 	sts	0x06E5, r28
     4f82:	2c c0       	rjmp	.+88     	; 0x4fdc <STEPPER_set_decel_step_values+0xcc>
     4f84:	9a 01       	movw	r18, r20
     4f86:	40 e0       	ldi	r20, 0x00	; 0
@@ -10227,8 +10227,8 @@ void initializeRobot(void)
     4f8a:	ca 01       	movw	r24, r20
     4f8c:	b9 01       	movw	r22, r18
     4f8e:	0e 94 ba 32 	call	0x6574	; 0x6574 <__mulsi3>
-    4f92:	20 91 5b 08 	lds	r18, 0x085B
-    4f96:	30 91 5c 08 	lds	r19, 0x085C
+    4f92:	20 91 db 06 	lds	r18, 0x06DB
+    4f96:	30 91 dc 06 	lds	r19, 0x06DC
     4f9a:	22 0f       	add	r18, r18
     4f9c:	33 1f       	adc	r19, r19
     4f9e:	40 e0       	ldi	r20, 0x00	; 0
@@ -10250,13 +10250,13 @@ void initializeRobot(void)
     4fc0:	a4 07       	cpc	r26, r20
     4fc2:	b5 07       	cpc	r27, r21
     4fc4:	28 f0       	brcs	.+10     	; 0x4fd0 <STEPPER_set_decel_step_values+0xc0>
-    4fc6:	f0 92 68 08 	sts	0x0868, r15
-    4fca:	e0 92 67 08 	sts	0x0867, r14
+    4fc6:	f0 92 e8 06 	sts	0x06E8, r15
+    4fca:	e0 92 e7 06 	sts	0x06E7, r14
     4fce:	06 c0       	rjmp	.+12     	; 0x4fdc <STEPPER_set_decel_step_values+0xcc>
     4fd0:	d6 95       	lsr	r29
     4fd2:	c7 95       	ror	r28
-    4fd4:	d0 93 68 08 	sts	0x0868, r29
-    4fd8:	c0 93 67 08 	sts	0x0867, r28
+    4fd4:	d0 93 e8 06 	sts	0x06E8, r29
+    4fd8:	c0 93 e7 06 	sts	0x06E7, r28
     4fdc:	df 91       	pop	r29
     4fde:	cf 91       	pop	r28
     4fe0:	1f 91       	pop	r17
@@ -10339,111 +10339,111 @@ void initializeRobot(void)
     5090:	81 30       	cpi	r24, 0x01	; 1
     5092:	09 f0       	breq	.+2      	; 0x5096 <STEPPER_clk+0xc>
     5094:	aa c0       	rjmp	.+340    	; 0x51ea <STEPPER_clk+0x160>
-    5096:	80 91 59 08 	lds	r24, 0x0859
-    509a:	90 91 5a 08 	lds	r25, 0x085A
+    5096:	80 91 d9 06 	lds	r24, 0x06D9
+    509a:	90 91 da 06 	lds	r25, 0x06DA
     509e:	89 2b       	or	r24, r25
     50a0:	09 f1       	breq	.+66     	; 0x50e4 <STEPPER_clk+0x5a>
-    50a2:	80 91 7d 08 	lds	r24, 0x087D
-    50a6:	90 91 7e 08 	lds	r25, 0x087E
-    50aa:	20 91 59 08 	lds	r18, 0x0859
-    50ae:	30 91 5a 08 	lds	r19, 0x085A
+    50a2:	80 91 fd 06 	lds	r24, 0x06FD
+    50a6:	90 91 fe 06 	lds	r25, 0x06FE
+    50aa:	20 91 d9 06 	lds	r18, 0x06D9
+    50ae:	30 91 da 06 	lds	r19, 0x06DA
     50b2:	82 0f       	add	r24, r18
     50b4:	93 1f       	adc	r25, r19
-    50b6:	90 93 7e 08 	sts	0x087E, r25
-    50ba:	80 93 7d 08 	sts	0x087D, r24
-    50be:	80 91 7d 08 	lds	r24, 0x087D
-    50c2:	90 91 7e 08 	lds	r25, 0x087E
+    50b6:	90 93 fe 06 	sts	0x06FE, r25
+    50ba:	80 93 fd 06 	sts	0x06FD, r24
+    50be:	80 91 fd 06 	lds	r24, 0x06FD
+    50c2:	90 91 fe 06 	lds	r25, 0x06FE
     50c6:	88 5e       	subi	r24, 0xE8	; 232
     50c8:	93 40       	sbci	r25, 0x03	; 3
     50ca:	a4 f0       	brlt	.+40     	; 0x50f4 <STEPPER_clk+0x6a>
-    50cc:	80 91 7d 08 	lds	r24, 0x087D
-    50d0:	90 91 7e 08 	lds	r25, 0x087E
+    50cc:	80 91 fd 06 	lds	r24, 0x06FD
+    50d0:	90 91 fe 06 	lds	r25, 0x06FE
     50d4:	88 5e       	subi	r24, 0xE8	; 232
     50d6:	93 40       	sbci	r25, 0x03	; 3
-    50d8:	90 93 7e 08 	sts	0x087E, r25
-    50dc:	80 93 7d 08 	sts	0x087D, r24
+    50d8:	90 93 fe 06 	sts	0x06FE, r25
+    50dc:	80 93 fd 06 	sts	0x06FD, r24
     50e0:	41 e0       	ldi	r20, 0x01	; 1
     50e2:	09 c0       	rjmp	.+18     	; 0x50f6 <STEPPER_clk+0x6c>
-    50e4:	80 91 51 08 	lds	r24, 0x0851
-    50e8:	90 91 52 08 	lds	r25, 0x0852
-    50ec:	90 93 56 08 	sts	0x0856, r25
-    50f0:	80 93 55 08 	sts	0x0855, r24
+    50e4:	80 91 d1 06 	lds	r24, 0x06D1
+    50e8:	90 91 d2 06 	lds	r25, 0x06D2
+    50ec:	90 93 d6 06 	sts	0x06D6, r25
+    50f0:	80 93 d5 06 	sts	0x06D5, r24
     50f4:	40 e0       	ldi	r20, 0x00	; 0
-    50f6:	80 91 5b 08 	lds	r24, 0x085B
-    50fa:	90 91 5c 08 	lds	r25, 0x085C
+    50f6:	80 91 db 06 	lds	r24, 0x06DB
+    50fa:	90 91 dc 06 	lds	r25, 0x06DC
     50fe:	89 2b       	or	r24, r25
     5100:	09 f1       	breq	.+66     	; 0x5144 <STEPPER_clk+0xba>
-    5102:	80 91 7f 08 	lds	r24, 0x087F
-    5106:	90 91 80 08 	lds	r25, 0x0880
-    510a:	20 91 5b 08 	lds	r18, 0x085B
-    510e:	30 91 5c 08 	lds	r19, 0x085C
+    5102:	80 91 ff 06 	lds	r24, 0x06FF
+    5106:	90 91 00 07 	lds	r25, 0x0700
+    510a:	20 91 db 06 	lds	r18, 0x06DB
+    510e:	30 91 dc 06 	lds	r19, 0x06DC
     5112:	82 0f       	add	r24, r18
     5114:	93 1f       	adc	r25, r19
-    5116:	90 93 80 08 	sts	0x0880, r25
-    511a:	80 93 7f 08 	sts	0x087F, r24
-    511e:	80 91 7f 08 	lds	r24, 0x087F
-    5122:	90 91 80 08 	lds	r25, 0x0880
+    5116:	90 93 00 07 	sts	0x0700, r25
+    511a:	80 93 ff 06 	sts	0x06FF, r24
+    511e:	80 91 ff 06 	lds	r24, 0x06FF
+    5122:	90 91 00 07 	lds	r25, 0x0700
     5126:	88 5e       	subi	r24, 0xE8	; 232
     5128:	93 40       	sbci	r25, 0x03	; 3
     512a:	a4 f0       	brlt	.+40     	; 0x5154 <STEPPER_clk+0xca>
-    512c:	80 91 7f 08 	lds	r24, 0x087F
-    5130:	90 91 80 08 	lds	r25, 0x0880
+    512c:	80 91 ff 06 	lds	r24, 0x06FF
+    5130:	90 91 00 07 	lds	r25, 0x0700
     5134:	88 5e       	subi	r24, 0xE8	; 232
     5136:	93 40       	sbci	r25, 0x03	; 3
-    5138:	90 93 80 08 	sts	0x0880, r25
-    513c:	80 93 7f 08 	sts	0x087F, r24
+    5138:	90 93 00 07 	sts	0x0700, r25
+    513c:	80 93 ff 06 	sts	0x06FF, r24
     5140:	61 e0       	ldi	r22, 0x01	; 1
     5142:	09 c0       	rjmp	.+18     	; 0x5156 <STEPPER_clk+0xcc>
-    5144:	80 91 53 08 	lds	r24, 0x0853
-    5148:	90 91 54 08 	lds	r25, 0x0854
-    514c:	90 93 58 08 	sts	0x0858, r25
-    5150:	80 93 57 08 	sts	0x0857, r24
+    5144:	80 91 d3 06 	lds	r24, 0x06D3
+    5148:	90 91 d4 06 	lds	r25, 0x06D4
+    514c:	90 93 d8 06 	sts	0x06D8, r25
+    5150:	80 93 d7 06 	sts	0x06D7, r24
     5154:	60 e0       	ldi	r22, 0x00	; 0
     5156:	84 2f       	mov	r24, r20
     5158:	0e 94 f6 28 	call	0x51ec	; 0x51ec <STEPPER_process_accel>
-    515c:	80 91 79 08 	lds	r24, 0x0879
-    5160:	90 91 7a 08 	lds	r25, 0x087A
-    5164:	20 91 55 08 	lds	r18, 0x0855
-    5168:	30 91 56 08 	lds	r19, 0x0856
+    515c:	80 91 f9 06 	lds	r24, 0x06F9
+    5160:	90 91 fa 06 	lds	r25, 0x06FA
+    5164:	20 91 d5 06 	lds	r18, 0x06D5
+    5168:	30 91 d6 06 	lds	r19, 0x06D6
     516c:	28 0f       	add	r18, r24
     516e:	39 1f       	adc	r19, r25
-    5170:	30 93 7a 08 	sts	0x087A, r19
-    5174:	20 93 79 08 	sts	0x0879, r18
-    5178:	80 91 79 08 	lds	r24, 0x0879
-    517c:	90 91 7a 08 	lds	r25, 0x087A
+    5170:	30 93 fa 06 	sts	0x06FA, r19
+    5174:	20 93 f9 06 	sts	0x06F9, r18
+    5178:	80 91 f9 06 	lds	r24, 0x06F9
+    517c:	90 91 fa 06 	lds	r25, 0x06FA
     5180:	88 5e       	subi	r24, 0xE8	; 232
     5182:	93 40       	sbci	r25, 0x03	; 3
     5184:	14 f4       	brge	.+4      	; 0x518a <STEPPER_clk+0x100>
     5186:	40 e0       	ldi	r20, 0x00	; 0
     5188:	0b c0       	rjmp	.+22     	; 0x51a0 <STEPPER_clk+0x116>
-    518a:	80 91 79 08 	lds	r24, 0x0879
-    518e:	90 91 7a 08 	lds	r25, 0x087A
+    518a:	80 91 f9 06 	lds	r24, 0x06F9
+    518e:	90 91 fa 06 	lds	r25, 0x06FA
     5192:	88 5e       	subi	r24, 0xE8	; 232
     5194:	93 40       	sbci	r25, 0x03	; 3
-    5196:	90 93 7a 08 	sts	0x087A, r25
-    519a:	80 93 79 08 	sts	0x0879, r24
+    5196:	90 93 fa 06 	sts	0x06FA, r25
+    519a:	80 93 f9 06 	sts	0x06F9, r24
     519e:	41 e0       	ldi	r20, 0x01	; 1
-    51a0:	80 91 7b 08 	lds	r24, 0x087B
-    51a4:	90 91 7c 08 	lds	r25, 0x087C
-    51a8:	20 91 57 08 	lds	r18, 0x0857
-    51ac:	30 91 58 08 	lds	r19, 0x0858
+    51a0:	80 91 fb 06 	lds	r24, 0x06FB
+    51a4:	90 91 fc 06 	lds	r25, 0x06FC
+    51a8:	20 91 d7 06 	lds	r18, 0x06D7
+    51ac:	30 91 d8 06 	lds	r19, 0x06D8
     51b0:	28 0f       	add	r18, r24
     51b2:	39 1f       	adc	r19, r25
-    51b4:	30 93 7c 08 	sts	0x087C, r19
-    51b8:	20 93 7b 08 	sts	0x087B, r18
-    51bc:	80 91 7b 08 	lds	r24, 0x087B
-    51c0:	90 91 7c 08 	lds	r25, 0x087C
+    51b4:	30 93 fc 06 	sts	0x06FC, r19
+    51b8:	20 93 fb 06 	sts	0x06FB, r18
+    51bc:	80 91 fb 06 	lds	r24, 0x06FB
+    51c0:	90 91 fc 06 	lds	r25, 0x06FC
     51c4:	88 5e       	subi	r24, 0xE8	; 232
     51c6:	93 40       	sbci	r25, 0x03	; 3
     51c8:	14 f4       	brge	.+4      	; 0x51ce <STEPPER_clk+0x144>
     51ca:	60 e0       	ldi	r22, 0x00	; 0
     51cc:	0b c0       	rjmp	.+22     	; 0x51e4 <STEPPER_clk+0x15a>
-    51ce:	80 91 7b 08 	lds	r24, 0x087B
-    51d2:	90 91 7c 08 	lds	r25, 0x087C
+    51ce:	80 91 fb 06 	lds	r24, 0x06FB
+    51d2:	90 91 fc 06 	lds	r25, 0x06FC
     51d6:	88 5e       	subi	r24, 0xE8	; 232
     51d8:	93 40       	sbci	r25, 0x03	; 3
-    51da:	90 93 7c 08 	sts	0x087C, r25
-    51de:	80 93 7b 08 	sts	0x087B, r24
+    51da:	90 93 fc 06 	sts	0x06FC, r25
+    51de:	80 93 fb 06 	sts	0x06FB, r24
     51e2:	61 e0       	ldi	r22, 0x01	; 1
     51e4:	84 2f       	mov	r24, r20
     51e6:	0e 94 3b 29 	call	0x5276	; 0x5276 <STEPPER_process_run_mode>
@@ -10452,50 +10452,50 @@ void initializeRobot(void)
 000051ec <STEPPER_process_accel>:
     51ec:	88 23       	and	r24, r24
     51ee:	f1 f0       	breq	.+60     	; 0x522c <STEPPER_process_accel+0x40>
-    51f0:	20 91 51 08 	lds	r18, 0x0851
-    51f4:	30 91 52 08 	lds	r19, 0x0852
-    51f8:	80 91 55 08 	lds	r24, 0x0855
-    51fc:	90 91 56 08 	lds	r25, 0x0856
+    51f0:	20 91 d1 06 	lds	r18, 0x06D1
+    51f4:	30 91 d2 06 	lds	r19, 0x06D2
+    51f8:	80 91 d5 06 	lds	r24, 0x06D5
+    51fc:	90 91 d6 06 	lds	r25, 0x06D6
     5200:	28 1b       	sub	r18, r24
     5202:	39 0b       	sbc	r19, r25
     5204:	12 16       	cp	r1, r18
     5206:	13 06       	cpc	r1, r19
     5208:	34 f4       	brge	.+12     	; 0x5216 <STEPPER_process_accel+0x2a>
-    520a:	80 91 55 08 	lds	r24, 0x0855
-    520e:	90 91 56 08 	lds	r25, 0x0856
+    520a:	80 91 d5 06 	lds	r24, 0x06D5
+    520e:	90 91 d6 06 	lds	r25, 0x06D6
     5212:	01 96       	adiw	r24, 0x01	; 1
     5214:	07 c0       	rjmp	.+14     	; 0x5224 <STEPPER_process_accel+0x38>
     5216:	23 2b       	or	r18, r19
     5218:	49 f0       	breq	.+18     	; 0x522c <STEPPER_process_accel+0x40>
-    521a:	80 91 55 08 	lds	r24, 0x0855
-    521e:	90 91 56 08 	lds	r25, 0x0856
+    521a:	80 91 d5 06 	lds	r24, 0x06D5
+    521e:	90 91 d6 06 	lds	r25, 0x06D6
     5222:	01 97       	sbiw	r24, 0x01	; 1
-    5224:	90 93 56 08 	sts	0x0856, r25
-    5228:	80 93 55 08 	sts	0x0855, r24
+    5224:	90 93 d6 06 	sts	0x06D6, r25
+    5228:	80 93 d5 06 	sts	0x06D5, r24
     522c:	66 23       	and	r22, r22
     522e:	11 f1       	breq	.+68     	; 0x5274 <STEPPER_process_accel+0x88>
-    5230:	20 91 53 08 	lds	r18, 0x0853
-    5234:	30 91 54 08 	lds	r19, 0x0854
-    5238:	80 91 57 08 	lds	r24, 0x0857
-    523c:	90 91 58 08 	lds	r25, 0x0858
+    5230:	20 91 d3 06 	lds	r18, 0x06D3
+    5234:	30 91 d4 06 	lds	r19, 0x06D4
+    5238:	80 91 d7 06 	lds	r24, 0x06D7
+    523c:	90 91 d8 06 	lds	r25, 0x06D8
     5240:	28 1b       	sub	r18, r24
     5242:	39 0b       	sbc	r19, r25
     5244:	12 16       	cp	r1, r18
     5246:	13 06       	cpc	r1, r19
     5248:	54 f4       	brge	.+20     	; 0x525e <STEPPER_process_accel+0x72>
-    524a:	80 91 57 08 	lds	r24, 0x0857
-    524e:	90 91 58 08 	lds	r25, 0x0858
+    524a:	80 91 d7 06 	lds	r24, 0x06D7
+    524e:	90 91 d8 06 	lds	r25, 0x06D8
     5252:	01 96       	adiw	r24, 0x01	; 1
-    5254:	90 93 58 08 	sts	0x0858, r25
-    5258:	80 93 57 08 	sts	0x0857, r24
+    5254:	90 93 d8 06 	sts	0x06D8, r25
+    5258:	80 93 d7 06 	sts	0x06D7, r24
     525c:	08 95       	ret
     525e:	23 2b       	or	r18, r19
     5260:	49 f0       	breq	.+18     	; 0x5274 <STEPPER_process_accel+0x88>
-    5262:	80 91 57 08 	lds	r24, 0x0857
-    5266:	90 91 58 08 	lds	r25, 0x0858
+    5262:	80 91 d7 06 	lds	r24, 0x06D7
+    5266:	90 91 d8 06 	lds	r25, 0x06D8
     526a:	01 97       	sbiw	r24, 0x01	; 1
-    526c:	90 93 58 08 	sts	0x0858, r25
-    5270:	80 93 57 08 	sts	0x0857, r24
+    526c:	90 93 d8 06 	sts	0x06D8, r25
+    5270:	80 93 d7 06 	sts	0x06D7, r24
     5274:	08 95       	ret
 
 00005276 <STEPPER_process_run_mode>:
@@ -10503,50 +10503,50 @@ void initializeRobot(void)
     5278:	1f 93       	push	r17
     527a:	18 2f       	mov	r17, r24
     527c:	06 2f       	mov	r16, r22
-    527e:	80 91 85 08 	lds	r24, 0x0885
+    527e:	80 91 05 07 	lds	r24, 0x0705
     5282:	88 23       	and	r24, r24
     5284:	09 f0       	breq	.+2      	; 0x5288 <STEPPER_process_run_mode+0x12>
     5286:	e7 c0       	rjmp	.+462    	; 0x5456 <STEPPER_process_run_mode+0x1e0>
-    5288:	80 91 6d 08 	lds	r24, 0x086D
+    5288:	80 91 ed 06 	lds	r24, 0x06ED
     528c:	88 23       	and	r24, r24
     528e:	09 f0       	breq	.+2      	; 0x5292 <STEPPER_process_run_mode+0x1c>
     5290:	5a c0       	rjmp	.+180    	; 0x5346 <STEPPER_process_run_mode+0xd0>
-    5292:	80 91 55 08 	lds	r24, 0x0855
-    5296:	90 91 56 08 	lds	r25, 0x0856
+    5292:	80 91 d5 06 	lds	r24, 0x06D5
+    5296:	90 91 d6 06 	lds	r25, 0x06D6
     529a:	89 2b       	or	r24, r25
     529c:	e9 f4       	brne	.+58     	; 0x52d8 <STEPPER_process_run_mode+0x62>
     529e:	80 91 08 04 	lds	r24, 0x0408
     52a2:	83 7e       	andi	r24, 0xE3	; 227
     52a4:	80 93 08 04 	sts	0x0408, r24
-    52a8:	10 92 76 08 	sts	0x0876, r1
-    52ac:	80 91 81 08 	lds	r24, 0x0881
+    52a8:	10 92 f6 06 	sts	0x06F6, r1
+    52ac:	80 91 01 07 	lds	r24, 0x0701
     52b0:	88 23       	and	r24, r24
     52b2:	09 f4       	brne	.+2      	; 0x52b6 <STEPPER_process_run_mode+0x40>
     52b4:	5d c0       	rjmp	.+186    	; 0x5370 <STEPPER_process_run_mode+0xfa>
-    52b6:	60 91 6f 08 	lds	r22, 0x086F
+    52b6:	60 91 ef 06 	lds	r22, 0x06EF
     52ba:	80 e0       	ldi	r24, 0x00	; 0
     52bc:	0e 94 d1 1d 	call	0x3ba2	; 0x3ba2 <STEPPER_stop>
-    52c0:	e0 91 83 08 	lds	r30, 0x0883
-    52c4:	f0 91 84 08 	lds	r31, 0x0884
+    52c0:	e0 91 03 07 	lds	r30, 0x0703
+    52c4:	f0 91 04 07 	lds	r31, 0x0704
     52c8:	30 97       	sbiw	r30, 0x00	; 0
     52ca:	09 f4       	brne	.+2      	; 0x52ce <STEPPER_process_run_mode+0x58>
     52cc:	51 c0       	rjmp	.+162    	; 0x5370 <STEPPER_process_run_mode+0xfa>
     52ce:	81 e0       	ldi	r24, 0x01	; 1
     52d0:	80 83       	st	Z, r24
-    52d2:	10 92 81 08 	sts	0x0881, r1
+    52d2:	10 92 01 07 	sts	0x0701, r1
     52d6:	4c c0       	rjmp	.+152    	; 0x5370 <STEPPER_process_run_mode+0xfa>
-    52d8:	80 91 4f 08 	lds	r24, 0x084F
+    52d8:	80 91 cf 06 	lds	r24, 0x06CF
     52dc:	81 30       	cpi	r24, 0x01	; 1
     52de:	41 f4       	brne	.+16     	; 0x52f0 <STEPPER_process_run_mode+0x7a>
-    52e0:	80 91 61 08 	lds	r24, 0x0861
-    52e4:	90 91 62 08 	lds	r25, 0x0862
+    52e0:	80 91 e1 06 	lds	r24, 0x06E1
+    52e4:	90 91 e2 06 	lds	r25, 0x06E2
     52e8:	01 97       	sbiw	r24, 0x01	; 1
     52ea:	11 f4       	brne	.+4      	; 0x52f0 <STEPPER_process_run_mode+0x7a>
     52ec:	11 e0       	ldi	r17, 0x01	; 1
     52ee:	02 c0       	rjmp	.+4      	; 0x52f4 <STEPPER_process_run_mode+0x7e>
     52f0:	11 23       	and	r17, r17
     52f2:	f1 f1       	breq	.+124    	; 0x5370 <STEPPER_process_run_mode+0xfa>
-    52f4:	e0 91 74 08 	lds	r30, 0x0874
+    52f4:	e0 91 f4 06 	lds	r30, 0x06F4
     52f8:	f0 e0       	ldi	r31, 0x00	; 0
     52fa:	e8 5c       	subi	r30, 0xC8	; 200
     52fc:	fc 4f       	sbci	r31, 0xFC	; 252
@@ -10555,21 +10555,21 @@ void initializeRobot(void)
     5304:	80 81       	ld	r24, Z
     5306:	89 2b       	or	r24, r25
     5308:	80 93 08 04 	sts	0x0408, r24
-    530c:	80 91 72 08 	lds	r24, 0x0872
+    530c:	80 91 f2 06 	lds	r24, 0x06F2
     5310:	88 23       	and	r24, r24
     5312:	21 f4       	brne	.+8      	; 0x531c <STEPPER_process_run_mode+0xa6>
-    5314:	80 91 74 08 	lds	r24, 0x0874
+    5314:	80 91 f4 06 	lds	r24, 0x06F4
     5318:	8f 5f       	subi	r24, 0xFF	; 255
     531a:	03 c0       	rjmp	.+6      	; 0x5322 <STEPPER_process_run_mode+0xac>
-    531c:	80 91 74 08 	lds	r24, 0x0874
+    531c:	80 91 f4 06 	lds	r24, 0x06F4
     5320:	81 50       	subi	r24, 0x01	; 1
-    5322:	80 93 74 08 	sts	0x0874, r24
-    5326:	80 91 74 08 	lds	r24, 0x0874
+    5322:	80 93 f4 06 	sts	0x06F4, r24
+    5326:	80 91 f4 06 	lds	r24, 0x06F4
     532a:	83 70       	andi	r24, 0x03	; 3
-    532c:	80 93 74 08 	sts	0x0874, r24
+    532c:	80 93 f4 06 	sts	0x06F4, r24
     5330:	81 e0       	ldi	r24, 0x01	; 1
-    5332:	80 93 76 08 	sts	0x0876, r24
-    5336:	80 91 4f 08 	lds	r24, 0x084F
+    5332:	80 93 f6 06 	sts	0x06F6, r24
+    5336:	80 91 cf 06 	lds	r24, 0x06CF
     533a:	81 30       	cpi	r24, 0x01	; 1
     533c:	c9 f4       	brne	.+50     	; 0x5370 <STEPPER_process_run_mode+0xfa>
     533e:	80 e0       	ldi	r24, 0x00	; 0
@@ -10578,7 +10578,7 @@ void initializeRobot(void)
     5346:	90 91 08 04 	lds	r25, 0x0408
     534a:	93 7e       	andi	r25, 0xE3	; 227
     534c:	90 93 08 04 	sts	0x0408, r25
-    5350:	e0 91 74 08 	lds	r30, 0x0874
+    5350:	e0 91 f4 06 	lds	r30, 0x06F4
     5354:	f0 e0       	ldi	r31, 0x00	; 0
     5356:	e8 5c       	subi	r30, 0xC8	; 200
     5358:	fc 4f       	sbci	r31, 0xFC	; 252
@@ -10586,49 +10586,49 @@ void initializeRobot(void)
     535c:	89 2b       	or	r24, r25
     535e:	80 93 08 04 	sts	0x0408, r24
     5362:	82 e0       	ldi	r24, 0x02	; 2
-    5364:	80 93 76 08 	sts	0x0876, r24
-    5368:	10 92 56 08 	sts	0x0856, r1
-    536c:	10 92 55 08 	sts	0x0855, r1
-    5370:	80 91 6e 08 	lds	r24, 0x086E
+    5364:	80 93 f6 06 	sts	0x06F6, r24
+    5368:	10 92 d6 06 	sts	0x06D6, r1
+    536c:	10 92 d5 06 	sts	0x06D5, r1
+    5370:	80 91 ee 06 	lds	r24, 0x06EE
     5374:	88 23       	and	r24, r24
     5376:	09 f0       	breq	.+2      	; 0x537a <STEPPER_process_run_mode+0x104>
     5378:	59 c0       	rjmp	.+178    	; 0x542c <STEPPER_process_run_mode+0x1b6>
-    537a:	80 91 57 08 	lds	r24, 0x0857
-    537e:	90 91 58 08 	lds	r25, 0x0858
+    537a:	80 91 d7 06 	lds	r24, 0x06D7
+    537e:	90 91 d8 06 	lds	r25, 0x06D8
     5382:	89 2b       	or	r24, r25
     5384:	e9 f4       	brne	.+58     	; 0x53c0 <STEPPER_process_run_mode+0x14a>
     5386:	80 91 08 04 	lds	r24, 0x0408
     538a:	8f 71       	andi	r24, 0x1F	; 31
     538c:	80 93 08 04 	sts	0x0408, r24
-    5390:	10 92 77 08 	sts	0x0877, r1
-    5394:	80 91 82 08 	lds	r24, 0x0882
+    5390:	10 92 f7 06 	sts	0x06F7, r1
+    5394:	80 91 02 07 	lds	r24, 0x0702
     5398:	88 23       	and	r24, r24
     539a:	09 f4       	brne	.+2      	; 0x539e <STEPPER_process_run_mode+0x128>
     539c:	5c c0       	rjmp	.+184    	; 0x5456 <STEPPER_process_run_mode+0x1e0>
-    539e:	60 91 70 08 	lds	r22, 0x0870
+    539e:	60 91 f0 06 	lds	r22, 0x06F0
     53a2:	81 e0       	ldi	r24, 0x01	; 1
     53a4:	0e 94 d1 1d 	call	0x3ba2	; 0x3ba2 <STEPPER_stop>
-    53a8:	e0 91 83 08 	lds	r30, 0x0883
-    53ac:	f0 91 84 08 	lds	r31, 0x0884
+    53a8:	e0 91 03 07 	lds	r30, 0x0703
+    53ac:	f0 91 04 07 	lds	r31, 0x0704
     53b0:	30 97       	sbiw	r30, 0x00	; 0
     53b2:	09 f4       	brne	.+2      	; 0x53b6 <STEPPER_process_run_mode+0x140>
     53b4:	50 c0       	rjmp	.+160    	; 0x5456 <STEPPER_process_run_mode+0x1e0>
     53b6:	81 e0       	ldi	r24, 0x01	; 1
     53b8:	81 83       	std	Z+1, r24	; 0x01
-    53ba:	10 92 82 08 	sts	0x0882, r1
+    53ba:	10 92 02 07 	sts	0x0702, r1
     53be:	4b c0       	rjmp	.+150    	; 0x5456 <STEPPER_process_run_mode+0x1e0>
-    53c0:	80 91 50 08 	lds	r24, 0x0850
+    53c0:	80 91 d0 06 	lds	r24, 0x06D0
     53c4:	81 30       	cpi	r24, 0x01	; 1
     53c6:	41 f4       	brne	.+16     	; 0x53d8 <STEPPER_process_run_mode+0x162>
-    53c8:	80 91 63 08 	lds	r24, 0x0863
-    53cc:	90 91 64 08 	lds	r25, 0x0864
+    53c8:	80 91 e3 06 	lds	r24, 0x06E3
+    53cc:	90 91 e4 06 	lds	r25, 0x06E4
     53d0:	01 97       	sbiw	r24, 0x01	; 1
     53d2:	11 f4       	brne	.+4      	; 0x53d8 <STEPPER_process_run_mode+0x162>
     53d4:	01 e0       	ldi	r16, 0x01	; 1
     53d6:	02 c0       	rjmp	.+4      	; 0x53dc <STEPPER_process_run_mode+0x166>
     53d8:	00 23       	and	r16, r16
     53da:	e9 f1       	breq	.+122    	; 0x5456 <STEPPER_process_run_mode+0x1e0>
-    53dc:	e0 91 75 08 	lds	r30, 0x0875
+    53dc:	e0 91 f5 06 	lds	r30, 0x06F5
     53e0:	f0 e0       	ldi	r31, 0x00	; 0
     53e2:	e4 5c       	subi	r30, 0xC4	; 196
     53e4:	fc 4f       	sbci	r31, 0xFC	; 252
@@ -10637,21 +10637,21 @@ void initializeRobot(void)
     53ec:	80 81       	ld	r24, Z
     53ee:	89 2b       	or	r24, r25
     53f0:	80 93 08 04 	sts	0x0408, r24
-    53f4:	80 91 73 08 	lds	r24, 0x0873
+    53f4:	80 91 f3 06 	lds	r24, 0x06F3
     53f8:	88 23       	and	r24, r24
     53fa:	21 f4       	brne	.+8      	; 0x5404 <STEPPER_process_run_mode+0x18e>
-    53fc:	80 91 75 08 	lds	r24, 0x0875
+    53fc:	80 91 f5 06 	lds	r24, 0x06F5
     5400:	8f 5f       	subi	r24, 0xFF	; 255
     5402:	03 c0       	rjmp	.+6      	; 0x540a <STEPPER_process_run_mode+0x194>
-    5404:	80 91 75 08 	lds	r24, 0x0875
+    5404:	80 91 f5 06 	lds	r24, 0x06F5
     5408:	81 50       	subi	r24, 0x01	; 1
-    540a:	80 93 75 08 	sts	0x0875, r24
-    540e:	80 91 75 08 	lds	r24, 0x0875
+    540a:	80 93 f5 06 	sts	0x06F5, r24
+    540e:	80 91 f5 06 	lds	r24, 0x06F5
     5412:	83 70       	andi	r24, 0x03	; 3
-    5414:	80 93 75 08 	sts	0x0875, r24
+    5414:	80 93 f5 06 	sts	0x06F5, r24
     5418:	81 e0       	ldi	r24, 0x01	; 1
-    541a:	80 93 77 08 	sts	0x0877, r24
-    541e:	80 91 50 08 	lds	r24, 0x0850
+    541a:	80 93 f7 06 	sts	0x06F7, r24
+    541e:	80 91 d0 06 	lds	r24, 0x06D0
     5422:	81 30       	cpi	r24, 0x01	; 1
     5424:	c1 f4       	brne	.+48     	; 0x5456 <STEPPER_process_run_mode+0x1e0>
     5426:	0e 94 3e 2a 	call	0x547c	; 0x547c <STEPPER_process_step_mode>
@@ -10659,7 +10659,7 @@ void initializeRobot(void)
     542c:	90 91 08 04 	lds	r25, 0x0408
     5430:	9f 71       	andi	r25, 0x1F	; 31
     5432:	90 93 08 04 	sts	0x0408, r25
-    5436:	e0 91 75 08 	lds	r30, 0x0875
+    5436:	e0 91 f5 06 	lds	r30, 0x06F5
     543a:	f0 e0       	ldi	r31, 0x00	; 0
     543c:	e4 5c       	subi	r30, 0xC4	; 196
     543e:	fc 4f       	sbci	r31, 0xFC	; 252
@@ -10667,10 +10667,10 @@ void initializeRobot(void)
     5442:	89 2b       	or	r24, r25
     5444:	80 93 08 04 	sts	0x0408, r24
     5448:	82 e0       	ldi	r24, 0x02	; 2
-    544a:	80 93 77 08 	sts	0x0877, r24
-    544e:	10 92 58 08 	sts	0x0858, r1
-    5452:	10 92 57 08 	sts	0x0857, r1
-    5456:	80 91 78 08 	lds	r24, 0x0878
+    544a:	80 93 f7 06 	sts	0x06F7, r24
+    544e:	10 92 d8 06 	sts	0x06D8, r1
+    5452:	10 92 d7 06 	sts	0x06D7, r1
+    5456:	80 91 f8 06 	lds	r24, 0x06F8
     545a:	88 23       	and	r24, r24
     545c:	31 f4       	brne	.+12     	; 0x546a <STEPPER_process_run_mode+0x1f4>
     545e:	88 e0       	ldi	r24, 0x08	; 8
@@ -10694,22 +10694,22 @@ void initializeRobot(void)
     5482:	09 f0       	breq	.+2      	; 0x5486 <STEPPER_process_step_mode+0xa>
     5484:	4e c0       	rjmp	.+156    	; 0x5522 <STEPPER_process_step_mode+0xa6>
     5486:	27 c0       	rjmp	.+78     	; 0x54d6 <STEPPER_process_step_mode+0x5a>
-    5488:	80 91 61 08 	lds	r24, 0x0861
-    548c:	90 91 62 08 	lds	r25, 0x0862
+    5488:	80 91 e1 06 	lds	r24, 0x06E1
+    548c:	90 91 e2 06 	lds	r25, 0x06E2
     5490:	89 2b       	or	r24, r25
     5492:	49 f0       	breq	.+18     	; 0x54a6 <STEPPER_process_step_mode+0x2a>
-    5494:	80 91 61 08 	lds	r24, 0x0861
-    5498:	90 91 62 08 	lds	r25, 0x0862
+    5494:	80 91 e1 06 	lds	r24, 0x06E1
+    5498:	90 91 e2 06 	lds	r25, 0x06E2
     549c:	01 97       	sbiw	r24, 0x01	; 1
-    549e:	90 93 62 08 	sts	0x0862, r25
-    54a2:	80 93 61 08 	sts	0x0861, r24
-    54a6:	80 91 81 08 	lds	r24, 0x0881
+    549e:	90 93 e2 06 	sts	0x06E2, r25
+    54a2:	80 93 e1 06 	sts	0x06E1, r24
+    54a6:	80 91 01 07 	lds	r24, 0x0701
     54aa:	88 23       	and	r24, r24
     54ac:	d1 f5       	brne	.+116    	; 0x5522 <STEPPER_process_step_mode+0xa6>
-    54ae:	20 91 61 08 	lds	r18, 0x0861
-    54b2:	30 91 62 08 	lds	r19, 0x0862
-    54b6:	80 91 65 08 	lds	r24, 0x0865
-    54ba:	90 91 66 08 	lds	r25, 0x0866
+    54ae:	20 91 e1 06 	lds	r18, 0x06E1
+    54b2:	30 91 e2 06 	lds	r19, 0x06E2
+    54b6:	80 91 e5 06 	lds	r24, 0x06E5
+    54ba:	90 91 e6 06 	lds	r25, 0x06E6
     54be:	28 17       	cp	r18, r24
     54c0:	39 07       	cpc	r19, r25
     54c2:	79 f5       	brne	.+94     	; 0x5522 <STEPPER_process_step_mode+0xa6>
@@ -10718,24 +10718,24 @@ void initializeRobot(void)
     54c8:	70 e0       	ldi	r23, 0x00	; 0
     54ca:	0e 94 23 1d 	call	0x3a46	; 0x3a46 <STEPPER_set_speed>
     54ce:	81 e0       	ldi	r24, 0x01	; 1
-    54d0:	80 93 81 08 	sts	0x0881, r24
+    54d0:	80 93 01 07 	sts	0x0701, r24
     54d4:	08 95       	ret
-    54d6:	80 91 63 08 	lds	r24, 0x0863
-    54da:	90 91 64 08 	lds	r25, 0x0864
+    54d6:	80 91 e3 06 	lds	r24, 0x06E3
+    54da:	90 91 e4 06 	lds	r25, 0x06E4
     54de:	89 2b       	or	r24, r25
     54e0:	49 f0       	breq	.+18     	; 0x54f4 <STEPPER_process_step_mode+0x78>
-    54e2:	80 91 63 08 	lds	r24, 0x0863
-    54e6:	90 91 64 08 	lds	r25, 0x0864
+    54e2:	80 91 e3 06 	lds	r24, 0x06E3
+    54e6:	90 91 e4 06 	lds	r25, 0x06E4
     54ea:	01 97       	sbiw	r24, 0x01	; 1
-    54ec:	90 93 64 08 	sts	0x0864, r25
-    54f0:	80 93 63 08 	sts	0x0863, r24
-    54f4:	80 91 82 08 	lds	r24, 0x0882
+    54ec:	90 93 e4 06 	sts	0x06E4, r25
+    54f0:	80 93 e3 06 	sts	0x06E3, r24
+    54f4:	80 91 02 07 	lds	r24, 0x0702
     54f8:	88 23       	and	r24, r24
     54fa:	99 f4       	brne	.+38     	; 0x5522 <STEPPER_process_step_mode+0xa6>
-    54fc:	20 91 63 08 	lds	r18, 0x0863
-    5500:	30 91 64 08 	lds	r19, 0x0864
-    5504:	80 91 67 08 	lds	r24, 0x0867
-    5508:	90 91 68 08 	lds	r25, 0x0868
+    54fc:	20 91 e3 06 	lds	r18, 0x06E3
+    5500:	30 91 e4 06 	lds	r19, 0x06E4
+    5504:	80 91 e7 06 	lds	r24, 0x06E7
+    5508:	90 91 e8 06 	lds	r25, 0x06E8
     550c:	28 17       	cp	r18, r24
     550e:	39 07       	cpc	r19, r25
     5510:	41 f4       	brne	.+16     	; 0x5522 <STEPPER_process_step_mode+0xa6>
@@ -10744,7 +10744,7 @@ void initializeRobot(void)
     5516:	70 e0       	ldi	r23, 0x00	; 0
     5518:	0e 94 23 1d 	call	0x3a46	; 0x3a46 <STEPPER_set_speed>
     551c:	81 e0       	ldi	r24, 0x01	; 1
-    551e:	80 93 82 08 	sts	0x0882, r24
+    551e:	80 93 02 07 	sts	0x0702, r24
     5522:	08 95       	ret
 
 00005524 <TMRSRVC_process>:
@@ -10753,12 +10753,12 @@ void initializeRobot(void)
     5528:	1f 93       	push	r17
     552a:	cf 93       	push	r28
     552c:	df 93       	push	r29
-    552e:	80 91 bf 08 	lds	r24, 0x08BF
+    552e:	80 91 3f 07 	lds	r24, 0x073F
     5532:	88 23       	and	r24, r24
     5534:	09 f4       	brne	.+2      	; 0x5538 <TMRSRVC_process+0x14>
     5536:	59 c0       	rjmp	.+178    	; 0x55ea <TMRSRVC_process+0xc6>
-    5538:	00 91 c0 08 	lds	r16, 0x08C0
-    553c:	10 91 c1 08 	lds	r17, 0x08C1
+    5538:	00 91 40 07 	lds	r16, 0x0740
+    553c:	10 91 41 07 	lds	r17, 0x0741
     5540:	f8 01       	movw	r30, r16
     5542:	c0 81       	ld	r28, Z
     5544:	d1 81       	ldd	r29, Z+1	; 0x01
@@ -10785,14 +10785,14 @@ void initializeRobot(void)
     556e:	ef 81       	ldd	r30, Y+7	; 0x07
     5570:	f8 85       	ldd	r31, Y+8	; 0x08
     5572:	09 95       	icall
-    5574:	80 91 bf 08 	lds	r24, 0x08BF
+    5574:	80 91 3f 07 	lds	r24, 0x073F
     5578:	82 30       	cpi	r24, 0x02	; 2
     557a:	a8 f0       	brcs	.+42     	; 0x55a6 <TMRSRVC_process+0x82>
     557c:	f8 01       	movw	r30, r16
     557e:	82 81       	ldd	r24, Z+2	; 0x02
     5580:	93 81       	ldd	r25, Z+3	; 0x03
-    5582:	90 93 c1 08 	sts	0x08C1, r25
-    5586:	80 93 c0 08 	sts	0x08C0, r24
+    5582:	90 93 41 07 	sts	0x0741, r25
+    5586:	80 93 40 07 	sts	0x0740, r24
     558a:	13 82       	std	Z+3, r1	; 0x03
     558c:	12 82       	std	Z+2, r1	; 0x02
     558e:	e0 91 00 00 	lds	r30, 0x0000
@@ -10805,13 +10805,13 @@ void initializeRobot(void)
     55a0:	ff 24       	eor	r15, r15
     55a2:	f3 94       	inc	r15
     55a4:	05 c0       	rjmp	.+10     	; 0x55b0 <TMRSRVC_process+0x8c>
-    55a6:	10 92 c1 08 	sts	0x08C1, r1
-    55aa:	10 92 c0 08 	sts	0x08C0, r1
+    55a6:	10 92 41 07 	sts	0x0741, r1
+    55aa:	10 92 40 07 	sts	0x0740, r1
     55ae:	ff 24       	eor	r15, r15
-    55b0:	80 91 bf 08 	lds	r24, 0x08BF
+    55b0:	80 91 3f 07 	lds	r24, 0x073F
     55b4:	81 50       	subi	r24, 0x01	; 1
-    55b6:	80 93 bf 08 	sts	0x08BF, r24
-    55ba:	80 91 bf 08 	lds	r24, 0x08BF
+    55b6:	80 93 3f 07 	sts	0x073F, r24
+    55ba:	80 91 3f 07 	lds	r24, 0x073F
     55be:	88 23       	and	r24, r24
     55c0:	11 f4       	brne	.+4      	; 0x55c6 <TMRSRVC_process+0xa2>
     55c2:	0e 94 fd 2a 	call	0x55fa	; 0x55fa <TMRSRVC_stop>
@@ -10846,7 +10846,7 @@ void initializeRobot(void)
 
 00005600 <STEPPER_process_pwm>:
     5600:	fc 01       	movw	r30, r24
-    5602:	80 91 76 08 	lds	r24, 0x0876
+    5602:	80 91 f6 06 	lds	r24, 0x06F6
     5606:	82 30       	cpi	r24, 0x02	; 2
     5608:	69 f4       	brne	.+26     	; 0x5624 <STEPPER_process_pwm+0x24>
     560a:	80 91 0c 04 	lds	r24, 0x040C
@@ -10860,14 +10860,14 @@ void initializeRobot(void)
     561e:	83 7e       	andi	r24, 0xE3	; 227
     5620:	80 83       	st	Z, r24
     5622:	3a c0       	rjmp	.+116    	; 0x5698 <STEPPER_process_pwm+0x98>
-    5624:	80 91 55 08 	lds	r24, 0x0855
-    5628:	90 91 56 08 	lds	r25, 0x0856
+    5624:	80 91 d5 06 	lds	r24, 0x06D5
+    5628:	90 91 d6 06 	lds	r25, 0x06D6
     562c:	c3 97       	sbiw	r24, 0x33	; 51
     562e:	a4 f5       	brge	.+104    	; 0x5698 <STEPPER_process_pwm+0x98>
     5630:	66 23       	and	r22, r22
     5632:	d1 f0       	breq	.+52     	; 0x5668 <STEPPER_process_pwm+0x68>
-    5634:	20 91 55 08 	lds	r18, 0x0855
-    5638:	30 91 56 08 	lds	r19, 0x0856
+    5634:	20 91 d5 06 	lds	r18, 0x06D5
+    5638:	30 91 d6 06 	lds	r19, 0x06D6
     563c:	80 e6       	ldi	r24, 0x60	; 96
     563e:	90 e0       	ldi	r25, 0x00	; 0
     5640:	bc 01       	movw	r22, r24
@@ -10882,28 +10882,28 @@ void initializeRobot(void)
     5652:	89 2f       	mov	r24, r25
     5654:	88 1f       	adc	r24, r24
     5656:	99 0b       	sbc	r25, r25
-    5658:	90 93 6a 08 	sts	0x086A, r25
-    565c:	80 93 69 08 	sts	0x0869, r24
+    5658:	90 93 ea 06 	sts	0x06EA, r25
+    565c:	80 93 e9 06 	sts	0x06E9, r24
     5660:	81 e0       	ldi	r24, 0x01	; 1
     5662:	80 93 0a 04 	sts	0x040A, r24
     5666:	18 c0       	rjmp	.+48     	; 0x5698 <STEPPER_process_pwm+0x98>
     5668:	80 91 0a 04 	lds	r24, 0x040A
     566c:	88 23       	and	r24, r24
     566e:	a1 f0       	breq	.+40     	; 0x5698 <STEPPER_process_pwm+0x98>
-    5670:	80 91 69 08 	lds	r24, 0x0869
-    5674:	90 91 6a 08 	lds	r25, 0x086A
+    5670:	80 91 e9 06 	lds	r24, 0x06E9
+    5674:	90 91 ea 06 	lds	r25, 0x06EA
     5678:	01 97       	sbiw	r24, 0x01	; 1
-    567a:	90 93 6a 08 	sts	0x086A, r25
-    567e:	80 93 69 08 	sts	0x0869, r24
-    5682:	80 91 69 08 	lds	r24, 0x0869
-    5686:	90 91 6a 08 	lds	r25, 0x086A
+    567a:	90 93 ea 06 	sts	0x06EA, r25
+    567e:	80 93 e9 06 	sts	0x06E9, r24
+    5682:	80 91 e9 06 	lds	r24, 0x06E9
+    5686:	90 91 ea 06 	lds	r25, 0x06EA
     568a:	89 2b       	or	r24, r25
     568c:	29 f4       	brne	.+10     	; 0x5698 <STEPPER_process_pwm+0x98>
     568e:	80 81       	ld	r24, Z
     5690:	83 7e       	andi	r24, 0xE3	; 227
     5692:	80 83       	st	Z, r24
     5694:	10 92 0a 04 	sts	0x040A, r1
-    5698:	80 91 77 08 	lds	r24, 0x0877
+    5698:	80 91 f7 06 	lds	r24, 0x06F7
     569c:	82 30       	cpi	r24, 0x02	; 2
     569e:	69 f4       	brne	.+26     	; 0x56ba <STEPPER_process_pwm+0xba>
     56a0:	80 91 0b 04 	lds	r24, 0x040B
@@ -10917,14 +10917,14 @@ void initializeRobot(void)
     56b4:	8f 71       	andi	r24, 0x1F	; 31
     56b6:	80 83       	st	Z, r24
     56b8:	08 95       	ret
-    56ba:	80 91 57 08 	lds	r24, 0x0857
-    56be:	90 91 58 08 	lds	r25, 0x0858
+    56ba:	80 91 d7 06 	lds	r24, 0x06D7
+    56be:	90 91 d8 06 	lds	r25, 0x06D8
     56c2:	c3 97       	sbiw	r24, 0x33	; 51
     56c4:	a4 f5       	brge	.+104    	; 0x572e <STEPPER_process_pwm+0x12e>
     56c6:	44 23       	and	r20, r20
     56c8:	d1 f0       	breq	.+52     	; 0x56fe <STEPPER_process_pwm+0xfe>
-    56ca:	20 91 57 08 	lds	r18, 0x0857
-    56ce:	30 91 58 08 	lds	r19, 0x0858
+    56ca:	20 91 d7 06 	lds	r18, 0x06D7
+    56ce:	30 91 d8 06 	lds	r19, 0x06D8
     56d2:	80 e6       	ldi	r24, 0x60	; 96
     56d4:	90 e0       	ldi	r25, 0x00	; 0
     56d6:	ac 01       	movw	r20, r24
@@ -10939,21 +10939,21 @@ void initializeRobot(void)
     56e8:	89 2f       	mov	r24, r25
     56ea:	88 1f       	adc	r24, r24
     56ec:	99 0b       	sbc	r25, r25
-    56ee:	90 93 6c 08 	sts	0x086C, r25
-    56f2:	80 93 6b 08 	sts	0x086B, r24
+    56ee:	90 93 ec 06 	sts	0x06EC, r25
+    56f2:	80 93 eb 06 	sts	0x06EB, r24
     56f6:	81 e0       	ldi	r24, 0x01	; 1
     56f8:	80 93 09 04 	sts	0x0409, r24
     56fc:	08 95       	ret
     56fe:	80 91 09 04 	lds	r24, 0x0409
     5702:	88 23       	and	r24, r24
     5704:	a1 f0       	breq	.+40     	; 0x572e <STEPPER_process_pwm+0x12e>
-    5706:	80 91 6b 08 	lds	r24, 0x086B
-    570a:	90 91 6c 08 	lds	r25, 0x086C
+    5706:	80 91 eb 06 	lds	r24, 0x06EB
+    570a:	90 91 ec 06 	lds	r25, 0x06EC
     570e:	01 97       	sbiw	r24, 0x01	; 1
-    5710:	90 93 6c 08 	sts	0x086C, r25
-    5714:	80 93 6b 08 	sts	0x086B, r24
-    5718:	80 91 6b 08 	lds	r24, 0x086B
-    571c:	90 91 6c 08 	lds	r25, 0x086C
+    5710:	90 93 ec 06 	sts	0x06EC, r25
+    5714:	80 93 eb 06 	sts	0x06EB, r24
+    5718:	80 91 eb 06 	lds	r24, 0x06EB
+    571c:	90 91 ec 06 	lds	r25, 0x06EC
     5720:	89 2b       	or	r24, r25
     5722:	29 f4       	brne	.+10     	; 0x572e <STEPPER_process_pwm+0x12e>
     5724:	80 81       	ld	r24, Z
@@ -13054,8 +13054,8 @@ void initializeRobot(void)
     66bc:	10 f4       	brcc	.+4      	; 0x66c2 <malloc+0x10>
     66be:	62 e0       	ldi	r22, 0x02	; 2
     66c0:	70 e0       	ldi	r23, 0x00	; 0
-    66c2:	a0 91 c9 08 	lds	r26, 0x08C9
-    66c6:	b0 91 ca 08 	lds	r27, 0x08CA
+    66c2:	a0 91 49 07 	lds	r26, 0x0749
+    66c6:	b0 91 4a 07 	lds	r27, 0x074A
     66ca:	ed 01       	movw	r28, r26
     66cc:	e0 e0       	ldi	r30, 0x00	; 0
     66ce:	f0 e0       	ldi	r31, 0x00	; 0
@@ -13074,8 +13074,8 @@ void initializeRobot(void)
     66e8:	93 83       	std	Z+3, r25	; 0x03
     66ea:	82 83       	std	Z+2, r24	; 0x02
     66ec:	04 c0       	rjmp	.+8      	; 0x66f6 <malloc+0x44>
-    66ee:	90 93 ca 08 	sts	0x08CA, r25
-    66f2:	80 93 c9 08 	sts	0x08C9, r24
+    66ee:	90 93 4a 07 	sts	0x074A, r25
+    66f2:	80 93 49 07 	sts	0x0749, r24
     66f6:	fe 01       	movw	r30, r28
     66f8:	34 c0       	rjmp	.+104    	; 0x6762 <malloc+0xb0>
     66fa:	68 17       	cp	r22, r24
@@ -13125,8 +13125,8 @@ void initializeRobot(void)
     6752:	93 83       	std	Z+3, r25	; 0x03
     6754:	82 83       	std	Z+2, r24	; 0x02
     6756:	04 c0       	rjmp	.+8      	; 0x6760 <malloc+0xae>
-    6758:	90 93 ca 08 	sts	0x08CA, r25
-    675c:	80 93 c9 08 	sts	0x08C9, r24
+    6758:	90 93 4a 07 	sts	0x074A, r25
+    675c:	80 93 49 07 	sts	0x0749, r24
     6760:	fd 01       	movw	r30, r26
     6762:	32 96       	adiw	r30, 0x02	; 2
     6764:	4f c0       	rjmp	.+158    	; 0x6804 <malloc+0x152>
@@ -13149,14 +13149,14 @@ void initializeRobot(void)
     6786:	d9 01       	movw	r26, r18
     6788:	10 97       	sbiw	r26, 0x00	; 0
     678a:	a1 f6       	brne	.-88     	; 0x6734 <malloc+0x82>
-    678c:	80 91 c7 08 	lds	r24, 0x08C7
-    6790:	90 91 c8 08 	lds	r25, 0x08C8
+    678c:	80 91 47 07 	lds	r24, 0x0747
+    6790:	90 91 48 07 	lds	r25, 0x0748
     6794:	89 2b       	or	r24, r25
     6796:	41 f4       	brne	.+16     	; 0x67a8 <malloc+0xf6>
     6798:	80 91 8e 03 	lds	r24, 0x038E
     679c:	90 91 8f 03 	lds	r25, 0x038F
-    67a0:	90 93 c8 08 	sts	0x08C8, r25
-    67a4:	80 93 c7 08 	sts	0x08C7, r24
+    67a0:	90 93 48 07 	sts	0x0748, r25
+    67a4:	80 93 47 07 	sts	0x0747, r24
     67a8:	40 91 90 03 	lds	r20, 0x0390
     67ac:	50 91 91 03 	lds	r21, 0x0391
     67b0:	41 15       	cp	r20, r1
@@ -13168,8 +13168,8 @@ void initializeRobot(void)
     67be:	90 91 8d 03 	lds	r25, 0x038D
     67c2:	48 1b       	sub	r20, r24
     67c4:	59 0b       	sbc	r21, r25
-    67c6:	20 91 c7 08 	lds	r18, 0x08C7
-    67ca:	30 91 c8 08 	lds	r19, 0x08C8
+    67c6:	20 91 47 07 	lds	r18, 0x0747
+    67ca:	30 91 48 07 	lds	r19, 0x0748
     67ce:	24 17       	cp	r18, r20
     67d0:	35 07       	cpc	r19, r21
     67d2:	b0 f4       	brcc	.+44     	; 0x6800 <malloc+0x14e>
@@ -13187,8 +13187,8 @@ void initializeRobot(void)
     67ea:	50 f0       	brcs	.+20     	; 0x6800 <malloc+0x14e>
     67ec:	42 0f       	add	r20, r18
     67ee:	53 1f       	adc	r21, r19
-    67f0:	50 93 c8 08 	sts	0x08C8, r21
-    67f4:	40 93 c7 08 	sts	0x08C7, r20
+    67f0:	50 93 48 07 	sts	0x0748, r21
+    67f4:	40 93 47 07 	sts	0x0747, r20
     67f8:	f9 01       	movw	r30, r18
     67fa:	61 93       	st	Z+, r22
     67fc:	71 93       	st	Z+, r23
@@ -13210,8 +13210,8 @@ void initializeRobot(void)
     6818:	22 97       	sbiw	r28, 0x02	; 2
     681a:	1b 82       	std	Y+3, r1	; 0x03
     681c:	1a 82       	std	Y+2, r1	; 0x02
-    681e:	a0 91 c9 08 	lds	r26, 0x08C9
-    6822:	b0 91 ca 08 	lds	r27, 0x08CA
+    681e:	a0 91 49 07 	lds	r26, 0x0749
+    6822:	b0 91 4a 07 	lds	r27, 0x074A
     6826:	10 97       	sbiw	r26, 0x00	; 0
     6828:	09 f1       	breq	.+66     	; 0x686c <free+0x60>
     682a:	40 e0       	ldi	r20, 0x00	; 0
@@ -13247,8 +13247,8 @@ void initializeRobot(void)
     6866:	41 15       	cp	r20, r1
     6868:	51 05       	cpc	r21, r1
     686a:	71 f4       	brne	.+28     	; 0x6888 <free+0x7c>
-    686c:	d0 93 ca 08 	sts	0x08CA, r29
-    6870:	c0 93 c9 08 	sts	0x08C9, r28
+    686c:	d0 93 4a 07 	sts	0x074A, r29
+    6870:	c0 93 49 07 	sts	0x0749, r28
     6874:	20 c0       	rjmp	.+64     	; 0x68b6 <free+0xaa>
     6876:	12 96       	adiw	r26, 0x02	; 2
     6878:	8d 91       	ld	r24, X+
@@ -13679,8 +13679,8 @@ void initializeRobot(void)
     6bae:	35 96       	adiw	r30, 0x05	; 5
     6bb0:	61 91       	ld	r22, Z+
     6bb2:	71 91       	ld	r23, Z+
-    6bb4:	80 91 cd 08 	lds	r24, 0x08CD
-    6bb8:	90 91 ce 08 	lds	r25, 0x08CE
+    6bb4:	80 91 4d 07 	lds	r24, 0x074D
+    6bb8:	90 91 4e 07 	lds	r25, 0x074E
     6bbc:	af 01       	movw	r20, r30
     6bbe:	72 d9       	rcall	.-3356   	; 0x5ea4 <vfprintf>
     6bc0:	20 96       	adiw	r28, 0x00	; 0
@@ -13693,16 +13693,16 @@ void initializeRobot(void)
     6bca:	cf 93       	push	r28
     6bcc:	df 93       	push	r29
     6bce:	8c 01       	movw	r16, r24
-    6bd0:	e0 91 cd 08 	lds	r30, 0x08CD
-    6bd4:	f0 91 ce 08 	lds	r31, 0x08CE
+    6bd0:	e0 91 4d 07 	lds	r30, 0x074D
+    6bd4:	f0 91 4e 07 	lds	r31, 0x074E
     6bd8:	83 81       	ldd	r24, Z+3	; 0x03
     6bda:	81 ff       	sbrs	r24, 1
     6bdc:	21 c0       	rjmp	.+66     	; 0x6c20 <puts+0x5a>
     6bde:	c0 e0       	ldi	r28, 0x00	; 0
     6be0:	d0 e0       	ldi	r29, 0x00	; 0
     6be2:	0d c0       	rjmp	.+26     	; 0x6bfe <puts+0x38>
-    6be4:	e0 91 cd 08 	lds	r30, 0x08CD
-    6be8:	f0 91 ce 08 	lds	r31, 0x08CE
+    6be4:	e0 91 4d 07 	lds	r30, 0x074D
+    6be8:	f0 91 4e 07 	lds	r31, 0x074E
     6bec:	20 85       	ldd	r18, Z+8	; 0x08
     6bee:	31 85       	ldd	r19, Z+9	; 0x09
     6bf0:	bf 01       	movw	r22, r30
@@ -13717,8 +13717,8 @@ void initializeRobot(void)
     6c02:	8f 01       	movw	r16, r30
     6c04:	88 23       	and	r24, r24
     6c06:	71 f7       	brne	.-36     	; 0x6be4 <puts+0x1e>
-    6c08:	e0 91 cd 08 	lds	r30, 0x08CD
-    6c0c:	f0 91 ce 08 	lds	r31, 0x08CE
+    6c08:	e0 91 4d 07 	lds	r30, 0x074D
+    6c0c:	f0 91 4e 07 	lds	r31, 0x074E
     6c10:	20 85       	ldd	r18, Z+8	; 0x08
     6c12:	31 85       	ldd	r19, Z+9	; 0x09
     6c14:	8a e0       	ldi	r24, 0x0A	; 10

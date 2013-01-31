@@ -37,7 +37,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Include Directories
-INCLUDES = -I"C:\Users\solorzaa\Documents\GitHub\ECE425\Labs\Lab07\MapMaker\..\..\..\..\..\..\..\..\Program Files\AVR Libraries\lib-includes" 
+INCLUDES = -I"C:\Users\whitemrj\Documents\GitHub\ECE425\Labs\Lab07\MapMaker\..\..\..\..\..\..\..\..\Program Files\AVR Libraries\lib-includes" 
 
 ## Library Directories
 LIBDIRS = -L"C:\Program Files\AVR Libraries" -L"C:\WinAVR-20100110\avr\lib\avr4" 

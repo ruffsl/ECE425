@@ -39,7 +39,7 @@ void initializeRobot(void)
 	
 	// pixel array for the LCD screen
 	for(int i = 0; i < 4; i++) {
-		for(int j = 0; j < 128; j++) {
+		for(int j = 0; j < 32; j++) {
 			pix_arr[i][j] = 0x00;
 		}
 	}

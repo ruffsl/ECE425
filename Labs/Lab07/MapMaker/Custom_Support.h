@@ -102,7 +102,7 @@
 										0b0110, 0b1110, 0b0111, 0b1111};
 										
 
-	unsigned char pix_arr[4][128]; // keeps track of on/off LCD pixels
+	unsigned char pix_arr[4][32]; // keeps track of on/off LCD pixels
 
 
 	/** Local Function Prototypes **************************************/
