@@ -140,8 +140,8 @@
 	
 	
 	// odometry values
-	unsigned char odometryStepL;
-	unsigned char odometryStepR;
+	float odometryStepL;
+	float odometryStepR;
 	float odometryTrigger;
 	unsigned char odometryFlag;
 	STEPPER_STEPS curr_step;

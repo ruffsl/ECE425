@@ -57,7 +57,7 @@ void initializeRobot(void)
 void checkOdometry( unsigned char reset )
 {	
 	// Update the avrage 
-	unsigned char odometry = ((odometryStepL + odometryStepR)/2)*D_STEP;
+	float odometry = ((odometryStepL + odometryStepR)/2.0)*D_STEP;
 	// check to see if we have traveresed the trigger distance
 	// or that a reset has been called
 	if((odometry > odometryTrigger)||(reset))

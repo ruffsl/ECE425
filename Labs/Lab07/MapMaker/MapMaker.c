@@ -37,11 +37,13 @@ void movesInput(void);
 void worldInput(void);
 char moveBehavior(int);
 char moveWorld(void);
-void mapWorld(void);
 void checkWorld(void);
 void getGateways(void);
 void setGateways(void);
 void orientationInput(void);
+void planMap(void);
+void moveMap(void);
+void shiftMap(void);
 
 /** Global Variables ***********************************************/
 
@@ -59,6 +61,20 @@ void CBOT_main( void )
 {
 	// initialize the robot
 	initializeRobot();
+	
+	odometryTrigger = WORLD_RESOLUTION_SIZE;
+	checkOdometry(1);
+	while(odometryFlag){
+		moveWall();
+		checkOdometry(0);
+	}
+	
+	LCD_clear();
+	LCD_printf("LOLZ\nI'm done!");
+	TMRSRVC_delay(3000);//wait 3 seconds
+	while(1){}
+		
+	
 	
 	LCD_printf("      New Map\n\n\n\n");	
 	printMap();
@@ -81,18 +97,46 @@ void CBOT_main( void )
 	TMRSRVC_delay(1000);//wait 3 seconds
 	LCD_clear();
 	
-	odometryTrigger = WORLD_RESOLUTION_SIZE;
-	isMapping = 1;
+	isMapping = 0;
 	
 	
-	
-	while(isMapping)
-	{
+	LCD_printf("      Your Map\n\n\n\n");	
+	printMap();
+	TMRSRVC_delay(1000);//wait 1 seconds
+	LCD_clear();	
+		
+	while(!isMapping)
+	{	
+		//Sense
 		checkIR();	
 		checkWorld();
-		checkOdometry(0);
-		mapWorld();
-		isMapping = !((currentCellWorldStart == currentCellWorld)&&(currentOrientationStart == currentOrientation));
+		
+		//Record
+		setGateways();
+				
+		//Plan using the Map
+		planMap();
+		
+		//Act on the Map
+		moveMap();
+		
+		//Shift the Map
+		shiftMap();
+		
+		//Break?
+		isMapping = ((currentCellWorldStart == currentCellWorld)&&(currentOrientationStart == currentOrientation));
+		if(isMapping){			
+			LCD_clear();
+			LCD_printf("LOLZ\nI'm done!");
+			TMRSRVC_delay(3000);//wait 3 seconds
+			break;
+		}
+		
+		//Print Map
+		LCD_clear();
+		LCD_printf("      Move"BYTETOBINARYPATTERN"\n      Cell"BYTETOBINARYPATTERN"\n      Ornt"BYTETOBINARYPATTERN"\n\n",BYTETOBINARY(currentMove),BYTETOBINARY(currentCellWorld),BYTETOBINARY(currentOrientation));
+		printMap();
+		TMRSRVC_delay(3000);//wait 3 seconds
 	}
 	
 	// Print the map
@@ -163,19 +207,18 @@ void CBOT_main( void )
 ********************************************************************/
 
 /*******************************************************************
-* Function:			void mapWorld(void)
+* Function:			void planMap(void)
 * Input Variables:	void
 * Output Return:	void
 * Overview:		    maps the world as it moves through it
 ********************************************************************/
-void mapWorld( void )
+void planMap( void )
 {	
+	//Plan
 	if(!(currentGateway&0b0001)){	
 		// If we can make a left turn,
 		// then spin left
 		currentMove = MOVE_LEFT;
-		// Reset Odometry
-		checkOdometry(1);
 	}
 	else if(!(currentGateway&0b1000)){
 		// If we can't make a left turn,
@@ -187,66 +230,116 @@ void mapWorld( void )
 		// If we can't turn left or go forward
 		// then spin right
 		currentMove = MOVE_RIGHT;
-		// Reset Odometry
-		checkOdometry(1);
 	}
 	
 	switch(oldMove){
 		case MOVE_LEFT:
-			// If our old move was left
-			// And we still see the left we came from
-			// then move forward
-			if(currentMove == MOVE_LEFT){
-				move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
-				setGateways();				
-				move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(2.0/3.0), 10, 10, 0);
-				// Set Odomitry
-				odometryStepL = (WORLD_RESOLUTION_SIZE*(2.0/3.0))/D_STEP;
-				odometryStepR = (WORLD_RESOLUTION_SIZE*(2.0/3.0))/D_STEP;		
-			}
+			//If we turned left befor
+			//then we still have yet to go forward
+			currentMove = MOVE_FORWARD;
 			break;
 		case MOVE_FORWARD:
-			if(currentMove == MOVE_LEFT){
-				// If we see a left turn
-				// then skoot to the center before spining left
-				move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(1.0/2.0), 10, 10, 0);
-				setGateways();
-			}
-			
-			if(currentMove == MOVE_FORWARD){
-				if(odometryFlag){
-					// If we are going forward
-					// and our odometry trips
-					// then capture then map the spot
-					setGateways();
-				}
-			}
-						
-			if(currentMove == MOVE_RIGHT){
-				// If went forward into a dead end
-				// then map the spot
-				setGateways();
-			}
 			break;
-		case MOVE_RIGHT:							
-			if(currentMove == MOVE_RIGHT){
-				// If went forward into a dead end
-				// then map the spot
-				setGateways();
-				move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
-			}
+		case MOVE_RIGHT:		
 			break;
 		default:
+			LCD_printf("Whatz1?!");
 			break;
 	}
-		
 	
-	if(currentMove != oldMove){
-		oldMove = currentMove;
-		LCD_clear();	
-		printMap();
-		TMRSRVC_delay(5000);//wait 5 seconds
+	
+	oldMove = currentMove;
+}
+
+
+/*******************************************************************
+* Function:			void moveMap(void)
+* Input Variables:	void
+* Output Return:	void
+* Overview:		    moves the robot through the map
+********************************************************************/
+void moveMap( void )
+{	
+	switch(currentMove){
+		case MOVE_LEFT:
+				move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
+			break;
+		case MOVE_FORWARD:
+			checkOdometry(1);
+			while(odometryFlag){
+				moveWall();
+				checkOdometry(0);
+			}
+			break;
+		case MOVE_RIGHT:
+			move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
+			break;
+		default:
+			LCD_printf("Whatz2?!");
+			break;
 	}
+}
+
+
+/*******************************************************************
+* Function:			void shiftMap(void)
+* Input Variables:	void
+* Output Return:	void
+* Overview:		    shifts the map after robot moves
+********************************************************************/
+void shiftMap( void )
+{		
+	// Get the currrent location of the robot
+	unsigned char curRow = currentCellWorld >> 2;
+	unsigned char curCol = currentCellWorld & 0b0011;
+		
+	// Git the currrent orientation of the robot
+	unsigned char curOrient = currentOrientation;
+			
+		
+	switch(currentMove){
+		case MOVE_LEFT:
+			//If we move left
+			// shift our oriention CCW
+			curOrient--;
+			curOrient = curOrient&0b11;
+			break;
+		case MOVE_FORWARD:
+			//If we move forward
+			// then shift to the next cell
+			// with repect to our curent oriention
+			switch(curOrient){
+				case NORTH:
+					curRow -= 1;
+					break;
+				case EAST:
+					curCol += 1;
+					break;
+				case SOUTH:
+					curRow += 1;					
+					break;
+				case WEST:
+					curCol -= 1;					
+					break;
+				default:
+					break;
+			}
+			break;
+		case MOVE_RIGHT:
+			//If we move right
+			// shift our oriention CW
+			curOrient++;
+			curOrient = curOrient&0b11;
+			break;
+		default:
+			LCD_printf("Whatz3?!");
+			break;
+	}
+	
+	// Set the new cell of the robot
+	currentCellWorld = (curRow << 2) + curCol;
+	// Set the new orientation of the robot
+	currentOrientation = curOrient;
 }
 
 /*******************************************************************
@@ -273,42 +366,6 @@ void setGateways(void)
 	
 	// Set the current cell
 	ROBOT_WORLD[curRow][curCol] = curCell;
-		
-		
-	switch(currentMove){
-		case MOVE_LEFT:
-			curOrient--;
-			curOrient = curOrient&0b11;
-			break;
-		case MOVE_FORWARD:
-			break;
-		case MOVE_RIGHT:		
-			curOrient++;
-			curOrient = curOrient&0b11;
-			break;
-		default:
-			LCD_printf("Whatz?!");
-			break;
-	}
-	
-	// move to the next cell with respect to our orientation
-	switch(curOrient){
-		case NORTH:
-			curRow -= 1;
-			break;
-		case EAST:
-			curCol += 1;
-			break;
-		case SOUTH:
-			curRow += 1;					
-			break;
-		case WEST:
-			curCol -= 1;					
-			break;
-		default:
-			break;
-	}	
-	currentCellWorld = (curRow << 2) + curCol;
 }
 
 /*******************************************************************
@@ -456,9 +513,10 @@ void worldInput( void )
 			LCD_clear();
 			LCD_printf("Current World Cell:\n%i\nCommand Num: %i\n",currentCellWorld,i);
 		// }
-		currentCellWorldStart = currentCellWorld;
 		TMRSRVC_delay(500);	//wait 0.5 seconds
 	}
+	
+	currentCellWorldStart = currentCellWorld;
 }
 
 /*******************************************************************
@@ -515,6 +573,9 @@ void orientationInput(void)
 		default:
 			break;
 	}
+	
+	currentOrientationStart = currentOrientation;
+	
 	TMRSRVC_delay(500);	//wait 0.5 seconds
 }
 
@@ -604,7 +665,7 @@ char moveWorld( void )
 			move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
 			break;
 		default:
-			LCD_printf("What?!");
+			LCD_printf("Whatz4?!");
 			STEPPER_stop( STEPPER_BOTH, STEPPER_BRK_OFF);
 			while(1);
 			break;
