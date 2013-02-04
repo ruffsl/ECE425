@@ -33,6 +33,7 @@
 
 /** Local Function Prototypes **************************************/
 char moveWall(void);
+char moveWallOld(void);
 void movesInput(void);
 void worldInput(void);
 char moveBehavior(int);
@@ -64,26 +65,26 @@ void CBOT_main( void )
 	
 	checkOdometry(1);
 	
-	/*
-	while(!odometryFlag){
-		moveWall();
-		checkOdometry(0);
-		// LCD_clear();
-		// LCD_printf("%5.5f\n%5.5f\n",odometryStepL,odometryStepL);
-		// TMRSRVC_delay(1000);//wait 3 seconds
-	}
 	
-	LCD_clear();
-	LCD_printf("LOLZ\nI'm done!");
-	TMRSRVC_delay(3000);//wait 3 seconds
-	while(1){}
-	*/
+	// while(!odometryFlag){
+		// moveWall();
+		// checkOdometry(0);
+		// // LCD_clear();
+		// // LCD_printf("%5.5f\n%5.5f\n",odometryStepL,odometryStepL);
+		// // TMRSRVC_delay(1000);//wait 3 seconds
+	// }
+	
+	// LCD_clear();
+	// LCD_printf("LOLZ\nI'm done!");
+	// TMRSRVC_delay(3000);//wait 3 seconds
+	// while(1){}
+	
 		
 	
 	
 	LCD_printf("      New Map\n\n\n\n");	
 	printMap();
-	TMRSRVC_delay(1000);//wait 1 seconds
+	TMRSRVC_delay(10000);//wait 1 seconds
 	LCD_clear();	
 	
 	// Enter the robot's current (starting) position
@@ -143,6 +144,7 @@ void CBOT_main( void )
 		printMap();
 		TMRSRVC_delay(500);//wait 3 seconds
 	}
+	
 	
 	// Print the map
 	LCD_clear();	
@@ -644,12 +646,12 @@ char moveWorld( void )
 	
 	if(((currentMove == MOVE_LEFT)|(currentMove == MOVE_RIGHT))&(oldMove == MOVE_FORWARD))
 	{
-		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(3.0/5.0), 10, 10, 0);		
+		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(2.5/5.0), 10, 10, 0);		
 	}
 	
 	if(((oldMove == MOVE_LEFT)|(oldMove == MOVE_RIGHT))&(currentMove == MOVE_FORWARD))
 	{
-		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(3.0/5.0), 10, 10, 0);		
+		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(2.2/5.0), 10, 10, 0);		
 	}
 	
 	switch(currentMove){
@@ -661,7 +663,7 @@ char moveWorld( void )
 		case MOVE_FORWARD:
 			LCD_printf("Forward\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
 			// TMRSRVC_delay(1000);//wait 1 seconds
-			moveWall();
+			moveWallOld();
 			// move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE, 10, 10, 0);
 			break;
 		case MOVE_RIGHT:
@@ -806,6 +808,92 @@ char moveWall( void )
 	STEPPER_move_stnb( STEPPER_BOTH, 
 	STEPPER_REV, WALL_STEP, stepper_speed_L, 450, STEPPER_BRK_OFF, // Left
 	STEPPER_REV, WALL_STEP, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
+	
+	// debug LCP print statement
+	// LCD_clear();
+	// LCD_printf("bkIR: %3.2f\nmoveWall\nError: %3f\nEffort: %3f\n", bkIR, error, effort);
+	return isWall;
+	
+}
+
+
+/*******************************************************************
+* Function:			char moveWall(void)
+* Input Variables:	void
+* Output Return:	char
+* Overview:			This function searches for walls and adjust the 
+*					robots differential steering to attempts to
+*					follow them
+********************************************************************/
+char moveWallOld( void )
+{	
+	// Check for walls
+	BOOL isWall = (ftIR < IR_WALL_F_THRESH)|(bkIR < IR_WALL_B_THRESH)|(rtIR < IR_WALL_R_THRESH)|(ltIR < IR_WALL_L_THRESH);
+	if(!isWall){	
+		move_arc_stnb(NO_TURN, 10, 10, 10, 0);
+		return isWall;
+	}
+		
+	// A variable that contains the logic of which wall is imaginary
+	BOOL isLEFT;
+	
+	// If there is no wall on our right side
+	// place an imaginary wall just within the threshold
+	if(rtIR>IR_WALL_R_THRESH){
+		rtIR = IR_WALL_R_THRESH-18;
+		isLEFT = 0;
+	}
+	// If there is no wall on our left side
+	// place an imaginary wall just within the threshold
+	if(ltIR>IR_WALL_L_THRESH){
+		ltIR = IR_WALL_L_THRESH-18;
+		isLEFT = 1;
+	}
+	
+	float error;
+	
+	// Check to see if the wall exists in front of the robot
+	if(ftIR < IR_WALL_F_THRESH)
+	{
+		// if the imaginary wall was on the left side
+		// then biased the error so that when the robot encounters
+		// an upcoming corner, the robot will turn away from both walls
+		if (isLEFT)
+		{
+			error = rtIR - (ltIR + (1000/ftIR));
+		}
+		// biased the error appropriately for the inverse situation
+		else 
+		{
+			error = rtIR - (ltIR - (1000/ftIR));
+		}
+	}
+	
+	// If no front facing walls detected
+	// the air is simply the right distance minus the left left distance
+	// this ensures symmetry that the robot will follow in between the two walls
+	// either one real and one imaginary, or both real
+	else 
+	{
+		error = rtIR - ltIR;
+	}
+
+	// Use the PID controller function to calculate error
+	float effort = pidController(-error, 0);
+	
+	// Limit the control effort to the max allowable effort
+	if((abs(effort) > MAX_EFFORT)&(effort!=0)){
+		effort = MAX_EFFORT*(effort/abs(effort));
+	}
+	
+	// Calculate the stepper speeds for each wheel using a ratio
+	float stepper_speed_L = MAX_SPEED/2 + (MAX_SPEED/2)*(effort/MAX_EFFORT);
+	float stepper_speed_R = MAX_SPEED/2 - (MAX_SPEED/2)*(effort/MAX_EFFORT);
+	
+	// Move with wall
+	STEPPER_move_stnb( STEPPER_BOTH, 
+	STEPPER_REV, 50, stepper_speed_L, 450, STEPPER_BRK_OFF, // Left
+	STEPPER_REV, 50, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
 	
 	// debug LCP print statement
 	// LCD_clear();
