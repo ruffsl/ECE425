@@ -1,4 +1,4 @@
-Custom_Support.o: ../Custom_Support.c \
+Localization.o: ../Localization.c \
   C:\Users\whitemrj\Documents\GitHub\ECE425\Final\ Project\Localization\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/capi324v221.h \
   C:\Users\whitemrj\Documents\GitHub\ECE425\Final\ Project\Localization\..\..\..\..\..\..\..\Program\ Files\AVR\ Libraries\lib-includes/utils324v221.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h \

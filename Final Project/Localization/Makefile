@@ -15,7 +15,7 @@ COMMON = -mmcu=$(MCU)
 
 ## Compile options common for all C compilation units.
 CFLAGS = $(COMMON)
-CFLAGS += -Wall -gdwarf-2 -std=gnu99     -DF_CPU=20000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CFLAGS += -Wall -gdwarf-2 -std=gnu99   -DF_CPU=20000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
 
 ## Assembly specific flags
@@ -46,7 +46,7 @@ LIBDIRS = -L"C:\WinAVR-20100110\avr\lib\avr4" -L"C:\Program Files\AVR Libraries"
 LIBS = -lcapi324v221 -lm -lprintf_flt 
 
 ## Objects that must be built in order to link
-OBJECTS = CEEN_Interfaces.o Custom_Support.o Localization.o 
+OBJECTS = CEEN_Interfaces.o MapMaker.o Custom_Support.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -56,10 +56,10 @@ all: $(TARGET) WallFollowing.hex WallFollowing.eep WallFollowing.lss## Compile
 CEEN_Interfaces.o: ../CEEN_Interfaces.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-Custom_Support.o: ../Custom_Support.c
+MapMaker.o: ../MapMaker.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-Localization.o: ../Localization.c
+Custom_Support.o: ../Custom_Support.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link
