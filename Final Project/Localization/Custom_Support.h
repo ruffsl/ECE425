@@ -12,8 +12,10 @@
 #define Custom_Support
 
 	// Flags
-	#define SUCCESS 1;
-	#define FAIL 0;
+	#define SUCCESS 1
+	#define FAIL 0
+	#define TO_MAP_ROTATE 0
+	#define TO_ROBOT_ROTATE 1
 
 	// Arc Function Constants
 	#define C_B 1

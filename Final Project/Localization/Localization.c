@@ -1,9 +1,9 @@
 /*******************************************************************
-* FileName:        MapeMaker.c
+* FileName:        Localization.c
 * Processor:       ATmega324P
 * Compiler:        GCC
 *
-* Code Description: Maps the world for later pathplaning
+* Code Description: Localizes its self in the world
 *
 * AUTHORS: Ander Solorzano & Ruffin White   
 ********************************************************************/
@@ -30,21 +30,40 @@
 #define LT_GATEWAY 30
 #define RT_GATEWAY 30
 
+// localizeGateways Size
+#define BRANCH_TYPES 2
+#define BRANCH_MAX 5
+
+
 
 /** Local Function Prototypes **************************************/
+// Locomotion Primitives
 char moveWall(void);
 char moveWallOld(void);
-void movesInput(void);
+
+// User Inputs
 void worldInput(void);
-char moveBehavior(int);
-char moveWorld(void);
+void orientationInput(void);
+void movesInput(void);
+
+// Sensory Primitives
 void checkWorld(void);
+char moveBehavior(int);
+
+// Pathplanning Tools
+char moveWorld(void);
 void getGateways(void);
 void setGateways(void);
-void orientationInput(void);
+
+// Mapping Tools
 void planMap(void);
 void moveMap(void);
-void shiftMap(void);
+unsigned char shiftMap(unsigned char currentCell, unsigned char curOrient);
+
+// Localization Tools
+void planGateway(void);
+char localizeGateway(void);
+char matchBranch(unsigned char *, unsigned char, unsigned char);
 
 /** Global Variables ***********************************************/
 
@@ -52,14 +71,17 @@ void shiftMap(void);
 char currentMove;
 char oldMove;
 char isMapping;
+char isLost;
+
+unsigned char localizeGateways[BRANCH_TYPES][BRANCH_MAX];
+unsigned char currentBranch = 0;
 
 unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] = 	{
-																{0b1001, 0b1110, 0b1111, 0b1111}, 
-																{0b0101, 0b1111, 0b1111, 0b1101}, 
-																{0b0011, 0b1000, 0b1010, 0b0100}, 
-																{0b1111, 0b0111, 0b1111, 0b0111}
+																{0b1101, 0b1111, 0b1111, 0b1101}, 
+																{0b0101, 0b1111, 0b1111, 0b0101}, 
+																{0b0001, 0b1010, 0b1010, 0b0100}, 
+																{0b0111, 0b1111, 0b1111, 0b0111}
 																};
-
 
 /*******************************************************************
 * Function:        void CBOT_main( void )
@@ -70,30 +92,73 @@ void CBOT_main( void )
 	// initialize the robot
 	initializeRobot();
 	
+	// reset the Odometry
 	checkOdometry(1);
 	
+	isLost = 1;
+	unsigned char i, branch, move;
 	
-	// while(!odometryFlag){
-		// moveWall();
-		// checkOdometry(0);
-		// // LCD_clear();
-		// // LCD_printf("%5.5f\n%5.5f\n",odometryStepL,odometryStepL);
-		// // TMRSRVC_delay(1000);//wait 3 seconds
-	// }
-	
-	// LCD_clear();
-	// LCD_printf("LOLZ\nI'm done!");
-	// TMRSRVC_delay(3000);//wait 3 seconds
-	// while(1){}
-	
+	// Localization Loop 
+	while(isLost)
+	{	
+		//Sense Gateway
+		checkIR();	
+		checkWorld();
 		
+		//Plan using the Gateway
+		planGateway();
+		
+		//Localize from Gateways?
+		isLost = localizeGateway();
+		if(!isLost){			
+			LCD_clear();
+			LCD_printf("LOLZ\nI'm found!");
+			TMRSRVC_delay(3000);//wait 3 seconds
+			break;
+		}
+		
+		//Print Tree
+		
+		LCD_clear();
+		LCD_printf("Branch");
+		for(i = 0; i<BRANCH_MAX; i++){
+			branch = localizeGateways[0][i];
+			LCD_printf("%3d", branch);
+		}
+		LCD_printf("Move  ");
+		for(i = 0; i<BRANCH_MAX; i++){
+			move = localizeGateways[1][i];
+			LCD_printf("%3d", move);
+		}
+		LCD_printf("isLost %1d",isLost);
+		TMRSRVC_delay(2000);//wait 3 seconds
+		
+		//Act on the Gateway
+		moveMap();
+	}
 	
 	
-	LCD_printf("      New Map\n\n\n\n");	
+
+	/**
+	while(!odometryFlag){
+		moveWall();
+		checkOdometry(0);
+		// LCD_clear();
+		// LCD_printf("%5.5f\n%5.5f\n",odometryStepL,odometryStepL);
+		// TMRSRVC_delay(1000);//wait 3 seconds
+	}
+	**/
+	
+	
+	LCD_clear();
+	TMRSRVC_delay(1000);//wait 1 seconds
+	LCD_printf("      New Map\n\n\n\n");
 	printMap();
-	TMRSRVC_delay(10000);//wait 1 seconds
-	LCD_clear();	
+	TMRSRVC_delay(10000);//wait 10 seconds
+	LCD_clear();
 	
+	
+	/**
 	// Enter the robot's current (starting) position
 	LCD_printf("START Map/nlocation\n\n\n");	
 	TMRSRVC_delay(1000);//wait 1 seconds
@@ -110,15 +175,16 @@ void CBOT_main( void )
 	TMRSRVC_delay(1000);//wait 3 seconds
 	LCD_clear();
 	
-	isMapping = 0;
+	isMapping = 1;
 	
 	
 	LCD_printf("      Your Map\n\n\n\n");	
 	printMap();
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();	
-		
-	while(!isMapping)
+	
+	// Mapping Loop
+	while(isMapping)
 	{	
 		//Sense
 		checkIR();	
@@ -134,11 +200,11 @@ void CBOT_main( void )
 		moveMap();
 		
 		//Shift the Map
-		shiftMap();
+		currentCellWorld = shiftMap(currentCellWorld, currentOrientation);
 		
 		//Break?
-		isMapping = ((currentCellWorldStart == currentCellWorld)&&(currentOrientationStart == currentOrientation));
-		if(isMapping){			
+		isMapping = !((currentCellWorldStart == currentCellWorld)&&(currentOrientationStart == currentOrientation));
+		if(!isMapping){			
 			LCD_clear();
 			LCD_printf("LOLZ\nI'm done!");
 			TMRSRVC_delay(3000);//wait 3 seconds
@@ -151,8 +217,9 @@ void CBOT_main( void )
 		printMap();
 		TMRSRVC_delay(500);//wait 3 seconds
 	}
+	**/
 	
-	
+	/**
 	// Print the map
 	LCD_clear();	
 	printMap();
@@ -192,13 +259,12 @@ void CBOT_main( void )
 	LCD_clear();
 		
 		
-	// Infinite loop
+	// Goal loop
 	while (1)
     {
 		checkIR();	
 		checkWorld();
 		moveWorld();
-		
 		//Test arc function
 		// LCD_printf("Move Arc\n\n\n\n");
 		// TMRSRVC_delay(1000);//wait 1 seconds
@@ -213,12 +279,155 @@ void CBOT_main( void )
 		// LCD_printf("FrontIR = %3.2f\nBackIR = %3.2f\nLeftIR = %3.2f\nRightIR = %3.2f\n", ftIR,bkIR,ltIR,rtIR);
 		// TMRSRVC_delay(1000);//wait 1 seconds
     }
+	**/
 }// end the CBOT_main()
 
 
 /*******************************************************************
 * Additional Helper Functions
 ********************************************************************/
+
+
+/*******************************************************************
+* Function:			char matchBranch(unsigned char *ptROBOT_WORLD, unsigned char row, unsigned char col)
+* Input Variables:	char
+* Output Return:	unsigned char *, unsigned char, unsigned char
+* Overview:		    Check to see if the branch is valid
+*					given the map and starting seed
+********************************************************************/
+char matchBranch( unsigned char *ptROBOT_WORLD, unsigned char row, unsigned char col)
+{	
+	// Local variables for comparing branch and gateway 
+	unsigned char branch, gateway;
+	
+	// Local variables for nested for loops 
+	unsigned char curRow = row;
+	unsigned char curCol = col;
+	unsigned char curOrnt, i;
+	
+	
+	// Then check for a matching brache
+	for(i = 0; i <= currentBranch; i++){
+	
+		// Check to see if we are still inside the map
+		// If we went outside, then return failure
+		if(!((curRow<WORLD_ROW_SIZE)&(curCol<WORLD_COLUMN_SIZE))){
+			return FAIL;
+		}
+	
+		// Get current branch
+		branch = localizeGateways[0][i];
+		
+		// Get the current orientation 
+		curOrnt = localizeGateways[1][i];
+		
+		// Rotate the branch to reflect the map
+		branch = rotateCell (branch, curOrnt, TO_MAP_ROTATE);
+		
+		// Get gateway from map
+		gateway = *(ptROBOT_WORLD+curRow+curCol);
+		
+		// If the matching pattern is broken
+		// stop matching and return failure
+		if(branch != gateway){
+			return FAIL;
+		}
+		
+		// Set the new cell of the next branch
+		currentCellWorld = (curRow << 2) + curCol;
+		
+		// Prep for the gateway by moving with the next branch		
+		currentCellWorld = shiftMap(currentCellWorld, curOrnt);
+		currentOrientation = curOrnt;
+		
+		// Get the currrent cell of the branch
+		curRow = currentCellWorld >> 2;
+		curCol = currentCellWorld & 0b0011;
+	}
+	// If we make it through all the branches
+	// then return success
+	return SUCCESS;
+}
+
+/*******************************************************************
+* Function:			char localizeGateway(void)
+* Input Variables:	char
+* Output Return:	void
+* Overview:		    use the localizeGateways tree to localize robot
+********************************************************************/
+char localizeGateway( void )
+{	
+	// Get the root seed from the tree
+	unsigned char localizeSeed = localizeGateways[0][0];
+	// Local variables for nested for loops 
+	unsigned char row, col;
+	// Stores the number of matching seeds
+	unsigned char matchSeeds = 0;
+	// Stores the last matching seed index
+	unsigned char matchRow, matchCol;
+	
+	// Find seeds and check for matching braches
+	// For ever row in the map
+	for(row = 0; row <= WORLD_ROW_SIZE; row++){
+	
+		// And For ever column in the map
+		for(col = 0; col <= WORLD_COLUMN_SIZE; col++){
+		
+			// Check to see if we have a matching seed
+			if(localizeSeed == ROBOT_WORLD[row][col]){
+			
+				//Check to see if we have a matching branch
+				if(matchBranch(*ROBOT_WORLD,row,col)){
+					matchRow = row;
+					matchCol = col;
+					matchSeeds++;
+				}
+			}			
+		}
+	}
+		
+	// If we have only one remaining seed
+	// Then we are localized
+	if(matchSeeds == 1){
+		return 0;
+	}
+	
+	// If we have none or more than one seed
+	// return failure
+	return 1;
+}
+
+/*******************************************************************
+* Function:			void planGateway(void)
+* Input Variables:	void
+* Output Return:	void
+* Overview:		    build the localizeGateways tree with current branch
+********************************************************************/
+void planGateway( void )
+{	
+	// If we are still lost
+	// when we reach our max branch
+	// Pop of the seed and use the second oldest
+	// as the new seed
+	unsigned char i;
+	if(currentBranch>=BRANCH_MAX){
+		for(i = 0; i<BRANCH_MAX; i++){
+			localizeGateways[0][i] = localizeGateways[0][i+1];
+			localizeGateways[1][i] = localizeGateways[1][i+1];
+		}
+		currentBranch--;
+	}
+	
+	// Decide what the current move should be
+	planMap();
+	
+	// Save the current gateway and move
+	localizeGateways[0][currentBranch] = currentGateway;
+	localizeGateways[1][currentBranch] = currentMove;
+
+	// Increment current branch 
+	currentBranch++;
+}
 
 /*******************************************************************
 * Function:			void planMap(void)
@@ -265,7 +474,6 @@ void planMap( void )
 	oldMove = currentMove;
 }
 
-
 /*******************************************************************
 * Function:			void moveMap(void)
 * Input Variables:	void
@@ -279,11 +487,13 @@ void moveMap( void )
 				move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
 			break;
 		case MOVE_FORWARD:
-			checkOdometry(1);
-			while(!odometryFlag){
-				moveWall();
-				checkOdometry(0);
-			}
+			// checkOdometry(1);
+			// while(!odometryFlag){
+				// moveWall();
+				// checkOdometry(0);
+			// }
+			
+			move_arc_stwt(NO_TURN, 45, 10, 10, 0);
 			break;
 		case MOVE_RIGHT:
 			move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
@@ -294,21 +504,20 @@ void moveMap( void )
 	}
 }
 
-
 /*******************************************************************
-* Function:			void shiftMap(void)
-* Input Variables:	void
-* Output Return:	void
+* Function:			unsigned char shiftMap(unsigned char currentCell, unsigned char curOrient)
+* Input Variables:	unsigned char, unsigned char
+* Output Return:	unsigned char
 * Overview:		    shifts the map after robot moves
 ********************************************************************/
-void shiftMap( void )
+unsigned char shiftMap( unsigned char currentCell, unsigned char curOrient)
 {		
 	// Get the currrent location of the robot
-	unsigned char curRow = currentCellWorld >> 2;
-	unsigned char curCol = currentCellWorld & 0b0011;
+	unsigned char curRow = currentCell >> 2;
+	unsigned char curCol = currentCell & 0b0011;
 		
-	// Git the currrent orientation of the robot
-	unsigned char curOrient = currentOrientation;
+	// // Git the currrent orientation of the robot
+	// unsigned char curOrient = currentOrientation;
 			
 		
 	switch(currentMove){
@@ -351,9 +560,10 @@ void shiftMap( void )
 	}
 	
 	// Set the new cell of the robot
-	currentCellWorld = (curRow << 2) + curCol;
+	currentCell = (curRow << 2) + curCol;
 	// Set the new orientation of the robot
 	currentOrientation = curOrient;
+	return currentCell;
 }
 
 /*******************************************************************
@@ -822,7 +1032,6 @@ char moveWall( void )
 	return isWall;
 	
 }
-
 
 /*******************************************************************
 * Function:			char moveWall(void)
