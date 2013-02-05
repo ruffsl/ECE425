@@ -53,6 +53,13 @@ char currentMove;
 char oldMove;
 char isMapping;
 
+unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] = 	{
+																{0b1001, 0b1110, 0b1111, 0b1111}, 
+																{0b0101, 0b1111, 0b1111, 0b1101}, 
+																{0b0011, 0b1000, 0b1010, 0b0100}, 
+																{0b1111, 0b0111, 0b1111, 0b0111}
+																};
+
 
 /*******************************************************************
 * Function:        void CBOT_main( void )
