@@ -87,12 +87,12 @@ void checkOdometry( unsigned char reset )
 }
 
 /*******************************************************************
-* Function:			void printMap(void)
-* Input Variables:	void
+* Function:			void printMap(char reset)
+* Input Variables:	char
 * Output Return:	void
 * Overview:		    Print the map
 ********************************************************************/
-void printMap(void)
+void printMap(char reset)
 {
 	unsigned char r;
 	unsigned char c;
@@ -106,7 +106,7 @@ void printMap(void)
 		for(c = 0; c < WORLD_COLUMN_SIZE; c++){
 			cell = ROBOT_WORLD[r][c];
 			isrobot = (r == curRow)&&(c == curCol);
-			printCell(cell, r, c, isrobot, currentOrientation);
+			printCell(cell, r, c, isrobot, currentOrientation, reset);
 		}	
 	}
 }
@@ -117,7 +117,7 @@ void printMap(void)
 * Output Return:	unsigned char, unsigned char, unsigned char, BOOL, unsigned char
 * Overview:		    Prints the cell
 ********************************************************************/
-void printCell(unsigned char cell, unsigned char r, unsigned char c, BOOL isrobot, unsigned char orent){
+void printCell(unsigned char cell, unsigned char r, unsigned char c, BOOL isrobot, unsigned char orent, BOOL reset){
 
 	r = r*LCD_CELL_OFFSET;
 	c = c*LCD_CELL_OFFSET;
@@ -182,6 +182,17 @@ void printCell(unsigned char cell, unsigned char r, unsigned char c, BOOL isrobo
 				break;
 		}
 	}
+	else if(reset){
+		LCD_set_pixel(LCD_OFFSET - (r+3), c+3, isrobot);
+		LCD_set_pixel(LCD_OFFSET - (r+4), c+3, isrobot);
+		LCD_set_pixel(LCD_OFFSET - (r+3), c+4, isrobot);
+		LCD_set_pixel(LCD_OFFSET - (r+4), c+4, isrobot);
+		
+		LCD_set_pixel(LCD_OFFSET - (r+2), c+3, isrobot);
+		LCD_set_pixel(LCD_OFFSET - (r+3), c+5, isrobot);
+		LCD_set_pixel(LCD_OFFSET - (r+5), c+4, isrobot);
+		LCD_set_pixel(LCD_OFFSET - (r+4), c+2, isrobot);
+		}
 }
 
 /*******************************************************************

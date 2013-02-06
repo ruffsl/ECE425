@@ -100,7 +100,7 @@ void CBOT_main( void )
 	// Display the map
 	LCD_clear();
 	LCD_printf("      New Map\n\n\n\n");
-	printMap();
+	printMap(RESET);
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
 	
@@ -116,9 +116,6 @@ void CBOT_main( void )
 		
 		//Localize from Gateways?
 		isLost = localizeGateway();
-		if(!isLost){
-			break;
-		}
 				
 		//Print Tree		
 		LCD_clear();
@@ -139,10 +136,15 @@ void CBOT_main( void )
 		}
 		LCD_printf("isLost %1d ",isLost);
 		LCD_printf("seeds: %1d", matchSeeds);
-		TMRSRVC_delay(4000);//wait 3 seconds
+		TMRSRVC_delay(2000);//wait 3 seconds
 		
 		//Act on the Gateway
 		moveMap();
+		
+		// Break if not isLost
+		if(!isLost){
+			break;
+		}
 	}
 	
 	
@@ -162,9 +164,8 @@ void CBOT_main( void )
 	TMRSRVC_delay(3000);//wait 3 seconds
 	
 	LCD_clear();
-	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_printf("      New Map\n\n\n\n");
-	printMap();
+	printMap(RESET);
 	TMRSRVC_delay(10000);//wait 10 seconds
 	LCD_clear();
 	
@@ -190,7 +191,7 @@ void CBOT_main( void )
 	
 	
 	LCD_printf("      Your Map\n\n\n\n");	
-	printMap();
+	printMap(RESET);
 	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();	
 	
@@ -225,7 +226,7 @@ void CBOT_main( void )
 		//Print Map
 		LCD_clear();
 		LCD_printf("      Move"BYTETOBINARYPATTERN"\n      Cell"BYTETOBINARYPATTERN"\n      Ornt"BYTETOBINARYPATTERN"\n\n",BYTETOBINARY(currentMove),BYTETOBINARY(currentCellWorld),BYTETOBINARY(currentOrientation));
-		printMap();
+		printMap(RESET);
 		TMRSRVC_delay(500);//wait 3 seconds
 	}
 	**/
@@ -233,7 +234,7 @@ void CBOT_main( void )
 	/**
 	// Print the map
 	LCD_clear();	
-	printMap();
+	printMap(RESET);
 	TMRSRVC_delay(10000);//wait 10 seconds
 	LCD_clear();	
 	
@@ -350,10 +351,15 @@ char matchBranch( unsigned char *ptROBOT_WORLD, unsigned char row, unsigned char
 		
 		// Set the new cell of the next branch
 		currentCellWorld = (curRow << 2) + curCol;
-		
-		// Prep for the gateway by moving with the next branch		
+
+		// If this is the last branch
+		// dont move the cell
+		// so we are left with our locilized position 
+		// if((i == (currentBranch-2))&&){
+		// Prep for the gateway by moving with the next branch
 		currentCellWorld = shiftMap(currentCellWorld, curMove, curOrnt);
-		
+		// }
+				
 		// Get the currrent cell of the branch
 		curRow = currentCellWorld >> 2;
 		curCol = currentCellWorld & 0b0011;
@@ -377,15 +383,15 @@ char localizeGateway( void )
 	unsigned char row, col;
 	// Stores the number of matching seeds
 	matchSeeds = 0;
-	// Stores the last matching seed index
-	unsigned char matchRow, matchCol;
+	// // Stores the last matching seed index
+	// unsigned char matchRow, matchCol;
 	
 	// Find seeds and check for matching braches
 	// For ever row in the map
-	for(row = 0; row <= WORLD_ROW_SIZE; row++){
+	for(row = 0; row < WORLD_ROW_SIZE; row++){
 	
 		// And For ever column in the map
-		for(col = 0; col <= WORLD_COLUMN_SIZE; col++){
+		for(col = 0; col < WORLD_COLUMN_SIZE; col++){
 		
 			// Check to see if we have a matching seed
 			// if(0b1101 == ROBOT_WORLD[row][col]){
@@ -393,8 +399,8 @@ char localizeGateway( void )
 			
 				//Check to see if we have a matching branch
 				if(matchBranch(*ROBOT_WORLD,row,col)){
-					matchRow = row;
-					matchCol = col;
+					// matchRow = row;
+					// matchCol = col;
 					matchSeeds++;
 				}
 			}			

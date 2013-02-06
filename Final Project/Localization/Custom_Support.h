@@ -16,6 +16,8 @@
 	#define FAIL 0
 	#define TO_MAP_ROTATE 0
 	#define TO_ROBOT_ROTATE 1
+	#define RESET 1
+	#define NO_RESET 0
 
 	// Arc Function Constants
 	#define C_B 1
@@ -173,8 +175,8 @@ extern unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE];
 	char move_arc_stwt(float, float, float, float, BOOL);
 	char move_arc_stnb(float, float, float, float, BOOL);
 	void LCD_set_pixel(unsigned char row, unsigned char col, BOOL val);
-	void printCell(unsigned char, unsigned char, unsigned char, BOOL, unsigned char);
-	void printMap(void);
+	void printCell(unsigned char, unsigned char, unsigned char, BOOL, unsigned char, BOOL);
+	void printMap(char);
 	void checkOdometry(unsigned char);
 
 #endif
