@@ -184,7 +184,6 @@ void printCell(unsigned char cell, unsigned char r, unsigned char c, BOOL isrobo
 	}
 }
 
-
 /*******************************************************************
 * Function:			void LCD_set_pixel(unsigned char , unsigned char , BOOL)
 * Input Variables:	void
@@ -219,7 +218,6 @@ void LCD_set_pixel(unsigned char row, unsigned char col, BOOL val) {
 	// Write the pixel data out to the lcd
 	LCD_write_data( pix_arr[page][col] );
 }
-
 
 /*******************************************************************
 * Function:			void checkIR(void)
@@ -569,125 +567,4 @@ char move_arc_stnb(float arc_Radius, float arc_Length, float arc_Speed, float ar
 		return SUCCESS;
 	}	
 	return FAIL;
-}
-
-
-/*******************************************************************
-* Function:			void moveAway(void)
-* Input Variables:	none
-* Output Return:	char
-* Overview:			Use a comment block like this before functions
-********************************************************************/
-char moveAway ( void )
-{	
-	char shyRobot = 0;
-	
-	// Use the differences between the front and back
-	// left and right distances to calculate a force vector
-	float moveY = ftIR - bkIR;
-	float moveX = rtIR - ltIR;
-	
-	// if the object is in front of us are behind us
-	// move appropriately in the Y direction
-	if ((ftIR < IR_OBST_F_THRESH)|(bkIR < IR_OBST_B_THRESH))
-	{
-			BOOL moveForward = (moveY >= 0);
-			
-			// Move.
-			STEPPER_move_stnb( STEPPER_BOTH, 
-			moveForward, 50, abs(moveY)+moveX, 450, STEPPER_BRK_OFF, // Left
-			moveForward, 50, abs(moveY)-moveX, 450, STEPPER_BRK_OFF ); // Right
-			
-			// debug LCP print statement
-			// LCD_clear();
-			// LCD_printf("moveAwayF\n\n\n\n");
-			
-			// if the robot was shy
-			// state that fact
-			shyRobot = 1;
-	}
-	
-	// if the object is on either side of the robot
-	// rotate the robot appropriately
-	else if ((rtIR < IR_OBST_R_THRESH))
-	{
-			// BOOL moveForwardR = ~(moveX <= 0);
-			// BOOL moveForwardL = ~(moveX > 0);
-			
-			// Move.
-			STEPPER_move_stnb( STEPPER_BOTH, 
-			0, 200, abs(moveX), 450, STEPPER_BRK_OFF, // Left
-			1, 200, abs(moveX), 450, STEPPER_BRK_OFF ); // Right
-			
-			// debug LCP print statement
-			// LCD_clear();
-			// LCD_printf("moveAwayS\n\n\n\n");
-			
-			// if the robot was shy
-			// state that fact
-			shyRobot = 1;
-	}
-	else if ((ltIR < IR_OBST_L_THRESH))
-	{
-			// BOOL moveForwardR = ~(moveX <= 0);
-			// BOOL moveForwardL = ~(moveX > 0);
-			
-			// Move.
-			STEPPER_move_stnb( STEPPER_BOTH, 
-			1, 200, abs(moveX), 450, STEPPER_BRK_OFF, // Left
-			0, 200, abs(moveX), 450, STEPPER_BRK_OFF ); // Right
-			
-			// debug LCP print statement
-			// LCD_clear();
-			// LCD_printf("moveAwayS\n\n\n\n");
-			
-			// if the robot was shy
-			// state that fact
-			shyRobot = 1;
-	}
-	
-	return shyRobot;
-}
-
-
-/*******************************************************************
-* Function:			void moveWander(void)
-* Input Variables:	none
-* Output Return:	none
-* Overview:			This function checks for walls and moves the 
-*					robot randomly if walls are not detected
-********************************************************************/
-char moveWander ( void )
-{	
-	// If we have wondered
-	// notify that we have
-	char isWander = 1;
-	
-	// if we are wondering
-	// first check the current progress of our wondering
-	STEPPER_STEPS curr_steps = STEPPER_get_nSteps();
-	
-	
-	// IF my motion is complete do another random motion
-	if ((curr_steps.left == 0)&(curr_steps.right == 0))
-	{
-		// create random values for wheel position and wheel speed
-		int moveRand = rand()%400+400;
-		float turnRandR = rand()%200+200;
-		float turnRandL = rand()%200+200;
-		
-		// Weight the chance that we will go forward slightly more
-		// so that the robot may possibly traverse farther
-		BOOL direction = ~((rand()%10)>7);
-				
-		// Move.
-		STEPPER_move_stnb( STEPPER_BOTH, 
-		direction, moveRand, turnRandL, 450, STEPPER_BRK_OFF, // Left
-		direction, moveRand, turnRandR, 450, STEPPER_BRK_OFF ); // Right
-		
-		// debug LCP print statement
-		// LCD_clear();
-		// LCD_printf("moveWander\nmoveRand: %3d\nturnRandR: %3d\nturnRandL: %3d\n",moveRand,turnRandR,turnRandL);
-		}
-	return isWander;
 }

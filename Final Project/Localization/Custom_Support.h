@@ -170,8 +170,6 @@ extern unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE];
 	void prefilter(char);
 	float pidController(float ,char);
 	unsigned char rotateCell(unsigned char,unsigned char, char);
-	char moveWander(void);
-	char moveAway(void);
 	char move_arc_stwt(float, float, float, float, BOOL);
 	char move_arc_stnb(float, float, float, float, BOOL);
 	void LCD_set_pixel(unsigned char row, unsigned char col, BOOL val);
