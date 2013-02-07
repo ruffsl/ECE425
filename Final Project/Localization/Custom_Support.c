@@ -49,41 +49,52 @@ void initializeRobot(void)
 }
 
 /*******************************************************************
-* Function:			void checkOdometry(unsigned char)
+* Function:			void setOdometry( float)
 * Input Variables:	void
-* Output Return:	unsigned char reset resets the odometry
+* Output Return:	float odometry 
+* Overview:		    Sets the odometry to move
+********************************************************************/
+void setOdometry( float odometry )
+{	
+	// Set the gloable odometryTrigger
+	odometryTrigger = odometry;
+	
+	// Set the stepers
+	STEPPER_move_stnb( STEPPER_BOTH, 
+	STEPPER_REV, odometryTrigger, MAX_SPEED, MAX_ACL, STEPPER_BRK_OFF, // Left
+	STEPPER_REV, odometryTrigger, MAX_SPEED, MAX_ACL, STEPPER_BRK_OFF ); // Right
+}
+
+/*******************************************************************
+* Function:			char checkOdometry( char)
+* Input Variables:	char
+* Output Return:	char reset resets the odometry
 * Overview:		    Checks the current odometry to the trigger and
 *					sets the flag whe appropriate
 ********************************************************************/
-void checkOdometry( unsigned char reset )
+char checkOdometry( char reset )
 {	
-	
-	// Update the avrage 
-	float odometry = ((odometryStepL + odometryStepR)/2.0)*D_STEP;
-	// check to see if we have traveresed the trigger distance
-	// or that a reset has been called
-	
-	// AT START: odometry is REALLY SMALL & odometryTrigger is at approx 343
-	// Suggest breaking apart the IF case?
-	if((odometry > odometryTrigger))
-	{
-		odometryFlag = 1;
-		odometryStepL = 0;
-		odometryStepR = 0;
-	}
+	// Check for a reset
 	if (reset){
-		STEPPER_set_steps(STEPPER_BOTH,0);
-		odometryFlag = 0;
-		odometryStepL = 0;
-		odometryStepR = 0;
+		odometryTrigger = 0;
+		STEPPER_set_steps(STEPPER_BOTH,odometryTrigger);
+		return SUCCESS;
 	}
 	
+	// Get the current number of steps
+	curr_step = STEPPER_get_nSteps();
 	
-	
-	// // Else the flag RESETS to ZERO?!
-	// else{
-		// odometryFlag = 0;
-	// }
+	// Check if the sum is zero
+	if((curr_step.left + curr_step.right) == 0)
+	{
+		// if it is zero
+		// then return success
+		return SUCCESS;	
+	}
+
+	// But if not zero
+	//then return fial
+	return FAIL;
 }
 
 /*******************************************************************

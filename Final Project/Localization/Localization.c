@@ -21,8 +21,6 @@
 #define IR_WALL_R_THRESH 15
 #define IR_WALL_L_THRESH 15
 #define IR_WALL_B_THRESH 15
-#define MAX_SPEED 200
-#define WALL_STEP 20
 
 // Gateway Thresholds
 #define FT_GATEWAY 13
@@ -93,6 +91,19 @@ void CBOT_main( void )
 {
 	// initialize the robot
 	initializeRobot();
+	
+	char isDone = 0;
+	setOdometry(WALL_STEP);
+	
+	while(!isDone){
+		checkIR();	
+		checkWorld();
+		isDone = moveWall();
+	}
+	STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
+	
+	while(1){
+	}
 	
 	// Loop variables for print debug
 	unsigned char i, branch, move, orent;
@@ -953,29 +964,21 @@ char moveWall( void )
 {	
 	// Check for walls
 	BOOL isWall = (ftIR < IR_WALL_F_THRESH)|(bkIR < IR_WALL_B_THRESH)|(rtIR < IR_WALL_R_THRESH)|(ltIR < IR_WALL_L_THRESH);
+	// If no walls
+	// Then go straight
 	if(!isWall){
-	
-		// Update odometry
-		curr_step = STEPPER_get_nSteps();
 		
-		if(curr_step.left != 0){
-			odometryStepL += WALL_STEP - curr_step.left;
-		}
-		if(curr_step.right != 0){
-			odometryStepR += WALL_STEP - curr_step.right;
-		}
+		// Update the speeds the same to go forward
+		STEPPER_set_speed(STEPPER_BOTH, MAX_SPEED);
 		
-		STEPPER_set_steps(STEPPER_BOTH,0);
-	
-		// Move with wall
-		STEPPER_move_stnb( STEPPER_BOTH, 
-		STEPPER_REV, WALL_STEP, 200, 450, STEPPER_BRK_OFF, // Left
-		STEPPER_REV, WALL_STEP, 200, 450, STEPPER_BRK_OFF ); // Right
-		return isWall;
+		// Return weather or not we are finished
+		return checkOdometry(NO_RESET);
 	}
+	
 		
 	// A variable that contains the logic of which wall is imaginary
 	BOOL isLEFT;
+	float error;
 	
 	// If there is no wall on our right side
 	// place an imaginary wall just within the threshold
@@ -989,8 +992,6 @@ char moveWall( void )
 		ltIR = IR_WALL_L_THRESH-18;
 		isLEFT = 1;
 	}
-	
-	float error;
 	
 	// Check to see if the wall exists in front of the robot
 	if(ftIR < IR_WALL_F_THRESH)
@@ -1010,7 +1011,7 @@ char moveWall( void )
 	}
 	
 	// If no front facing walls detected
-	// the air is simply the right distance minus the left left distance
+	// the error is simply the right distance minus the left left distance
 	// this ensures symmetry that the robot will follow in between the two walls
 	// either one real and one imaginary, or both real
 	else 
@@ -1030,27 +1031,12 @@ char moveWall( void )
 	float stepper_speed_L = MAX_SPEED/2 + (MAX_SPEED/2)*(effort/MAX_EFFORT);
 	float stepper_speed_R = MAX_SPEED/2 - (MAX_SPEED/2)*(effort/MAX_EFFORT);
 	
-	// Update odometry
-	curr_step = STEPPER_get_nSteps();
+	// Update the speeds the same to move with wall
+	STEPPER_set_speed(STEPPER_LEFT, stepper_speed_L);
+	STEPPER_set_speed(STEPPER_RIGHT, stepper_speed_R);
 	
-	if(curr_step.left != 0){
-		odometryStepL += WALL_STEP - (curr_step.left);
-	}
-	if(curr_step.right != 0){
-		odometryStepR += WALL_STEP - (curr_step.right);
-	}
-	
-	STEPPER_set_steps(STEPPER_BOTH,0);
-	
-	// Move with wall
-	STEPPER_move_stnb( STEPPER_BOTH, 
-	STEPPER_REV, WALL_STEP, stepper_speed_L, 450, STEPPER_BRK_OFF, // Left
-	STEPPER_REV, WALL_STEP, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
-	
-	// debug LCP print statement
-	// LCD_clear();
-	// LCD_printf("bkIR: %3.2f\nmoveWall\nError: %3f\nEffort: %3f\n", bkIR, error, effort);
-	return isWall;
+	// Return weather or not we are finished
+	return checkOdometry(NO_RESET);
 	
 }
 

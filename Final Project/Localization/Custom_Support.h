@@ -76,7 +76,9 @@
 	#define LCD_CELL_OFFSET 8
 	
 	#define MAX_SPEED 200
-	#define WALL_STEP 20
+	#define MAX_ACL	  450
+	#define MAX_SPEED 200
+	#define WALL_STEP 342.42
 
 	#define BYTETOBINARYPATTERN "%d%d%d%d%d%d%d%d"
 	#define BYTETOBINARY(byte)  \
@@ -156,11 +158,8 @@ extern unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE];
 	
 	
 	// odometry values
-	float odometryStepL;
-	float odometryStepR;
-	float odometryTrigger;
-	unsigned char odometryFlag;
 	STEPPER_STEPS curr_step;
+	float odometryTrigger;
 
 
 	/** Local Function Prototypes **************************************/
@@ -177,6 +176,7 @@ extern unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE];
 	void LCD_set_pixel(unsigned char row, unsigned char col, BOOL val);
 	void printCell(unsigned char, unsigned char, unsigned char, BOOL, unsigned char, BOOL);
 	void printMap(char);
-	void checkOdometry(unsigned char);
+	char checkOdometry( char);
+	void setOdometry( float );
 
 #endif
