@@ -75,6 +75,11 @@
 	#define LCD_OFFSET 31
 	#define LCD_CELL_OFFSET 8
 	
+	// Wall Following Threshold
+	#define IR_WALL_F_THRESH 0
+	#define IR_WALL_R_THRESH 15
+	#define IR_WALL_L_THRESH 15
+	#define IR_WALL_B_THRESH 15	
 	#define MAX_SPEED 200
 	#define MAX_ACL	  450
 	#define MAX_SPEED 200
@@ -178,5 +183,7 @@ extern unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE];
 	void printMap(char);
 	char checkOdometry( char);
 	void setOdometry( float );
+	void moveCell( void );
+	char moveWall(void);
 
 #endif

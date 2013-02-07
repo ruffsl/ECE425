@@ -16,12 +16,6 @@
 
 /** Define Constants Here ******************************************/
 
-// Wall Following Threshold
-#define IR_WALL_F_THRESH 0
-#define IR_WALL_R_THRESH 15
-#define IR_WALL_L_THRESH 15
-#define IR_WALL_B_THRESH 15
-
 // Gateway Thresholds
 #define FT_GATEWAY 13
 #define BK_GATEWAY 35
@@ -36,7 +30,6 @@
 
 /** Local Function Prototypes **************************************/
 // Locomotion Primitives
-char moveWall(void);
 char moveWallOld(void);
 
 // User Inputs
@@ -91,20 +84,7 @@ void CBOT_main( void )
 {
 	// initialize the robot
 	initializeRobot();
-	
-	char isDone = 0;
-	setOdometry(WALL_STEP);
-	
-	while(!isDone){
-		checkIR();	
-		checkWorld();
-		isDone = moveWall();
-	}
-	STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
-	
-	while(1){
-	}
-	
+		
 	// Loop variables for print debug
 	unsigned char i, branch, move, orent;
 	
@@ -112,7 +92,7 @@ void CBOT_main( void )
 	LCD_clear();
 	LCD_printf("      New Map\n\n\n\n");
 	printMap(RESET);
-	TMRSRVC_delay(1000);//wait 1 seconds
+	TMRSRVC_delay(2000);//wait 1 seconds
 	LCD_clear();
 	
 	// Localization Loop 
@@ -147,7 +127,7 @@ void CBOT_main( void )
 		}
 		LCD_printf("isLost %1d ",isLost);
 		LCD_printf("seeds: %1d", matchSeeds);
-		TMRSRVC_delay(2000);//wait 3 seconds
+		TMRSRVC_delay(4000);//wait 3 seconds
 		
 		//Act on the Gateway
 		moveMap();
@@ -534,19 +514,13 @@ void planMap( void )
 * Overview:		    moves the robot through the map
 ********************************************************************/
 void moveMap( void )
-{	
+{		
 	switch(currentMove){
 		case MOVE_LEFT:
-				move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
+			move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
 			break;
 		case MOVE_FORWARD:
-			// checkOdometry(1);
-			// while(!odometryFlag){
-				// moveWall();
-				// checkOdometry(0);
-			// }
-			
-			move_arc_stwt(NO_TURN, 45, 10, 10, 0);
+			moveCell();
 			break;
 		case MOVE_RIGHT:
 			move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
@@ -950,94 +924,6 @@ char moveWorld( void )
 	// TMRSRVC_delay(1000);//wait 1 seconds
 	oldMove = currentMove;
 	return 1;
-}
-
-/*******************************************************************
-* Function:			char moveWall(void)
-* Input Variables:	void
-* Output Return:	char
-* Overview:			This function searches for walls and adjust the 
-*					robots differential steering to attempts to
-*					follow them
-********************************************************************/
-char moveWall( void )
-{	
-	// Check for walls
-	BOOL isWall = (ftIR < IR_WALL_F_THRESH)|(bkIR < IR_WALL_B_THRESH)|(rtIR < IR_WALL_R_THRESH)|(ltIR < IR_WALL_L_THRESH);
-	// If no walls
-	// Then go straight
-	if(!isWall){
-		
-		// Update the speeds the same to go forward
-		STEPPER_set_speed(STEPPER_BOTH, MAX_SPEED);
-		
-		// Return weather or not we are finished
-		return checkOdometry(NO_RESET);
-	}
-	
-		
-	// A variable that contains the logic of which wall is imaginary
-	BOOL isLEFT;
-	float error;
-	
-	// If there is no wall on our right side
-	// place an imaginary wall just within the threshold
-	if(rtIR>IR_WALL_R_THRESH){
-		rtIR = IR_WALL_R_THRESH-18;
-		isLEFT = 0;
-	}
-	// If there is no wall on our left side
-	// place an imaginary wall just within the threshold
-	if(ltIR>IR_WALL_L_THRESH){
-		ltIR = IR_WALL_L_THRESH-18;
-		isLEFT = 1;
-	}
-	
-	// Check to see if the wall exists in front of the robot
-	if(ftIR < IR_WALL_F_THRESH)
-	{
-		// if the imaginary wall was on the left side
-		// then biased the error so that when the robot encounters
-		// an upcoming corner, the robot will turn away from both walls
-		if (isLEFT)
-		{
-			error = rtIR - (ltIR + (1000/ftIR));
-		}
-		// biased the error appropriately for the inverse situation
-		else 
-		{
-			error = rtIR - (ltIR - (1000/ftIR));
-		}
-	}
-	
-	// If no front facing walls detected
-	// the error is simply the right distance minus the left left distance
-	// this ensures symmetry that the robot will follow in between the two walls
-	// either one real and one imaginary, or both real
-	else 
-	{
-		error = rtIR - ltIR;
-	}
-
-	// Use the PID controller function to calculate error
-	float effort = pidController(-error, 0);
-	
-	// Limit the control effort to the max allowable effort
-	if((abs(effort) > MAX_EFFORT)&(effort!=0)){
-		effort = MAX_EFFORT*(effort/abs(effort));
-	}
-	
-	// Calculate the stepper speeds for each wheel using a ratio
-	float stepper_speed_L = MAX_SPEED/2 + (MAX_SPEED/2)*(effort/MAX_EFFORT);
-	float stepper_speed_R = MAX_SPEED/2 - (MAX_SPEED/2)*(effort/MAX_EFFORT);
-	
-	// Update the speeds the same to move with wall
-	STEPPER_set_speed(STEPPER_LEFT, stepper_speed_L);
-	STEPPER_set_speed(STEPPER_RIGHT, stepper_speed_R);
-	
-	// Return weather or not we are finished
-	return checkOdometry(NO_RESET);
-	
 }
 
 /*******************************************************************
