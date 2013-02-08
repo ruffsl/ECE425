@@ -184,10 +184,12 @@ void CBOT_main( void )
 	TMRSRVC_delay(10000);//wait 10 seconds
 	LCD_clear();
 	
+	
+	currentCellWorld = 0b0000;
+	currentGoalWorld = 0b1111;
+	
 	// Make metric map
 	wavefrontMake();
-	
-	currentGoalWorld = 12;
 	
 	while(!isGoal){
 	
