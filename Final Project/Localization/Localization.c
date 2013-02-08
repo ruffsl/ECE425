@@ -16,6 +16,14 @@
 
 /** Define Constants Here ******************************************/
 
+// Wall Following Threshold
+#define IR_WALL_F_THRESH 0
+#define IR_WALL_R_THRESH 15
+#define IR_WALL_L_THRESH 15
+#define IR_WALL_B_THRESH 15
+#define MAX_SPEED 200
+#define WALL_STEP 20
+
 // Gateway Thresholds
 #define FT_GATEWAY 13
 #define BK_GATEWAY 35
@@ -30,6 +38,7 @@
 
 /** Local Function Prototypes **************************************/
 // Locomotion Primitives
+char moveWall(void);
 char moveWallOld(void);
 
 // User Inputs
@@ -45,6 +54,10 @@ char moveWorld(void);
 void getGateways(void);
 void setGateways(void);
 
+void wavefrontMake(void);
+unsigned char fourNeighborSearch(unsigned char);
+void planMetric(void);
+
 // Mapping Tools
 void planMap(void);
 void moveMap(void);
@@ -55,6 +68,7 @@ void planGateway(void);
 char localizeGateway(void);
 char matchBranch(unsigned char *, unsigned char, unsigned char);
 
+
 /** Global Variables ***********************************************/
 
 // moveBehavior Global Flag Variables
@@ -63,6 +77,8 @@ char oldMove;
 char isMapping;
 char isLost = 1;
 unsigned char matchSeeds;
+unsigned char isGoal;
+
 
 unsigned char localizeGateways[BRANCH_TYPES][BRANCH_MAX] = {{0,0,0,0,0},
 															{0,0,0,0,0},
@@ -75,6 +91,14 @@ unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] = 	{
 																{0b0001, 0b1010, 0b1010, 0b0100}, 
 																{0b0111, 0b1111, 0b1111, 0b0111}
 																};
+																
+unsigned char ROBOT_METRIC_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] =	
+																{
+																{0,0,0,0},
+																{0,0,0,0},
+																{0,0,0,0},
+																{0,0,0,0}
+																};
 
 /*******************************************************************
 * Function:        void CBOT_main( void )
@@ -84,7 +108,7 @@ void CBOT_main( void )
 {
 	// initialize the robot
 	initializeRobot();
-		
+	
 	// Loop variables for print debug
 	unsigned char i, branch, move, orent;
 	
@@ -92,7 +116,7 @@ void CBOT_main( void )
 	LCD_clear();
 	LCD_printf("      New Map\n\n\n\n");
 	printMap(RESET);
-	TMRSRVC_delay(2000);//wait 1 seconds
+	TMRSRVC_delay(1000);//wait 1 seconds
 	LCD_clear();
 	
 	// Localization Loop 
@@ -127,7 +151,7 @@ void CBOT_main( void )
 		}
 		LCD_printf("isLost %1d ",isLost);
 		LCD_printf("seeds: %1d", matchSeeds);
-		TMRSRVC_delay(4000);//wait 3 seconds
+		TMRSRVC_delay(2000);//wait 3 seconds
 		
 		//Act on the Gateway
 		moveMap();
@@ -160,6 +184,32 @@ void CBOT_main( void )
 	TMRSRVC_delay(10000);//wait 10 seconds
 	LCD_clear();
 	
+	// Make metric map
+	wavefrontMake();
+	
+	currentGoalWorld = 12;
+	
+	while(!isGoal){
+	
+		// Find the next orentation
+		isGoal = fourNeighborSearch(currentCellWorld);
+		if(isGoal){
+			break;
+		}
+		
+		// Plan using metric map and next orientation
+		planMetric();
+		
+		// Act on the move
+		moveMap();
+		
+		// Shift the map
+		currentCellWorld = shiftMap(currentCellWorld, currentMove, currentOrientation);
+	}
+	
+	LCD_clear();
+	LCD_printf("LOLZ\nI'm here!");
+	TMRSRVC_delay(5000);//wait 3 seconds
 	
 	/**
 	// Enter the robot's current (starting) position
@@ -290,6 +340,310 @@ void CBOT_main( void )
 * Additional Helper Functions
 ********************************************************************/
 
+/*******************************************************************
+* Function:			unsigned char fourNeighborSearch(unsigned char)
+* Input Variables:	the robot's current position
+* Output Return:	unsigned char
+* Overview:			searches the four-neighboring cells in the 
+*					wavefront map
+********************************************************************/
+unsigned char fourNeighborSearch(unsigned char curCell)
+{	
+	
+	// Get the cell current row and column
+	unsigned char curRow = (curCell>>2);
+	unsigned char curCol = (curCell&0b0011);
+	
+	// If our current cell is 0
+	// then we have reached our goal
+	if( ROBOT_METRIC_WORLD[curRow][curCol] == 0){
+		return SUCCESS;
+	}
+	
+	// Make some initial variables
+	unsigned char minVal;
+	unsigned char topVal,leftVal,botVal,rightVal;
+	unsigned char minInd;
+
+	
+	// Reset minInd value and minNeighbor
+	minVal = 0;
+	minInd = 0;
+	
+	// Perform a 4-neighbor search and store the lowest value
+	// Robot in four-corners (2-neighbors to worry about)
+	
+	// Top-left corner
+	if(curCell==0b0000){
+		rightVal = ROBOT_METRIC_WORLD[curRow][curCol+1];
+		botVal = ROBOT_METRIC_WORLD[curRow+1][curCol];
+		if(rightVal<botVal){
+			minVal=rightVal;
+			nextOrientation = EAST;
+		}
+		else{
+			minVal=botVal;
+			nextOrientation = SOUTH;
+		}
+	}
+	
+	// Top-right corner
+	if(curCell==0b0011){
+		leftVal = ROBOT_METRIC_WORLD[curRow][curCol-1];
+		botVal = ROBOT_METRIC_WORLD[curRow+1][curCol];
+		if(leftVal<botVal){
+			minVal=leftVal;
+			nextOrientation = WEST;
+		}
+		else{
+			minVal=botVal;
+			nextOrientation = SOUTH;
+		}
+	}
+	
+	// Bottom-left corner
+	if(curCell==0b1100){
+		rightVal = ROBOT_METRIC_WORLD[curRow][curCol+1];
+		topVal = ROBOT_METRIC_WORLD[curRow-1][curCol];
+		if(rightVal<topVal){
+			minVal=rightVal;
+			nextOrientation = EAST;
+		}
+		else{
+			minVal=topVal;
+			nextOrientation = NORTH;
+		}
+	}
+	
+	// Bottom-right corner
+	if(curCell==0b1111){
+		leftVal = ROBOT_METRIC_WORLD[curRow][curCol-1];
+		topVal = ROBOT_METRIC_WORLD[curRow-1][curCol];
+		if(leftVal<topVal){
+			minVal=leftVal;
+			nextOrientation = WEST;
+		}
+		else{
+			minVal=topVal;
+			nextOrientation = NORTH;
+		}
+	}
+	
+	// Robot on top boundary of world (row = 0)
+	else if(curRow == 0){
+		leftVal = ROBOT_METRIC_WORLD[curRow][curCol-1];
+		rightVal = ROBOT_METRIC_WORLD[curRow][curCol+1];
+		botVal = ROBOT_METRIC_WORLD[curRow+1][curCol];
+		if((leftVal<rightVal)&&(leftVal<botVal)){
+			minVal = leftVal;
+			nextOrientation = WEST;
+		}
+		if((rightVal<leftVal)&&(rightVal<botVal)){
+			minVal = rightVal;
+			nextOrientation = EAST;
+		}
+		else{
+			minVal = botVal;
+			nextOrientation = SOUTH;
+		}
+		
+	}
+	
+	// Robot on left boundary of world (col = 0)
+	else if(curCol == 0){
+		rightVal = ROBOT_METRIC_WORLD[curRow][curCol+1];
+		botVal = ROBOT_METRIC_WORLD[curRow+1][curCol];
+		topVal = ROBOT_METRIC_WORLD[curRow-1][curCol];
+		if((rightVal<botVal)&&(rightVal<topVal)){
+			minVal = rightVal;
+			nextOrientation = EAST;
+		}
+		if((botVal<rightVal)&&(botVal<topVal)){
+			minVal = botVal;
+			nextOrientation = SOUTH;
+		}
+		else{
+			minVal = topVal;
+			nextOrientation = NORTH;
+		}
+	}
+	
+	// Robot on bottom boundary of world (row = 3)
+	else if(curRow == 3){
+		leftVal = ROBOT_METRIC_WORLD[curRow][curCol-1];
+		rightVal = ROBOT_METRIC_WORLD[curRow][curCol+1];
+		topVal = ROBOT_METRIC_WORLD[curRow-1][curCol];
+		if((leftVal<rightVal)&&(leftVal<topVal)){
+			minVal = leftVal;
+			return minInd=WORLD_CELL[curRow][curCol-1];
+		}
+		if((rightVal<leftVal)&&(rightVal<topVal)){
+			minVal = rightVal;
+			return minInd=WORLD_CELL[curRow][curCol+1];
+		}
+		else{
+			minVal = topVal;
+			return minInd=WORLD_CELL[curRow-1][curCol]; 
+		}
+	}
+	
+	// Robot on right boundary of world (col = 3)
+	else if(curCol == 3){
+		leftVal = ROBOT_METRIC_WORLD[curRow][curCol-1];
+		topVal = ROBOT_METRIC_WORLD[curRow-1][curCol];
+		botVal = ROBOT_METRIC_WORLD[curRow+1][curCol];
+		if((leftVal<topVal)&&(leftVal<botVal)){
+			minVal = leftVal;
+			nextOrientation = WEST;
+		}
+		if((topVal<leftVal)&&(topVal<botVal)){
+			minVal = topVal;
+			nextOrientation = NORTH;
+		}
+		else{
+			minVal = botVal;
+			nextOrientation = SOUTH;
+		}
+	}
+	
+	// // Else the robot is inside the world with four-neighboring cells
+	else{
+		topVal = ROBOT_METRIC_WORLD[curRow-1][curCol];
+		leftVal = ROBOT_METRIC_WORLD[curRow][curCol-1];
+		botVal = ROBOT_METRIC_WORLD[curRow+1][curCol];
+		rightVal = ROBOT_METRIC_WORLD[curRow][curCol+1];
+		if((topVal<leftVal)&&(topVal<botVal)&&(topVal<rightVal)){
+			minVal = topVal;
+			nextOrientation = NORTH;
+		}
+		if((leftVal<topVal)&&(leftVal<botVal)&&(leftVal<rightVal)){
+			minVal = leftVal;
+			nextOrientation = WEST;
+		}
+		if((botVal<topVal)&&(botVal<leftVal)&&(botVal<rightVal)){
+			minVal = botVal;
+			nextOrientation = SOUTH;
+		}
+		else{
+			minVal = rightVal;
+			nextOrientation = EAST;
+		}
+	}
+	
+	return FAIL;
+}
+
+/*******************************************************************
+* Function:			void planMetric(void)
+* Input Variables:	none
+* Output Return:	none
+* Overview:			Moves around the map using metric navigation
+********************************************************************/
+void planMetric (void)
+{
+	switch(currentOrientation){
+		case NORTH:
+			switch(nextOrientation){
+				case NORTH:
+					currentMove = MOVE_FORWARD; break;
+				case EAST:
+					currentMove = MOVE_RIGHT; break;
+				case SOUTH:
+					currentMove = MOVE_LEFT; break;
+				case WEST:
+					currentMove = MOVE_LEFT; break;
+				default:
+					LCD_printf("Whatz5?!"); break;
+			}
+			break;
+		case EAST:
+			switch(nextOrientation){
+				case NORTH:
+					currentMove = MOVE_LEFT; break;
+				case EAST:
+					currentMove = MOVE_FORWARD; break;
+				case SOUTH:
+					currentMove = MOVE_RIGHT; break;
+				case WEST:
+					currentMove = MOVE_LEFT; break;
+				default:
+					LCD_printf("Whatz5?!"); break;
+			}
+			break;
+		case SOUTH:
+			switch(nextOrientation){
+				case NORTH:
+					currentMove = MOVE_LEFT; break;
+				case EAST:
+					currentMove = MOVE_LEFT; break;
+				case SOUTH:
+					currentMove = MOVE_FORWARD; break;
+				case WEST:
+					currentMove = MOVE_RIGHT; break;
+				default:
+					LCD_printf("Whatz5?!"); break;
+			}
+			break;
+		case WEST:
+			switch(nextOrientation){
+				case NORTH:
+					currentMove = MOVE_RIGHT; break;
+				case EAST:
+					currentMove = MOVE_LEFT; break;
+				case SOUTH:
+					currentMove = MOVE_LEFT; break;
+				case WEST:
+					currentMove = MOVE_FORWARD; break;
+				default:
+					LCD_printf("Whatz5?!"); break;
+			}
+			break;
+		default:
+			LCD_printf("Whatz5?!"); break;
+	}
+}
+
+/*******************************************************************
+* Function:			void wavefrontMake(unsigned char)
+* Input Variables:	unsigned char
+* Output Return:	void
+* Overview:			Makes the wavefront metric map to goal location
+*					from current location 
+********************************************************************/
+void wavefrontMake(void)
+{
+	// User-defined goal location
+	// unsigned char goalLocation = currentGoalWorld;
+	// Extract x and y goal location
+	int rowGoal = (currentGoalWorld>>2);
+	int colGoal = (currentGoalWorld&0b0011);
+	// Declare some variables and initialize a distance 
+	unsigned int rowDelta, colDelta;
+	int row, col;
+	int distance = 0;
+	
+	// For every cell in the world
+	for(row = 0; row < WORLD_ROW_SIZE; row++)
+	{
+		for(col = 0; col < WORLD_COLUMN_SIZE; col++)
+		{
+			// for cells with 4 walls, set metric map vaule to 99
+			if(ROBOT_WORLD[row][col] == 0b1111){
+				ROBOT_METRIC_WORLD[row][col] = 99;
+			}
+			// for all other cells compute the distance
+			else{
+				// compute the differences in rows and columns
+				rowDelta = abs((WORLD_CELL[row][col]>>2) - rowGoal);
+				colDelta = abs((WORLD_CELL[row][col]&0b0011) - colGoal);
+				// compute the distance without using sqrt
+				distance = ((rowDelta*rowDelta)+(colDelta*colDelta));
+				// overwrite the cells in the metric map to the actual distance values
+				ROBOT_METRIC_WORLD[row][col] = distance;
+			}
+		}
+	}
+}
 
 /*******************************************************************
 * Function:			char matchBranch(unsigned char *ptROBOT_WORLD, unsigned char row, unsigned char col)
@@ -514,13 +868,19 @@ void planMap( void )
 * Overview:		    moves the robot through the map
 ********************************************************************/
 void moveMap( void )
-{		
+{	
 	switch(currentMove){
 		case MOVE_LEFT:
-			move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
+				move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
 			break;
 		case MOVE_FORWARD:
-			moveCell();
+			// checkOdometry(1);
+			// while(!odometryFlag){
+				// moveWall();
+				// checkOdometry(0);
+			// }
+			
+			move_arc_stwt(NO_TURN, 45, 10, 10, 0);
 			break;
 		case MOVE_RIGHT:
 			move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
@@ -924,6 +1284,119 @@ char moveWorld( void )
 	// TMRSRVC_delay(1000);//wait 1 seconds
 	oldMove = currentMove;
 	return 1;
+}
+
+/*******************************************************************
+* Function:			char moveWall(void)
+* Input Variables:	void
+* Output Return:	char
+* Overview:			This function searches for walls and adjust the 
+*					robots differential steering to attempts to
+*					follow them
+********************************************************************/
+char moveWall( void )
+{	
+	// Check for walls
+	BOOL isWall = (ftIR < IR_WALL_F_THRESH)|(bkIR < IR_WALL_B_THRESH)|(rtIR < IR_WALL_R_THRESH)|(ltIR < IR_WALL_L_THRESH);
+	if(!isWall){
+	
+		// Update odometry
+		curr_step = STEPPER_get_nSteps();
+		
+		if(curr_step.left != 0){
+			odometryStepL += WALL_STEP - curr_step.left;
+		}
+		if(curr_step.right != 0){
+			odometryStepR += WALL_STEP - curr_step.right;
+		}
+		
+		STEPPER_set_steps(STEPPER_BOTH,0);
+	
+		// Move with wall
+		STEPPER_move_stnb( STEPPER_BOTH, 
+		STEPPER_REV, WALL_STEP, 200, 450, STEPPER_BRK_OFF, // Left
+		STEPPER_REV, WALL_STEP, 200, 450, STEPPER_BRK_OFF ); // Right
+		return isWall;
+	}
+		
+	// A variable that contains the logic of which wall is imaginary
+	BOOL isLEFT;
+	
+	// If there is no wall on our right side
+	// place an imaginary wall just within the threshold
+	if(rtIR>IR_WALL_R_THRESH){
+		rtIR = IR_WALL_R_THRESH-18;
+		isLEFT = 0;
+	}
+	// If there is no wall on our left side
+	// place an imaginary wall just within the threshold
+	if(ltIR>IR_WALL_L_THRESH){
+		ltIR = IR_WALL_L_THRESH-18;
+		isLEFT = 1;
+	}
+	
+	float error;
+	
+	// Check to see if the wall exists in front of the robot
+	if(ftIR < IR_WALL_F_THRESH)
+	{
+		// if the imaginary wall was on the left side
+		// then biased the error so that when the robot encounters
+		// an upcoming corner, the robot will turn away from both walls
+		if (isLEFT)
+		{
+			error = rtIR - (ltIR + (1000/ftIR));
+		}
+		// biased the error appropriately for the inverse situation
+		else 
+		{
+			error = rtIR - (ltIR - (1000/ftIR));
+		}
+	}
+	
+	// If no front facing walls detected
+	// the air is simply the right distance minus the left left distance
+	// this ensures symmetry that the robot will follow in between the two walls
+	// either one real and one imaginary, or both real
+	else 
+	{
+		error = rtIR - ltIR;
+	}
+
+	// Use the PID controller function to calculate error
+	float effort = pidController(-error, 0);
+	
+	// Limit the control effort to the max allowable effort
+	if((abs(effort) > MAX_EFFORT)&(effort!=0)){
+		effort = MAX_EFFORT*(effort/abs(effort));
+	}
+	
+	// Calculate the stepper speeds for each wheel using a ratio
+	float stepper_speed_L = MAX_SPEED/2 + (MAX_SPEED/2)*(effort/MAX_EFFORT);
+	float stepper_speed_R = MAX_SPEED/2 - (MAX_SPEED/2)*(effort/MAX_EFFORT);
+	
+	// Update odometry
+	curr_step = STEPPER_get_nSteps();
+	
+	if(curr_step.left != 0){
+		odometryStepL += WALL_STEP - (curr_step.left);
+	}
+	if(curr_step.right != 0){
+		odometryStepR += WALL_STEP - (curr_step.right);
+	}
+	
+	STEPPER_set_steps(STEPPER_BOTH,0);
+	
+	// Move with wall
+	STEPPER_move_stnb( STEPPER_BOTH, 
+	STEPPER_REV, WALL_STEP, stepper_speed_L, 450, STEPPER_BRK_OFF, // Left
+	STEPPER_REV, WALL_STEP, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
+	
+	// debug LCP print statement
+	// LCD_clear();
+	// LCD_printf("bkIR: %3.2f\nmoveWall\nError: %3f\nEffort: %3f\n", bkIR, error, effort);
+	return isWall;
+	
 }
 
 /*******************************************************************
