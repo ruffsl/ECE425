@@ -58,8 +58,8 @@ void setOdometry( float odometry )
 
 	// Set the stepers
 	STEPPER_move_stnb( STEPPER_BOTH, 
-	STEPPER_REV, odometryTrigger, MAX_SPEED, MAX_ACL, STEPPER_BRK_OFF, // Left
-	STEPPER_REV, odometryTrigger, MAX_SPEED, MAX_ACL, STEPPER_BRK_OFF ); // Right
+	STEPPER_REV, odometryTrigger, MAX_SPEED_STEP, MAX_ACL_STEP, STEPPER_BRK_OFF, // Left
+	STEPPER_REV, odometryTrigger, MAX_SPEED_STEP, MAX_ACL_STEP, STEPPER_BRK_OFF ); // Right
 }
 
 /*******************************************************************
@@ -608,7 +608,7 @@ char moveWall( void )
 	if(!isWall){
 	
 		// Update the speeds the same to go forward
-		STEPPER_set_speed(STEPPER_BOTH, MAX_SPEED);
+		STEPPER_set_speed(STEPPER_BOTH, MAX_SPEED_STEP);
 	
 		// Return weather or not we are finished
 		return checkOdometry(NO_RESET);
@@ -667,8 +667,8 @@ char moveWall( void )
 	}
 	
 	// Calculate the stepper speeds for each wheel using a ratio
-	float stepper_speed_L = MAX_SPEED/2 + (MAX_SPEED/2)*(effort/MAX_EFFORT);
-	float stepper_speed_R = MAX_SPEED/2 - (MAX_SPEED/2)*(effort/MAX_EFFORT);
+	float stepper_speed_L = MAX_SPEED_STEP/2 + (MAX_SPEED_STEP/2)*(effort/MAX_EFFORT);
+	float stepper_speed_R = MAX_SPEED_STEP/2 - (MAX_SPEED_STEP/2)*(effort/MAX_EFFORT);
 	
 	// Update the speeds the same to move with wall
 	STEPPER_set_speed(STEPPER_LEFT, stepper_speed_L);

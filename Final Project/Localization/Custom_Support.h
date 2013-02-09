@@ -51,13 +51,14 @@
 	#define MOVE_FORWARD 2
 	#define MOVE_RIGHT 3
 	#define MOVE_STOP 4
+	#define BRAKE_DELAY 50
 
 	// PID Control Gains
 	// Note: these current values are adjusted for control cycles times
 	// including LCD debug print statements, but not for prefilter
-	#define KP 1
+	#define KP 1.0
 	#define KI 0
-	#define KD 0
+	#define KD .1
 		
 	// Maximum Magnitude Control Effort
 	#define MAX_EFFORT 100
@@ -85,9 +86,9 @@
 	#define LCD_OFFSET 31
 	#define LCD_CELL_OFFSET 8
 	
-	#define MAX_SPEED 400
- 	#define MAX_ACL   450
-	#define WALL_STEP 342.42
+	#define MAX_SPEED_STEP 500
+ 	#define MAX_ACL_STEP   500
+	#define WALL_STEP 300
 
 	#define BYTETOBINARYPATTERN "%d%d%d%d%d%d%d%d"
 	#define BYTETOBINARY(byte)  \
