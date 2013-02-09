@@ -109,58 +109,58 @@ void CBOT_main( void )
 	// initialize the robot
 	initializeRobot();
 	
-	// Loop variables for print debug
-	unsigned char i, branch, move, orent;
+	// // Loop variables for print debug
+	// unsigned char i, branch, move, orent;
 	
-	// Display the map
-	LCD_clear();
-	LCD_printf("      New Map\n\n\n\n");
-	printMap(RESET);
-	TMRSRVC_delay(1000);//wait 1 seconds
-	LCD_clear();
+	// // Display the map
+	// LCD_clear();
+	// LCD_printf("      New Map\n\n\n\n");
+	// printMap(RESET);
+	// TMRSRVC_delay(1000);//wait 1 seconds
+	// LCD_clear();
 	
-	// Localization Loop 
-	while(isLost)
-	{	
-		//Sense Gateway
-		checkIR();	
-		checkWorld();
+	// // Localization Loop 
+	// while(isLost)
+	// {	
+		// //Sense Gateway
+		// checkIR();	
+		// checkWorld();
 		
-		//Plan using the Gateway
-		planGateway();
+		// //Plan using the Gateway
+		// planGateway();
 		
-		//Localize from Gateways?
-		isLost = localizeGateway();
+		// //Localize from Gateways?
+		// isLost = localizeGateway();
 				
-		//Print Tree		
-		LCD_clear();
-		LCD_printf("Branch");
-		for(i = 0; i<BRANCH_MAX; i++){
-			branch = localizeGateways[0][i];
-			LCD_printf("%3d", branch);
-		}
-		LCD_printf("Move  ");
-		for(i = 0; i<BRANCH_MAX; i++){
-			move = localizeGateways[1][i];
-			LCD_printf("%3d", move);
-		}
-		LCD_printf("Ornt  ");
-		for(i = 0; i<BRANCH_MAX; i++){
-			orent = localizeGateways[2][i];
-			LCD_printf("%3d", orent);
-		}
-		LCD_printf("isLost %1d ",isLost);
-		LCD_printf("seeds: %1d", matchSeeds);
-		TMRSRVC_delay(2000);//wait 3 seconds
+		// //Print Tree		
+		// LCD_clear();
+		// LCD_printf("Branch");
+		// for(i = 0; i<BRANCH_MAX; i++){
+			// branch = localizeGateways[0][i];
+			// LCD_printf("%3d", branch);
+		// }
+		// LCD_printf("Move  ");
+		// for(i = 0; i<BRANCH_MAX; i++){
+			// move = localizeGateways[1][i];
+			// LCD_printf("%3d", move);
+		// }
+		// LCD_printf("Ornt  ");
+		// for(i = 0; i<BRANCH_MAX; i++){
+			// orent = localizeGateways[2][i];
+			// LCD_printf("%3d", orent);
+		// }
+		// LCD_printf("isLost %1d ",isLost);
+		// LCD_printf("seeds: %1d", matchSeeds);
+		// TMRSRVC_delay(2000);//wait 3 seconds
 		
-		//Act on the Gateway
-		moveMap();
+		// //Act on the Gateway
+		// moveMap();
 		
-		// Break if not isLost
-		if(!isLost){
-			break;
-		}
-	}
+		// // Break if not isLost
+		// if(!isLost){
+			// break;
+		// }
+	// }
 	
 	
 
@@ -174,15 +174,15 @@ void CBOT_main( void )
 	}
 	**/
 	
-	LCD_clear();
-	LCD_printf("LOLZ\nI'm found!");
-	TMRSRVC_delay(3000);//wait 3 seconds
+	// LCD_clear();
+	// LCD_printf("LOLZ\nI'm found!");
+	// TMRSRVC_delay(3000);//wait 3 seconds
 	
-	LCD_clear();
-	LCD_printf("      New Map\n\n\n\n");
-	printMap(RESET);
-	TMRSRVC_delay(10000);//wait 10 seconds
-	LCD_clear();
+	// LCD_clear();
+	// LCD_printf("      New Map\n\n\n\n");
+	// printMap(RESET);
+	// TMRSRVC_delay(10000);//wait 10 seconds
+	// LCD_clear();
 	
 	
 	currentCellWorld = 0b0000;
@@ -193,10 +193,63 @@ void CBOT_main( void )
 	
 	while(!isGoal){
 	
+		LCD_clear();
+		switch(currentOrientation){
+			case NORTH:
+				LCD_printf("CurtOrent:NORTH\n");
+				break;
+			case EAST:
+				LCD_printf("CurtOrent:EAST\n");
+				break;
+			case SOUTH:
+				LCD_printf("CurtOrent:SOUTH\n");
+				break;
+			case WEST:
+				LCD_printf("CurtOrent:WEST\n");
+				break;
+			default:
+				break;
+		}
+	
 		// Find the next orentation
 		isGoal = fourNeighborSearch(currentCellWorld);
 		if(isGoal){
 			break;
+		}
+		
+		// if(nextOrientation != SOUTH){
+			// break;
+		// }
+				
+		switch(nextOrientation){
+			case NORTH:
+				LCD_printf("NextOrent:NORTH\n");
+				break;
+			case EAST:
+				LCD_printf("NextOrent:EAST\n");
+				break;
+			case SOUTH:
+				LCD_printf("NextOrent:SOUTH\n");
+				break;
+			case WEST:
+				LCD_printf("NextOrent:WEST\n");
+				break;
+			default:
+				break;
+		}
+		
+		switch(currentMove){
+			case MOVE_LEFT:
+				LCD_printf("CurMOVE:LEFT\n");
+				break;
+			case MOVE_RIGHT:
+				LCD_printf("CurMOVE:RIGHT\n");
+				break;
+			case MOVE_FORWARD:
+				LCD_printf("CurMOVE:FORWARD\n");
+				break;
+			default:
+				break;
 		}
 		
 		// Plan using metric map and next orientation
@@ -207,6 +260,7 @@ void CBOT_main( void )
 		
 		// Shift the map
 		currentCellWorld = shiftMap(currentCellWorld, currentMove, currentOrientation);
+		// TMRSRVC_delay(2000);//wait 1 seconds
 	}
 	
 	LCD_clear();
@@ -363,172 +417,61 @@ unsigned char fourNeighborSearch(unsigned char curCell)
 	}
 	
 	// Make some initial variables
-	unsigned char minVal;
-	unsigned char topVal,leftVal,botVal,rightVal;
-	unsigned char minInd;
-
-	
 	// Reset minInd value and minNeighbor
-	minVal = 0;
-	minInd = 0;
+	unsigned char minVal = 100;
+	unsigned char curVal = 0;
 	
 	// Perform a 4-neighbor search and store the lowest value
-	// Robot in four-corners (2-neighbors to worry about)
 	
-	// Top-left corner
-	if(curCell==0b0000){
-		rightVal = ROBOT_METRIC_WORLD[curRow][curCol+1];
-		botVal = ROBOT_METRIC_WORLD[curRow+1][curCol];
-		if(rightVal<botVal){
-			minVal=rightVal;
-			nextOrientation = EAST;
-		}
-		else{
-			minVal=botVal;
-			nextOrientation = SOUTH;
-		}
-	}
-	
-	// Top-right corner
-	if(curCell==0b0011){
-		leftVal = ROBOT_METRIC_WORLD[curRow][curCol-1];
-		botVal = ROBOT_METRIC_WORLD[curRow+1][curCol];
-		if(leftVal<botVal){
-			minVal=leftVal;
-			nextOrientation = WEST;
-		}
-		else{
-			minVal=botVal;
-			nextOrientation = SOUTH;
-		}
-	}
-	
-	// Bottom-left corner
-	if(curCell==0b1100){
-		rightVal = ROBOT_METRIC_WORLD[curRow][curCol+1];
-		topVal = ROBOT_METRIC_WORLD[curRow-1][curCol];
-		if(rightVal<topVal){
-			minVal=rightVal;
-			nextOrientation = EAST;
-		}
-		else{
-			minVal=topVal;
+	// LCD_clear();
+	//Check the north cell
+	curRow--;
+	if((curRow)<WORLD_ROW_SIZE){
+		curVal = ROBOT_METRIC_WORLD[(curRow)][curCol];
+		// LCD_printf("NORTH curVal: %i\n",curVal);
+		// TMRSRVC_delay(1000);
+		if(curVal<minVal){
+			minVal = curVal;
 			nextOrientation = NORTH;
 		}
 	}
 	
-	// Bottom-right corner
-	if(curCell==0b1111){
-		leftVal = ROBOT_METRIC_WORLD[curRow][curCol-1];
-		topVal = ROBOT_METRIC_WORLD[curRow-1][curCol];
-		if(leftVal<topVal){
-			minVal=leftVal;
-			nextOrientation = WEST;
-		}
-		else{
-			minVal=topVal;
-			nextOrientation = NORTH;
+	curRow++;
+	curRow++;
+	// Check the south cell
+	if((curRow)<WORLD_ROW_SIZE){
+		curVal = ROBOT_METRIC_WORLD[(curRow)][curCol];
+		// LCD_printf("SOUTH curVal: %i\n",curVal);
+		// TMRSRVC_delay(1000);
+		if(curVal<minVal){
+			minVal = curVal;
+			nextOrientation = SOUTH;
 		}
 	}
 	
-	// Robot on top boundary of world (row = 0)
-	else if(curRow == 0){
-		leftVal = ROBOT_METRIC_WORLD[curRow][curCol-1];
-		rightVal = ROBOT_METRIC_WORLD[curRow][curCol+1];
-		botVal = ROBOT_METRIC_WORLD[curRow+1][curCol];
-		if((leftVal<rightVal)&&(leftVal<botVal)){
-			minVal = leftVal;
-			nextOrientation = WEST;
-		}
-		if((rightVal<leftVal)&&(rightVal<botVal)){
-			minVal = rightVal;
+	curRow--;
+	curCol++;
+	// Check the east cell
+	if((curCol)<WORLD_COLUMN_SIZE){
+		curVal = ROBOT_METRIC_WORLD[curRow][(curCol)];
+		// LCD_printf("EAST curVal: %i\n",curVal);
+		// TMRSRVC_delay(1000);
+		if(curVal<minVal){
+			minVal = curVal;
 			nextOrientation = EAST;
 		}
-		else{
-			minVal = botVal;
-			nextOrientation = SOUTH;
-		}
-		
 	}
 	
-	// Robot on left boundary of world (col = 0)
-	else if(curCol == 0){
-		rightVal = ROBOT_METRIC_WORLD[curRow][curCol+1];
-		botVal = ROBOT_METRIC_WORLD[curRow+1][curCol];
-		topVal = ROBOT_METRIC_WORLD[curRow-1][curCol];
-		if((rightVal<botVal)&&(rightVal<topVal)){
-			minVal = rightVal;
-			nextOrientation = EAST;
-		}
-		if((botVal<rightVal)&&(botVal<topVal)){
-			minVal = botVal;
-			nextOrientation = SOUTH;
-		}
-		else{
-			minVal = topVal;
-			nextOrientation = NORTH;
-		}
-	}
-	
-	// Robot on bottom boundary of world (row = 3)
-	else if(curRow == 3){
-		leftVal = ROBOT_METRIC_WORLD[curRow][curCol-1];
-		rightVal = ROBOT_METRIC_WORLD[curRow][curCol+1];
-		topVal = ROBOT_METRIC_WORLD[curRow-1][curCol];
-		if((leftVal<rightVal)&&(leftVal<topVal)){
-			minVal = leftVal;
-			return minInd=WORLD_CELL[curRow][curCol-1];
-		}
-		if((rightVal<leftVal)&&(rightVal<topVal)){
-			minVal = rightVal;
-			return minInd=WORLD_CELL[curRow][curCol+1];
-		}
-		else{
-			minVal = topVal;
-			return minInd=WORLD_CELL[curRow-1][curCol]; 
-		}
-	}
-	
-	// Robot on right boundary of world (col = 3)
-	else if(curCol == 3){
-		leftVal = ROBOT_METRIC_WORLD[curRow][curCol-1];
-		topVal = ROBOT_METRIC_WORLD[curRow-1][curCol];
-		botVal = ROBOT_METRIC_WORLD[curRow+1][curCol];
-		if((leftVal<topVal)&&(leftVal<botVal)){
-			minVal = leftVal;
+	curCol--;
+	curCol--;
+	// Check the west cell
+	if((curCol)<WORLD_COLUMN_SIZE){
+		curVal = ROBOT_METRIC_WORLD[curRow][(curCol)];
+		// LCD_printf("WEST curVal: %i\n",curVal);
+		// TMRSRVC_delay(1000);
+		if(curVal<minVal){
+			minVal = curVal;
 			nextOrientation = WEST;
-		}
-		if((topVal<leftVal)&&(topVal<botVal)){
-			minVal = topVal;
-			nextOrientation = NORTH;
-		}
-		else{
-			minVal = botVal;
-			nextOrientation = SOUTH;
-		}
-	}
-	
-	// // Else the robot is inside the world with four-neighboring cells
-	else{
-		topVal = ROBOT_METRIC_WORLD[curRow-1][curCol];
-		leftVal = ROBOT_METRIC_WORLD[curRow][curCol-1];
-		botVal = ROBOT_METRIC_WORLD[curRow+1][curCol];
-		rightVal = ROBOT_METRIC_WORLD[curRow][curCol+1];
-		if((topVal<leftVal)&&(topVal<botVal)&&(topVal<rightVal)){
-			minVal = topVal;
-			nextOrientation = NORTH;
-		}
-		if((leftVal<topVal)&&(leftVal<botVal)&&(leftVal<rightVal)){
-			minVal = leftVal;
-			nextOrientation = WEST;
-		}
-		if((botVal<topVal)&&(botVal<leftVal)&&(botVal<rightVal)){
-			minVal = botVal;
-			nextOrientation = SOUTH;
-		}
-		else{
-			minVal = rightVal;
-			nextOrientation = EAST;
 		}
 	}
 	
