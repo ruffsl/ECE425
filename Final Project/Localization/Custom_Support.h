@@ -11,6 +11,10 @@
 #ifndef Custom_Support
 #define Custom_Support
 
+	#include "capi324v221.h"
+	#include "stdio.h"
+	#include "CEEN_Interfaces.h"
+	
 	// Flags
 	#define SUCCESS 1
 	#define FAIL 0
@@ -31,10 +35,16 @@
 	#define LEFT_TURN -17.50
 	
 	// Obstacle Avoidance Threshold
-	#define IR_OBST_F_THRESH 7
+	#define IR_OBST_F_THRESH 10
 	#define IR_OBST_R_THRESH 10
 	#define IR_OBST_L_THRESH 10
-	#define IR_OBST_B_THRESH 7
+	#define IR_OBST_B_THRESH 10
+	
+	// Wall Following Threshold
+	#define IR_WALL_F_THRESH 0
+	#define IR_WALL_R_THRESH 15
+	#define IR_WALL_L_THRESH 15
+	#define IR_WALL_B_THRESH 15
 	
 	// Movement Commands for pathplanning
 	#define MOVE_LEFT 1
@@ -75,8 +85,9 @@
 	#define LCD_OFFSET 31
 	#define LCD_CELL_OFFSET 8
 	
-	#define MAX_SPEED 200
-	#define WALL_STEP 20
+	#define MAX_SPEED 400
+ 	#define MAX_ACL   450
+	#define WALL_STEP 342.42
 
 	#define BYTETOBINARYPATTERN "%d%d%d%d%d%d%d%d"
 	#define BYTETOBINARY(byte)  \
@@ -125,15 +136,6 @@
 										0b0010, 0b1010, 0b0011, 0b1011, 
 										0b0100, 0b1100, 0b0101, 0b1101, 
 										0b0110, 0b1110, 0b0111, 0b1111};
-										
-	static unsigned char WORLD_CELL[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] = 	
-										{
-										{0b0000,0b0001,0b0010,0b0011},
-										{0b0100,0b0101,0b0110,0b0111},
-										{0b1000,0b1001,0b1010,0b1011},
-										{0b1100,0b1101,0b1110,0b1111}
-										};
-										
 	
 	// Keeps track of on/off LCD pixels
 	unsigned char pix_arr[4][32];
@@ -162,11 +164,8 @@
 	
 	
 	// odometry values
-	float odometryStepL;
-	float odometryStepR;
-	float odometryTrigger;
-	unsigned char odometryFlag;
 	STEPPER_STEPS curr_step;
+	float odometryTrigger;
 
 
 	/** Local Function Prototypes **************************************/
@@ -183,6 +182,8 @@
 	void LCD_set_pixel(unsigned char row, unsigned char col, BOOL val);
 	void printCell(unsigned char, unsigned char, unsigned char, BOOL, unsigned char, BOOL);
 	void printMap(char);
-	void checkOdometry(unsigned char);
+	char checkOdometry( char);
+	void setOdometry( float );
+	char moveWall(void);
 
 #endif

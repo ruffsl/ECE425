@@ -8,10 +8,7 @@
 *
 ********************************************************************/
 
-/** Header Files ***************************************************/     
-#include "capi324v221.h"
-#include "stdio.h"
-#include "CEEN_Interfaces.h"
+/** Header Files ***************************************************/
 #include "Custom_Support.h"
 
 /*******************************************************************
@@ -49,41 +46,52 @@ void initializeRobot(void)
 }
 
 /*******************************************************************
-* Function:			void checkOdometry(unsigned char)
+* Function:			void setOdometry( float)
 * Input Variables:	void
-* Output Return:	unsigned char reset resets the odometry
+* Output Return:	float odometry 
+* Overview:		    Sets the odometry to move
+********************************************************************/
+void setOdometry( float odometry )
+{	
+	// Set the gloable odometryTrigger
+	odometryTrigger = odometry;
+
+	// Set the stepers
+	STEPPER_move_stnb( STEPPER_BOTH, 
+	STEPPER_REV, odometryTrigger, MAX_SPEED, MAX_ACL, STEPPER_BRK_OFF, // Left
+	STEPPER_REV, odometryTrigger, MAX_SPEED, MAX_ACL, STEPPER_BRK_OFF ); // Right
+}
+
+/*******************************************************************
+* Function:			char checkOdometry( char)
+* Input Variables:	char
+* Output Return:	char reset resets the odometry
 * Overview:		    Checks the current odometry to the trigger and
 *					sets the flag whe appropriate
 ********************************************************************/
-void checkOdometry( unsigned char reset )
+char checkOdometry( char reset )
 {	
-	
-	// Update the avrage 
-	float odometry = ((odometryStepL + odometryStepR)/2.0)*D_STEP;
-	// check to see if we have traveresed the trigger distance
-	// or that a reset has been called
-	
-	// AT START: odometry is REALLY SMALL & odometryTrigger is at approx 343
-	// Suggest breaking apart the IF case?
-	if((odometry > odometryTrigger))
-	{
-		odometryFlag = 1;
-		odometryStepL = 0;
-		odometryStepR = 0;
-	}
+	// Check for a reset
 	if (reset){
-		STEPPER_set_steps(STEPPER_BOTH,0);
-		odometryFlag = 0;
-		odometryStepL = 0;
-		odometryStepR = 0;
+		odometryTrigger = 0;
+		STEPPER_set_steps(STEPPER_BOTH,odometryTrigger);
+		return SUCCESS;
 	}
-	
-	
-	
-	// // Else the flag RESETS to ZERO?!
-	// else{
-		// odometryFlag = 0;
-	// }
+
+	// Get the current number of steps
+	curr_step = STEPPER_get_nSteps();
+
+	// Check if the sum is zero
+	if((curr_step.left + curr_step.right) == 0)
+	{
+		// if it is zero
+		// then return success
+		return SUCCESS;	
+	}
+
+	// But if not zero
+	//then return fial
+	return FAIL;
 }
 
 /*******************************************************************
@@ -578,4 +586,94 @@ char move_arc_stnb(float arc_Radius, float arc_Length, float arc_Speed, float ar
 		return SUCCESS;
 	}	
 	return FAIL;
+}
+
+/*******************************************************************
+* Function:			char moveWall(void)
+* Input Variables:	void
+* Output Return:	char
+* Overview:			This function searches for walls and adjust the 
+*					robots differential steering to attempts to
+*					follow them
+********************************************************************/
+char moveWall( void )
+{
+	// Check for collision
+	if(ftIR <= IR_OBST_F_THRESH){
+		return SUCCESS;
+	}
+
+	// Check for walls
+	BOOL isWall = (ftIR < IR_WALL_F_THRESH)|(bkIR < IR_WALL_B_THRESH)|(rtIR < IR_WALL_R_THRESH)|(ltIR < IR_WALL_L_THRESH);
+	if(!isWall){
+	
+		// Update the speeds the same to go forward
+		STEPPER_set_speed(STEPPER_BOTH, MAX_SPEED);
+	
+		// Return weather or not we are finished
+		return checkOdometry(NO_RESET);
+	}
+		
+	// A variable that contains the logic of which wall is imaginary
+	BOOL isLEFT;
+	float error;	
+	
+	// If there is no wall on our right side
+	// place an imaginary wall just within the threshold
+	if(rtIR>IR_WALL_R_THRESH){
+		rtIR = IR_WALL_R_THRESH-18;
+		isLEFT = 0;
+	}
+	// If there is no wall on our left side
+	// place an imaginary wall just within the threshold
+	if(ltIR>IR_WALL_L_THRESH){
+		ltIR = IR_WALL_L_THRESH-18;
+		isLEFT = 1;
+	}
+	
+	
+	// Check to see if the wall exists in front of the robot
+	if(ftIR < IR_WALL_F_THRESH)
+	{
+		// if the imaginary wall was on the left side
+		// then biased the error so that when the robot encounters
+		// an upcoming corner, the robot will turn away from both walls
+		if (isLEFT)
+		{
+			error = rtIR - (ltIR + (1000/ftIR));
+		}
+		// biased the error appropriately for the inverse situation
+		else 
+		{
+			error = rtIR - (ltIR - (1000/ftIR));
+		}
+	}
+	
+	// If no front facing walls detected
+	// the error is simply the right distance minus the left left distance
+	// this ensures symmetry that the robot will follow in between the two walls
+	// either one real and one imaginary, or both real
+	else 
+	{
+		error = rtIR - ltIR;
+	}
+
+	// Use the PID controller function to calculate error
+	float effort = pidController(-error, 0);
+	
+	// Limit the control effort to the max allowable effort
+	if((abs(effort) > MAX_EFFORT)&(effort!=0)){
+		effort = MAX_EFFORT*(effort/abs(effort));
+	}
+	
+	// Calculate the stepper speeds for each wheel using a ratio
+	float stepper_speed_L = MAX_SPEED/2 + (MAX_SPEED/2)*(effort/MAX_EFFORT);
+	float stepper_speed_R = MAX_SPEED/2 - (MAX_SPEED/2)*(effort/MAX_EFFORT);
+	
+	// Update the speeds the same to move with wall
+	STEPPER_set_speed(STEPPER_LEFT, stepper_speed_L);
+	STEPPER_set_speed(STEPPER_RIGHT, stepper_speed_R);
+	
+	// Return weather or not we are finished
+	return checkOdometry(NO_RESET);
 }

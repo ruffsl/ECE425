@@ -35,7 +35,7 @@ C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_transmit.o)
 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_open.o)
                               Custom_Support.o (SPKR_open)
 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_get_nSteps.o)
-                              Localization.o (STEPPER_get_nSteps)
+                              Custom_Support.o (STEPPER_get_nSteps)
 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_globals.o)
                               C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_get_nSteps.o) (STEPPER_params)
 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_move.o)
@@ -51,7 +51,7 @@ C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_dir.o)
 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_mode.o)
                               C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_move.o) (STEPPER_set_mode)
 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_speed.o)
-                              C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_run.o) (STEPPER_set_speed)
+                              Custom_Support.o (STEPPER_set_speed)
 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_steps.o)
                               Custom_Support.o (STEPPER_set_steps)
 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_step.o)
@@ -297,7 +297,6 @@ Allocating common symbols
 Common symbol       size              file
 
 currentMove         0x1               Localization.o
-odometryStepR       0x4               Custom_Support.o
 oldMove             0x1               Localization.o
 ltIR_old            0x78              Custom_Support.o
 isGoal              0x1               Localization.o
@@ -335,7 +334,6 @@ rightContact        0x1               Custom_Support.o
 leftContact         0x1               Custom_Support.o
 ltIR                0x4               Custom_Support.o
 matchSeeds          0x1               Localization.o
-odometryFlag        0x1               Custom_Support.o
 curr_spi_addr       0x1               C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_globals.o)
 rtIR                0x4               Custom_Support.o
 LCD_params          0x5               C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_globals.o)
@@ -347,7 +345,6 @@ __iob               0x6               C:\WinAVR-20100110\avr\lib\avr4\libc.a(iob
 isMapping           0x1               Localization.o
 step_done           0x2               C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_globals.o)
 ATopstat            0x2               CEEN_Interfaces.o
-odometryStepL       0x4               Custom_Support.o
 
 Memory Configuration
 
@@ -464,7 +461,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x7104
+.text           0x00000000     0x6fc2
  *(.vectors)
  .vectors       0x00000000       0x7c c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
                 0x00000000                __vectors
@@ -570,444 +567,445 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x000009de                getFrontIR
                 0x000006a0                get_ambient_temp
                 0x000008b4                read_pixel_2
- .text          0x00000c14     0x14c6 Custom_Support.o
+ .text          0x00000c14     0x1792 Custom_Support.o
                 0x00001000                rotateCell
                 0x00000c14                prefilter
+                0x00002082                moveWall
                 0x00000f42                pidController
-                0x00001aea                checkContactIR
-                0x00001b30                checkIR
-                0x00001eec                printMap
-                0x00001b82                LCD_set_pixel
+                0x00001b8e                checkContactIR
+                0x00001bd4                checkIR
+                0x00001f90                printMap
+                0x00001c26                LCD_set_pixel
                 0x0000102a                move_arc_stnb
-                0x00001c42                printCell
+                0x00001ce6                printCell
                 0x0000158a                move_arc_stwt
-                0x00001b06                checkLightSensor
-                0x00001f82                checkOdometry
-                0x00002046                initializeRobot
- .text          0x000020da     0x1510 Localization.o
-                0x00003144                orientationInput
-                0x00002b1a                shiftMap
-                0x00002b90                moveMap
-                0x00002c30                planMap
-                0x00002c84                planGateway
-                0x00002680                moveWall
-                0x00003472                localizeGateway
-                0x0000237e                moveWallOld
-                0x000033b6                setGateways
-                0x000020da                fourNeighborSearch
-                0x00003018                movesInput
-                0x000030be                worldInput
-                0x0000320c                getGateways
-                0x000021b0                wavefrontMake
-                0x00002da2                moveWorld
-                0x00002d06                planMetric
-                0x000022a6                checkWorld
-                0x000033ea                matchBranch
-                0x000034f4                CBOT_main
- .text          0x000035ea       0x1c C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_open.o)
-                0x000035ea                ADC_open
- .text          0x00003606       0x3a C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_sample.o)
-                0x00003606                ADC_sample
- .text          0x00003640       0x6e C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_set_channel.o)
-                0x00003640                ADC_set_channel
- .text          0x000036ae       0x16 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_set_VREF.o)
-                0x000036ae                ADC_set_VREF
- .text          0x000036c4       0x12 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_main.o)
-                0x000036c4                main
- .text          0x000036d6       0x3a C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_clear.o)
-                0x000036d6                LCD_clear
- .text          0x00003710      0x102 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_open.o)
-                0x00003710                LCD_open
- .text          0x00003812       0x42 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_backlight.o)
-                0x00003812                LCD_set_backlight
- .text          0x00003854        0xe C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_next_PGC.o)
-                0x00003854                LCD_set_next_PGC
- .text          0x00003862       0x32 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_PGC_addr.o)
-                0x00003862                LCD_set_PGC_addr
- .text          0x00003894       0x36 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_write.o)
-                0x00003894                LCD_write
- .text          0x000038ca       0x18 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_clr_pattern.o)
-                0x000038ca                LED_clr_pattern
- .text          0x000038e2       0x12 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_open.o)
-                0x000038e2                LED_open
- .text          0x000038f4       0x18 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_set_patttern.o)
-                0x000038f4                LED_set_pattern
- .text          0x0000390c       0xa2 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_set_slave_addr.o)
-                0x0000390c                SPI_set_slave_addr
- .text          0x000039ae       0x1e C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_transmit.o)
-                0x000039ae                SPI_transmit
- .text          0x000039cc      0x13c C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_open.o)
-                0x00003a96                __SPKR_open_tone_mode
-                0x00003aee                SPKR_open
-                0x000039cc                __SPKR_set_up_freq_LUT
-                0x00003a6a                __SPKR_open_beep_mode
- .text          0x00003b08       0x16 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_get_nSteps.o)
-                0x00003b08                STEPPER_get_nSteps
- .text          0x00003b1e        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_globals.o)
- .text          0x00003b1e      0x2c8 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_move.o)
-                0x00003c98                STEPPER_move
- .text          0x00003de6       0xae C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_open.o)
-                0x00003de6                STEPPER_open
- .text          0x00003e94       0x2e C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_run.o)
-                0x00003e94                STEPPER_run
- .text          0x00003ec2       0x44 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_accel.o)
-                0x00003ec2                STEPPER_set_accel
- .text          0x00003f06       0x2a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_dir.o)
-                0x00003f06                STEPPER_set_dir
- .text          0x00003f30       0x2a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_mode.o)
-                0x00003f30                STEPPER_set_mode
- .text          0x00003f5a       0x44 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_speed.o)
-                0x00003f5a                STEPPER_set_speed
- .text          0x00003f9e       0x36 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_steps.o)
-                0x00003f9e                STEPPER_set_steps
- .text          0x00003fd4      0x118 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_step.o)
-                0x00003fd4                STEPPER_step
- .text          0x000040ec       0x4a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_stop.o)
-                0x000040ec                STEPPER_stop
- .text          0x00004136       0x9c C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_wait_and_then.o)
-                0x00004136                STEPPER_wait_and_then
- .text          0x000041d2       0x90 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_get_state.o)
-                0x000041d2                SYS_get_state
- .text          0x00004262        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_globals.o)
- .text          0x00004262       0x8e C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_set_state.o)
-                0x00004262                SYS_set_state
- .text          0x000042f0       0x62 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_get_sensors.o)
-                0x000042f0                ATTINY_get_sensors
- .text          0x00004352       0x9c C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_get_SW_state.o)
-                0x00004352                ATTINY_get_SW_state
- .text          0x000043ee       0x9e C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_open.o)
-                0x000043ee                ATTINY_open
- .text          0x0000448c       0x42 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_delay.o)
-                0x0000448c                TMRSRVC_delay
- .text          0x000044ce       0x7c C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_new.o)
-                0x000044ce                TMRSRVC_new
- .text          0x0000454a       0x58 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_get.o)
-                0x0000454a                I2C_MSTR_get
- .text          0x000045a2       0x4c C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_send.o)
-                0x000045a2                I2C_MSTR_send
- .text          0x000045ee       0x8c C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_start.o)
-                0x000045ee                I2C_MSTR_start
- .text          0x0000467a       0x28 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_stop.o)
-                0x0000467a                I2C_MSTR_stop
- .text          0x000046a2       0x3c C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_open.o)
-                0x000046a2                I2C_open
- .text          0x000046de       0x12 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_set_BRG.o)
-                0x000046de                I2C_set_BRG
- .text          0x000046f0       0x16 C:\Program Files\AVR Libraries\libcapi324v221.a(__ADC_init.o)
-                0x000046f0                __ADC_init
- .text          0x00004706       0x1c C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_init.o)
-                0x00004706                CBOT_init
- .text          0x00004722      0x480 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_isr.o)
-                0x000049b6                __vector_12
-                0x00004afe                __vector_6
-                0x000048c0                __vector_11
-                0x00004912                __vector_13
-                0x00004778                __vector_17
-                0x00004b50                __vector_7
-                0x00004aac                __vector_5
-                0x00004a5a                __vector_4
-                0x0000481c                __vector_9
-                0x00004a08                __vector_15
-                0x00004722                CBOT_ISR_init
-                0x00004964                __vector_14
-                0x0000486e                __vector_10
-                0x00004726                __vector_16
-                0x000047ca                __vector_18
- .text          0x00004ba2       0x28 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_attach.o)
-                0x00004ba2                ISR_attach
- .text          0x00004bca        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_globals.o)
- .text          0x00004bca       0x28 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_open.o)
-                0x00004bca                ISR_open
- .text          0x00004bf2        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_globals.o)
- .text          0x00004bf2        0x4 C:\Program Files\AVR Libraries\libcapi324v221.a(__LCD_init.o)
-                0x00004bf2                __LCD_init
- .text          0x00004bf6      0x15a C:\Program Files\AVR Libraries\libcapi324v221.a(__LCD_putchar.o)
-                0x00004bf6                __LCD_putchar
- .text          0x00004d50        0xa C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_clr_pattern.o)
-                0x00004d50                __LED_clr_pattern
- .text          0x00004d5a        0x6 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_init.o)
-                0x00004d5a                __LED_init
- .text          0x00004d60        0xa C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_set_pattern.o)
-                0x00004d60                __LED_set_pattern
- .text          0x00004d6a       0x24 C:\Program Files\AVR Libraries\libcapi324v221.a(ATMEGA_open.o)
-                0x00004d6a                ATMEGA_open
- .text          0x00004d8e       0xa6 C:\Program Files\AVR Libraries\libcapi324v221.a(ATMEGA_set_clk_mode.o)
-                0x00004d8e                ATMEGA_set_clk_mode
- .text          0x00004e34        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_globals.o)
- .text          0x00004e34       0x72 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_open.o)
-                0x00004e34                SPI_open
- .text          0x00004ea6       0x24 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_receive.o)
-                0x00004ea6                SPI_receive
- .text          0x00004eca       0x12 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_set_config_func.o)
-                0x00004eca                SPI_set_config_func
- .text          0x00004edc        0x6 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR__SPKR__TIMER1_COMPA_vect.o)
-                0x00004edc                __SPKR_TIMER1_COMPA_vect
- .text          0x00004ee2       0x82 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_clk.o)
-                0x00004ee2                SPKR_clk
- .text          0x00004f64       0x72 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_close.o)
-                0x00004fc2                SPKR_close
-                0x00004f80                __SPKR_close_tone_mode
-                0x00004f64                __SPKR_close_beep_mode
- .text          0x00004fd6        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_globals.o)
- .text          0x00004fd6       0x54 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_init.o)
-                0x00004fd6                __SPKR_init
- .text          0x0000502a       0x9a C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_play_beep.o)
-                0x0000502a                SPKR_play_beep
- .text          0x000050c4        0xc C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_stop.o)
-                0x000050c4                __SPKR_stop
- .text          0x000050d0       0x2a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_go.o)
-                0x000050d0                STEPPER_go
- .text          0x000050fa       0x14 C:\Program Files\AVR Libraries\libcapi324v221.a(__STEPPER_init.o)
-                0x000050fa                __STEPPER_init
- .text          0x0000510e       0x2a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_stop_mode.o)
-                0x0000510e                STEPPER_set_stop_mode
- .text          0x00005138       0x7a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_setup_decels.o)
-                0x00005138                STEPPER_setup_decels
- .text          0x000051b2       0x46 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_init.o)
-                0x000051b2                SYS_init
- .text          0x000051f8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_globals.o)
- .text          0x000051f8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_globals.o)
- .text          0x000051f8       0xd2 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_insert.o)
-                0x000051f8                TMRSRVC_insert
- .text          0x000052ca       0x3e C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_open.o)
-                0x000052ca                TMRSRVC_open
- .text          0x00005308        0xc C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_start.o)
-                0x00005308                __TMRSRVC_start
- .text          0x00005314        0x8 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_start.o)
-                0x00005314                TMRSRVC_start
- .text          0x0000531c       0x14 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_enable.o)
-                0x0000531c                I2C_enable
- .text          0x00005330        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_globals.o)
- .text          0x00005330        0x6 C:\Program Files\AVR Libraries\libcapi324v221.a(__I2C_init.o)
-                0x00005330                __I2C_init
- .text          0x00005336       0x22 C:\Program Files\AVR Libraries\libcapi324v221.a(__ISR_attach.o)
-                0x00005336                __ISR_attach
- .text          0x00005358        0x6 C:\Program Files\AVR Libraries\libcapi324v221.a(__ATMEGA_init.o)
-                0x00005358                __ATMEGA_init
- .text          0x0000535e       0x52 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_cfgrs.o)
-                0x0000536e                SPI_ATtiny0_config
-                0x0000539e                SPI_FLASH_config
-                0x0000535e                SPI_default_config
-                0x0000538e                SPI_LCD_config
-                0x0000537e                SPI_PSXC_config
- .text          0x000053b0        0xe C:\Program Files\AVR Libraries\libcapi324v221.a(__SPI_init.o)
-                0x000053b0                __SPI_init
- .text          0x000053be       0x2e C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_beep.o)
-                0x000053be                SPKR_beep
- .text          0x000053ec       0x38 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_close.o)
-                0x000053ec                __SPKR_close
- .text          0x00005424       0xda C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_decel_step_values.o)
-                0x00005424                STEPPER_set_decel_step_values
- .text          0x000054fe        0xe C:\Program Files\AVR Libraries\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o)
-                0x000054fe                __TIMER0_COMPA_vect
- .text          0x0000550c       0x12 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_init.o)
-                0x0000550c                __TMRSRVC_init
- .text          0x0000551e       0x32 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_tick.o)
-                0x0000551e                TMRSRVC_tick
- .text          0x00005550       0x4e C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_beep_clk.o)
-                0x00005550                SPKR_beep_clk
- .text          0x0000559e      0x162 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_clk.o)
-                0x0000559e                STEPPER_clk
- .text          0x00005700       0x8a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_accel.o)
-                0x00005700                STEPPER_process_accel
- .text          0x0000578a      0x206 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_run_mode.o)
-                0x0000578a                STEPPER_process_run_mode
- .text          0x00005990       0xa8 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_step_mode.o)
-                0x00005990                STEPPER_process_step_mode
- .text          0x00005a38       0xd6 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_process.o)
-                0x00005a38                TMRSRVC_process
- .text          0x00005b0e        0x6 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_stop.o)
-                0x00005b0e                TMRSRVC_stop
- .text          0x00005b14      0x130 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_pwm.o)
-                0x00005b14                STEPPER_process_pwm
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3x.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(cmpsf2.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3x.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixsfsi.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixunssfsi.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(floatsisf.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_cmp.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_inf.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_nan.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscA.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscB.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_round.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_split3.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_zero.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(gesf2.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(lrint.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3x.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(pow.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(exp.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_powser.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(inverse.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(ldexp.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(log.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(modf.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_mpack.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libprintf_flt.a(vfprintf_flt.o)
- .text          0x00005c44        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
- .text          0x00005c44        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
- .text          0x00005c44        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
- .text          0x00005c44        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
- .text          0x00005c44        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .text          0x00005c44        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
- .text          0x00005c44        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(malloc.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ftoa_engine.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen_P.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(fputc.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(iob.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(printf.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(puts.o)
- .text          0x00005c44        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ultoa_invert.o)
-                0x00005c44                . = ALIGN (0x2)
+                0x00001aea                setOdometry
+                0x00001baa                checkLightSensor
+                0x00002026                checkOdometry
+                0x00002312                initializeRobot
+ .text          0x000023a6     0x1102 Localization.o
+                0x00002eb6                orientationInput
+                0x0000292c                shiftMap
+                0x00003266                moveMap
+                0x000029a2                planMap
+                0x000029f6                planGateway
+                0x000031e4                localizeGateway
+                0x0000262a                moveWallOld
+                0x00003128                setGateways
+                0x000023a6                fourNeighborSearch
+                0x00002d8a                movesInput
+                0x00002e30                worldInput
+                0x00002f7e                getGateways
+                0x0000247c                wavefrontMake
+                0x00002b14                moveWorld
+                0x00002a78                planMetric
+                0x00002552                checkWorld
+                0x0000315c                matchBranch
+                0x00003326                CBOT_main
+ .text          0x000034a8       0x1c C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_open.o)
+                0x000034a8                ADC_open
+ .text          0x000034c4       0x3a C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_sample.o)
+                0x000034c4                ADC_sample
+ .text          0x000034fe       0x6e C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_set_channel.o)
+                0x000034fe                ADC_set_channel
+ .text          0x0000356c       0x16 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_set_VREF.o)
+                0x0000356c                ADC_set_VREF
+ .text          0x00003582       0x12 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_main.o)
+                0x00003582                main
+ .text          0x00003594       0x3a C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_clear.o)
+                0x00003594                LCD_clear
+ .text          0x000035ce      0x102 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_open.o)
+                0x000035ce                LCD_open
+ .text          0x000036d0       0x42 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_backlight.o)
+                0x000036d0                LCD_set_backlight
+ .text          0x00003712        0xe C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_next_PGC.o)
+                0x00003712                LCD_set_next_PGC
+ .text          0x00003720       0x32 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_PGC_addr.o)
+                0x00003720                LCD_set_PGC_addr
+ .text          0x00003752       0x36 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_write.o)
+                0x00003752                LCD_write
+ .text          0x00003788       0x18 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_clr_pattern.o)
+                0x00003788                LED_clr_pattern
+ .text          0x000037a0       0x12 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_open.o)
+                0x000037a0                LED_open
+ .text          0x000037b2       0x18 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_set_patttern.o)
+                0x000037b2                LED_set_pattern
+ .text          0x000037ca       0xa2 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_set_slave_addr.o)
+                0x000037ca                SPI_set_slave_addr
+ .text          0x0000386c       0x1e C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_transmit.o)
+                0x0000386c                SPI_transmit
+ .text          0x0000388a      0x13c C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_open.o)
+                0x00003954                __SPKR_open_tone_mode
+                0x000039ac                SPKR_open
+                0x0000388a                __SPKR_set_up_freq_LUT
+                0x00003928                __SPKR_open_beep_mode
+ .text          0x000039c6       0x16 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_get_nSteps.o)
+                0x000039c6                STEPPER_get_nSteps
+ .text          0x000039dc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_globals.o)
+ .text          0x000039dc      0x2c8 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_move.o)
+                0x00003b56                STEPPER_move
+ .text          0x00003ca4       0xae C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_open.o)
+                0x00003ca4                STEPPER_open
+ .text          0x00003d52       0x2e C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_run.o)
+                0x00003d52                STEPPER_run
+ .text          0x00003d80       0x44 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_accel.o)
+                0x00003d80                STEPPER_set_accel
+ .text          0x00003dc4       0x2a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_dir.o)
+                0x00003dc4                STEPPER_set_dir
+ .text          0x00003dee       0x2a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_mode.o)
+                0x00003dee                STEPPER_set_mode
+ .text          0x00003e18       0x44 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_speed.o)
+                0x00003e18                STEPPER_set_speed
+ .text          0x00003e5c       0x36 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_steps.o)
+                0x00003e5c                STEPPER_set_steps
+ .text          0x00003e92      0x118 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_step.o)
+                0x00003e92                STEPPER_step
+ .text          0x00003faa       0x4a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_stop.o)
+                0x00003faa                STEPPER_stop
+ .text          0x00003ff4       0x9c C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_wait_and_then.o)
+                0x00003ff4                STEPPER_wait_and_then
+ .text          0x00004090       0x90 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_get_state.o)
+                0x00004090                SYS_get_state
+ .text          0x00004120        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_globals.o)
+ .text          0x00004120       0x8e C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_set_state.o)
+                0x00004120                SYS_set_state
+ .text          0x000041ae       0x62 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_get_sensors.o)
+                0x000041ae                ATTINY_get_sensors
+ .text          0x00004210       0x9c C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_get_SW_state.o)
+                0x00004210                ATTINY_get_SW_state
+ .text          0x000042ac       0x9e C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_open.o)
+                0x000042ac                ATTINY_open
+ .text          0x0000434a       0x42 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_delay.o)
+                0x0000434a                TMRSRVC_delay
+ .text          0x0000438c       0x7c C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_new.o)
+                0x0000438c                TMRSRVC_new
+ .text          0x00004408       0x58 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_get.o)
+                0x00004408                I2C_MSTR_get
+ .text          0x00004460       0x4c C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_send.o)
+                0x00004460                I2C_MSTR_send
+ .text          0x000044ac       0x8c C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_start.o)
+                0x000044ac                I2C_MSTR_start
+ .text          0x00004538       0x28 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_stop.o)
+                0x00004538                I2C_MSTR_stop
+ .text          0x00004560       0x3c C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_open.o)
+                0x00004560                I2C_open
+ .text          0x0000459c       0x12 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_set_BRG.o)
+                0x0000459c                I2C_set_BRG
+ .text          0x000045ae       0x16 C:\Program Files\AVR Libraries\libcapi324v221.a(__ADC_init.o)
+                0x000045ae                __ADC_init
+ .text          0x000045c4       0x1c C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_init.o)
+                0x000045c4                CBOT_init
+ .text          0x000045e0      0x480 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_isr.o)
+                0x00004874                __vector_12
+                0x000049bc                __vector_6
+                0x0000477e                __vector_11
+                0x000047d0                __vector_13
+                0x00004636                __vector_17
+                0x00004a0e                __vector_7
+                0x0000496a                __vector_5
+                0x00004918                __vector_4
+                0x000046da                __vector_9
+                0x000048c6                __vector_15
+                0x000045e0                CBOT_ISR_init
+                0x00004822                __vector_14
+                0x0000472c                __vector_10
+                0x000045e4                __vector_16
+                0x00004688                __vector_18
+ .text          0x00004a60       0x28 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_attach.o)
+                0x00004a60                ISR_attach
+ .text          0x00004a88        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_globals.o)
+ .text          0x00004a88       0x28 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_open.o)
+                0x00004a88                ISR_open
+ .text          0x00004ab0        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_globals.o)
+ .text          0x00004ab0        0x4 C:\Program Files\AVR Libraries\libcapi324v221.a(__LCD_init.o)
+                0x00004ab0                __LCD_init
+ .text          0x00004ab4      0x15a C:\Program Files\AVR Libraries\libcapi324v221.a(__LCD_putchar.o)
+                0x00004ab4                __LCD_putchar
+ .text          0x00004c0e        0xa C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_clr_pattern.o)
+                0x00004c0e                __LED_clr_pattern
+ .text          0x00004c18        0x6 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_init.o)
+                0x00004c18                __LED_init
+ .text          0x00004c1e        0xa C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_set_pattern.o)
+                0x00004c1e                __LED_set_pattern
+ .text          0x00004c28       0x24 C:\Program Files\AVR Libraries\libcapi324v221.a(ATMEGA_open.o)
+                0x00004c28                ATMEGA_open
+ .text          0x00004c4c       0xa6 C:\Program Files\AVR Libraries\libcapi324v221.a(ATMEGA_set_clk_mode.o)
+                0x00004c4c                ATMEGA_set_clk_mode
+ .text          0x00004cf2        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_globals.o)
+ .text          0x00004cf2       0x72 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_open.o)
+                0x00004cf2                SPI_open
+ .text          0x00004d64       0x24 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_receive.o)
+                0x00004d64                SPI_receive
+ .text          0x00004d88       0x12 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_set_config_func.o)
+                0x00004d88                SPI_set_config_func
+ .text          0x00004d9a        0x6 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR__SPKR__TIMER1_COMPA_vect.o)
+                0x00004d9a                __SPKR_TIMER1_COMPA_vect
+ .text          0x00004da0       0x82 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_clk.o)
+                0x00004da0                SPKR_clk
+ .text          0x00004e22       0x72 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_close.o)
+                0x00004e80                SPKR_close
+                0x00004e3e                __SPKR_close_tone_mode
+                0x00004e22                __SPKR_close_beep_mode
+ .text          0x00004e94        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_globals.o)
+ .text          0x00004e94       0x54 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_init.o)
+                0x00004e94                __SPKR_init
+ .text          0x00004ee8       0x9a C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_play_beep.o)
+                0x00004ee8                SPKR_play_beep
+ .text          0x00004f82        0xc C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_stop.o)
+                0x00004f82                __SPKR_stop
+ .text          0x00004f8e       0x2a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_go.o)
+                0x00004f8e                STEPPER_go
+ .text          0x00004fb8       0x14 C:\Program Files\AVR Libraries\libcapi324v221.a(__STEPPER_init.o)
+                0x00004fb8                __STEPPER_init
+ .text          0x00004fcc       0x2a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_stop_mode.o)
+                0x00004fcc                STEPPER_set_stop_mode
+ .text          0x00004ff6       0x7a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_setup_decels.o)
+                0x00004ff6                STEPPER_setup_decels
+ .text          0x00005070       0x46 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_init.o)
+                0x00005070                SYS_init
+ .text          0x000050b6        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_globals.o)
+ .text          0x000050b6        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_globals.o)
+ .text          0x000050b6       0xd2 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_insert.o)
+                0x000050b6                TMRSRVC_insert
+ .text          0x00005188       0x3e C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_open.o)
+                0x00005188                TMRSRVC_open
+ .text          0x000051c6        0xc C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_start.o)
+                0x000051c6                __TMRSRVC_start
+ .text          0x000051d2        0x8 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_start.o)
+                0x000051d2                TMRSRVC_start
+ .text          0x000051da       0x14 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_enable.o)
+                0x000051da                I2C_enable
+ .text          0x000051ee        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_globals.o)
+ .text          0x000051ee        0x6 C:\Program Files\AVR Libraries\libcapi324v221.a(__I2C_init.o)
+                0x000051ee                __I2C_init
+ .text          0x000051f4       0x22 C:\Program Files\AVR Libraries\libcapi324v221.a(__ISR_attach.o)
+                0x000051f4                __ISR_attach
+ .text          0x00005216        0x6 C:\Program Files\AVR Libraries\libcapi324v221.a(__ATMEGA_init.o)
+                0x00005216                __ATMEGA_init
+ .text          0x0000521c       0x52 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_cfgrs.o)
+                0x0000522c                SPI_ATtiny0_config
+                0x0000525c                SPI_FLASH_config
+                0x0000521c                SPI_default_config
+                0x0000524c                SPI_LCD_config
+                0x0000523c                SPI_PSXC_config
+ .text          0x0000526e        0xe C:\Program Files\AVR Libraries\libcapi324v221.a(__SPI_init.o)
+                0x0000526e                __SPI_init
+ .text          0x0000527c       0x2e C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_beep.o)
+                0x0000527c                SPKR_beep
+ .text          0x000052aa       0x38 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_close.o)
+                0x000052aa                __SPKR_close
+ .text          0x000052e2       0xda C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_decel_step_values.o)
+                0x000052e2                STEPPER_set_decel_step_values
+ .text          0x000053bc        0xe C:\Program Files\AVR Libraries\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o)
+                0x000053bc                __TIMER0_COMPA_vect
+ .text          0x000053ca       0x12 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_init.o)
+                0x000053ca                __TMRSRVC_init
+ .text          0x000053dc       0x32 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_tick.o)
+                0x000053dc                TMRSRVC_tick
+ .text          0x0000540e       0x4e C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_beep_clk.o)
+                0x0000540e                SPKR_beep_clk
+ .text          0x0000545c      0x162 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_clk.o)
+                0x0000545c                STEPPER_clk
+ .text          0x000055be       0x8a C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_accel.o)
+                0x000055be                STEPPER_process_accel
+ .text          0x00005648      0x206 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_run_mode.o)
+                0x00005648                STEPPER_process_run_mode
+ .text          0x0000584e       0xa8 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_step_mode.o)
+                0x0000584e                STEPPER_process_step_mode
+ .text          0x000058f6       0xd6 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_process.o)
+                0x000058f6                TMRSRVC_process
+ .text          0x000059cc        0x6 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_stop.o)
+                0x000059cc                TMRSRVC_stop
+ .text          0x000059d2      0x130 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_pwm.o)
+                0x000059d2                STEPPER_process_pwm
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3x.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(cmpsf2.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3x.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixsfsi.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixunssfsi.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(floatsisf.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_cmp.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_inf.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_nan.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscA.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscB.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_round.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_split3.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_zero.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(gesf2.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(lrint.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3x.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(pow.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(exp.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_powser.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(inverse.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(ldexp.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(log.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(modf.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_mpack.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libprintf_flt.a(vfprintf_flt.o)
+ .text          0x00005b02        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+ .text          0x00005b02        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+ .text          0x00005b02        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+ .text          0x00005b02        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+ .text          0x00005b02        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text          0x00005b02        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .text          0x00005b02        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(malloc.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ftoa_engine.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen_P.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(fputc.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(iob.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(printf.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(puts.o)
+ .text          0x00005b02        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ultoa_invert.o)
+                0x00005b02                . = ALIGN (0x2)
  *(.text.*)
  .text.avr-libc.fplib
-                0x00005c44        0xa C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3.o)
-                0x00005c44                __subsf3
-                0x00005c46                __addsf3
+                0x00005b02        0xa C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3.o)
+                0x00005b02                __subsf3
+                0x00005b04                __addsf3
  .text.avr-libc.fplib
-                0x00005c4e       0xc0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3x.o)
-                0x00005c68                __addsf3x
+                0x00005b0c       0xc0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3x.o)
+                0x00005b26                __addsf3x
  .text.avr-libc.fplib
-                0x00005d0e        0x8 C:\WinAVR-20100110\avr\lib\avr4\libm.a(cmpsf2.o)
-                0x00005d0e                __lesf2
-                0x00005d0e                __nesf2
-                0x00005d0e                __eqsf2
-                0x00005d0e                __cmpsf2
-                0x00005d0e                __ltsf2
+                0x00005bcc        0x8 C:\WinAVR-20100110\avr\lib\avr4\libm.a(cmpsf2.o)
+                0x00005bcc                __lesf2
+                0x00005bcc                __nesf2
+                0x00005bcc                __eqsf2
+                0x00005bcc                __cmpsf2
+                0x00005bcc                __ltsf2
  .text.avr-libc.fplib
-                0x00005d16        0x4 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3.o)
-                0x00005d16                __divsf3
+                0x00005bd4        0x4 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3.o)
+                0x00005bd4                __divsf3
  .text.avr-libc.fplib
-                0x00005d1a       0xcc C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3x.o)
-                0x00005d30                __divsf3x
-                0x00005d34                __divsf3_pse
+                0x00005bd8       0xcc C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3x.o)
+                0x00005bee                __divsf3x
+                0x00005bf2                __divsf3_pse
  .text.avr-libc.fplib
-                0x00005de6        0xa C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixsfsi.o)
-                0x00005de6                __fixsfsi
+                0x00005ca4        0xa C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixsfsi.o)
+                0x00005ca4                __fixsfsi
  .text.avr-libc.fplib
-                0x00005df0       0x58 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixunssfsi.o)
-                0x00005df0                __fixunssfsi
+                0x00005cae       0x58 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixunssfsi.o)
+                0x00005cae                __fixunssfsi
  .text.avr-libc.fplib
-                0x00005e48       0x7a C:\WinAVR-20100110\avr\lib\avr4\libm.a(floatsisf.o)
-                0x00005e4c                __floatsisf
-                0x00005e48                __floatunsisf
+                0x00005d06       0x7a C:\WinAVR-20100110\avr\lib\avr4\libm.a(floatsisf.o)
+                0x00005d0a                __floatsisf
+                0x00005d06                __floatunsisf
  .text.avr-libc.fplib
-                0x00005ec2       0x48 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_cmp.o)
-                0x00005ec2                __fp_cmp
+                0x00005d80       0x48 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_cmp.o)
+                0x00005d80                __fp_cmp
  .text.avr-libc.fplib
-                0x00005f0a        0xc C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_inf.o)
-                0x00005f0a                __fp_inf
+                0x00005dc8        0xc C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_inf.o)
+                0x00005dc8                __fp_inf
  .text.avr-libc.fplib
-                0x00005f16        0x6 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_nan.o)
-                0x00005f16                __fp_nan
+                0x00005dd4        0x6 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_nan.o)
+                0x00005dd4                __fp_nan
  .text.avr-libc.fplib
-                0x00005f1c        0xe C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscA.o)
-                0x00005f1c                __fp_pscA
+                0x00005dda        0xe C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscA.o)
+                0x00005dda                __fp_pscA
  .text.avr-libc.fplib
-                0x00005f2a        0xe C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscB.o)
-                0x00005f2a                __fp_pscB
+                0x00005de8        0xe C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscB.o)
+                0x00005de8                __fp_pscB
  .text.avr-libc.fplib
-                0x00005f38       0x22 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_round.o)
-                0x00005f38                __fp_round
+                0x00005df6       0x22 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_round.o)
+                0x00005df6                __fp_round
  .text.avr-libc.fplib
-                0x00005f5a       0x44 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_split3.o)
-                0x00005f5a                __fp_split3
-                0x00005f6a                __fp_splitA
+                0x00005e18       0x44 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_split3.o)
+                0x00005e18                __fp_split3
+                0x00005e28                __fp_splitA
  .text.avr-libc.fplib
-                0x00005f9e        0xe C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_zero.o)
-                0x00005f9e                __fp_zero
-                0x00005fa0                __fp_szero
+                0x00005e5c        0xe C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_zero.o)
+                0x00005e5c                __fp_zero
+                0x00005e5e                __fp_szero
  .text.avr-libc.fplib
-                0x00005fac        0x8 C:\WinAVR-20100110\avr\lib\avr4\libm.a(gesf2.o)
-                0x00005fac                __gtsf2
-                0x00005fac                __gesf2
+                0x00005e6a        0x8 C:\WinAVR-20100110\avr\lib\avr4\libm.a(gesf2.o)
+                0x00005e6a                __gtsf2
+                0x00005e6a                __gesf2
  .text.avr-libc.fplib
-                0x00005fb4       0x74 C:\WinAVR-20100110\avr\lib\avr4\libm.a(lrint.o)
-                0x00005fb4                lrint
+                0x00005e72       0x74 C:\WinAVR-20100110\avr\lib\avr4\libm.a(lrint.o)
+                0x00005e72                lrint
  .text.avr-libc.fplib
-                0x00006028        0x4 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3.o)
-                0x00006028                __mulsf3
+                0x00005ee6        0x4 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3.o)
+                0x00005ee6                __mulsf3
  .text.avr-libc.fplib
-                0x0000602c       0xc2 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3x.o)
-                0x00006044                __mulsf3_pse
-                0x00006040                __mulsf3x
+                0x00005eea       0xc2 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3x.o)
+                0x00005f02                __mulsf3_pse
+                0x00005efe                __mulsf3x
  .text.avr-libc.fplib
-                0x000060ee       0x98 C:\WinAVR-20100110\avr\lib\avr4\libm.a(pow.o)
-                0x000060ee                pow
+                0x00005fac       0x98 C:\WinAVR-20100110\avr\lib\avr4\libm.a(pow.o)
+                0x00005fac                pow
  .text.avr-libc.fplib
-                0x00006186       0x62 C:\WinAVR-20100110\avr\lib\avr4\libm.a(exp.o)
-                0x00006190                exp
+                0x00006044       0x62 C:\WinAVR-20100110\avr\lib\avr4\libm.a(exp.o)
+                0x0000604e                exp
  .text.avr-libc.fplib
-                0x000061e8       0x4a C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_powser.o)
-                0x000061e8                __fp_powser
+                0x000060a6       0x4a C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_powser.o)
+                0x000060a6                __fp_powser
  .text.avr-libc.fplib
-                0x00006232        0xe C:\WinAVR-20100110\avr\lib\avr4\libm.a(inverse.o)
-                0x00006232                inverse
+                0x000060f0        0xe C:\WinAVR-20100110\avr\lib\avr4\libm.a(inverse.o)
+                0x000060f0                inverse
  .text.avr-libc.fplib
-                0x00006240       0x6c C:\WinAVR-20100110\avr\lib\avr4\libm.a(ldexp.o)
-                0x00006244                ldexp
+                0x000060fe       0x6c C:\WinAVR-20100110\avr\lib\avr4\libm.a(ldexp.o)
+                0x00006102                ldexp
  .text.avr-libc.fplib
-                0x000062ac       0x8a C:\WinAVR-20100110\avr\lib\avr4\libm.a(log.o)
-                0x000062b6                log
+                0x0000616a       0x8a C:\WinAVR-20100110\avr\lib\avr4\libm.a(log.o)
+                0x00006174                log
  .text.avr-libc.fplib
-                0x00006336       0x66 C:\WinAVR-20100110\avr\lib\avr4\libm.a(modf.o)
-                0x00006336                modff
-                0x00006336                modf
+                0x000061f4       0x66 C:\WinAVR-20100110\avr\lib\avr4\libm.a(modf.o)
+                0x000061f4                modff
+                0x000061f4                modf
  .text.avr-libc.fplib
-                0x0000639c       0x1c C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_mpack.o)
-                0x000063a0                __fp_mpack_finite
-                0x0000639c                __fp_mpack
+                0x0000625a       0x1c C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_mpack.o)
+                0x0000625e                __fp_mpack_finite
+                0x0000625a                __fp_mpack
  .text.avr-libc
-                0x000063b8      0x6d0 C:\WinAVR-20100110\avr\lib\avr4\libprintf_flt.a(vfprintf_flt.o)
-                0x000063b8                vfprintf
- .text.libgcc   0x00006a88       0x3e c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
-                0x00006a88                __mulsi3
- .text.libgcc   0x00006ac6       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
-                0x00006ac6                __udivmodsi4
- .text.libgcc   0x00006b0a       0x38 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
-                0x00006b0a                __prologue_saves__
- .text.libgcc   0x00006b42       0x36 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
-                0x00006b42                __epilogue_restores__
- .text.libgcc   0x00006b78        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .text.libgcc   0x00006b78        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
- .text.libgcc   0x00006b78        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+                0x00006276      0x6d0 C:\WinAVR-20100110\avr\lib\avr4\libprintf_flt.a(vfprintf_flt.o)
+                0x00006276                vfprintf
+ .text.libgcc   0x00006946       0x3e c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+                0x00006946                __mulsi3
+ .text.libgcc   0x00006984       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+                0x00006984                __udivmodsi4
+ .text.libgcc   0x000069c8       0x38 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+                0x000069c8                __prologue_saves__
+ .text.libgcc   0x00006a00       0x36 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+                0x00006a00                __epilogue_restores__
+ .text.libgcc   0x00006a36        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x00006a36        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00006a36        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
  .text.avr-libc
-                0x00006b78      0x20a C:\WinAVR-20100110\avr\lib\avr4\libc.a(malloc.o)
-                0x00006b78                malloc
-                0x00006cd2                free
+                0x00006a36      0x20a C:\WinAVR-20100110\avr\lib\avr4\libc.a(malloc.o)
+                0x00006a36                malloc
+                0x00006b90                free
  .text.avr-libc
-                0x00006d82      0x1b0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ftoa_engine.o)
-                0x00006d82                __ftoa_engine
+                0x00006c40      0x1b0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ftoa_engine.o)
+                0x00006c40                __ftoa_engine
  .text.avr-libc
-                0x00006f32       0x16 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen_P.o)
-                0x00006f32                strnlen_P
+                0x00006df0       0x16 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen_P.o)
+                0x00006df0                strnlen_P
  .text.avr-libc
-                0x00006f48       0x16 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen.o)
-                0x00006f48                strnlen
+                0x00006e06       0x16 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen.o)
+                0x00006e06                strnlen
  .text.avr-libc
-                0x00006f5e       0x58 C:\WinAVR-20100110\avr\lib\avr4\libc.a(fputc.o)
-                0x00006f5e                fputc
+                0x00006e1c       0x58 C:\WinAVR-20100110\avr\lib\avr4\libc.a(fputc.o)
+                0x00006e1c                fputc
  .text.avr-libc
-                0x00006fb6       0x24 C:\WinAVR-20100110\avr\lib\avr4\libc.a(printf.o)
-                0x00006fb6                printf
+                0x00006e74       0x24 C:\WinAVR-20100110\avr\lib\avr4\libc.a(printf.o)
+                0x00006e74                printf
  .text.avr-libc
-                0x00006fda       0x6a C:\WinAVR-20100110\avr\lib\avr4\libc.a(puts.o)
-                0x00006fda                puts
+                0x00006e98       0x6a C:\WinAVR-20100110\avr\lib\avr4\libc.a(puts.o)
+                0x00006e98                puts
  .text.avr-libc
-                0x00007044       0xbc C:\WinAVR-20100110\avr\lib\avr4\libc.a(ultoa_invert.o)
-                0x00007044                __ultoa_invert
-                0x00007100                . = ALIGN (0x2)
+                0x00006f02       0xbc C:\WinAVR-20100110\avr\lib\avr4\libc.a(ultoa_invert.o)
+                0x00006f02                __ultoa_invert
+                0x00006fbe                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00007100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
-                0x00007100                exit
-                0x00007100                _exit
+ .fini9         0x00006fbe        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                0x00006fbe                exit
+                0x00006fbe                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -1026,422 +1024,420 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00007100        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .fini0         0x00006fbe        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00007104                _etext = .
+                0x00006fc2                _etext = .
 
-.data           0x00800100      0x358 load address 0x00007104
+.data           0x00800100      0x36a load address 0x00006fc2
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
  .data          0x00800100       0x24 CEEN_Interfaces.o
  .data          0x00800124       0x20 Custom_Support.o
- .data          0x00800144      0x2b9 Localization.o
-                0x008003dd                ROBOT_WORLD
-                0x008003dc                isLost
- .data          0x008003fd        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_open.o)
- .data          0x008003fd        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_sample.o)
- .data          0x008003fd        0x1 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_set_channel.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_set_VREF.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_main.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_clear.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_open.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_backlight.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_next_PGC.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_PGC_addr.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_write.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_clr_pattern.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_open.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_set_patttern.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_set_slave_addr.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_transmit.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_open.o)
- .data          0x008003fe        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_get_nSteps.o)
- .data          0x008003fe        0x8 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_globals.o)
-                0x00800402                Motor_R_LUT
-                0x008003fe                Motor_L_LUT
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_move.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_open.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_run.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_accel.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_dir.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_mode.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_speed.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_steps.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_step.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_stop.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_wait_and_then.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_get_state.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_globals.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_set_state.o)
- .data          0x00800406        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_get_sensors.o)
- .data          0x00800406        0x6 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_get_SW_state.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_open.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_delay.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_new.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_get.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_send.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_start.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_stop.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_open.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_set_BRG.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__ADC_init.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_init.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_isr.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_attach.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_globals.o)
- .data          0x0080040c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_open.o)
- .data          0x0080040c        0xe C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_globals.o)
-                0x0080040c                LCD_stdout
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LCD_init.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LCD_putchar.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_clr_pattern.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_init.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_set_pattern.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATMEGA_open.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATMEGA_set_clk_mode.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_globals.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_open.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_receive.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_set_config_func.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR__SPKR__TIMER1_COMPA_vect.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_clk.o)
- .data          0x0080041a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_close.o)
- .data          0x0080041a       0x38 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_globals.o)
-                0x0080044a                diatonic_LUT
-                0x0080041a                note_LUT
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_init.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_play_beep.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_stop.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_go.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__STEPPER_init.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_stop_mode.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_setup_decels.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_init.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_globals.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_globals.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_insert.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_open.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_start.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_start.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_enable.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_globals.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__I2C_init.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__ISR_attach.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__ATMEGA_init.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_cfgrs.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPI_init.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_beep.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_close.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_decel_step_values.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_init.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_tick.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_beep_clk.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_clk.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_accel.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_run_mode.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_step_mode.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_process.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_stop.o)
- .data          0x00800452        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_pwm.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3x.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(cmpsf2.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3x.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixsfsi.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixunssfsi.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(floatsisf.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_cmp.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_inf.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_nan.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscA.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscB.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_round.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_split3.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_zero.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(gesf2.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(lrint.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3x.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(pow.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(exp.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_powser.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(inverse.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(ldexp.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(log.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(modf.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_mpack.o)
- .data          0x00800452        0x0 C:\WinAVR-20100110\avr\lib\avr4\libprintf_flt.a(vfprintf_flt.o)
- .data          0x00800452        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
- .data          0x00800452        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
- .data          0x00800452        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
- .data          0x00800452        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
- .data          0x00800452        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .data          0x00800452        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
- .data          0x00800452        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
- .data          0x00800452        0x6 C:\WinAVR-20100110\avr\lib\avr4\libc.a(malloc.o)
-                0x00800454                __malloc_heap_start
-                0x00800456                __malloc_heap_end
-                0x00800452                __malloc_margin
- .data          0x00800458        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ftoa_engine.o)
- .data          0x00800458        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen_P.o)
- .data          0x00800458        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen.o)
- .data          0x00800458        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(fputc.o)
- .data          0x00800458        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(iob.o)
- .data          0x00800458        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(printf.o)
- .data          0x00800458        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(puts.o)
- .data          0x00800458        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ultoa_invert.o)
+ .data          0x00800144      0x2ca Localization.o
+                0x008003fe                ROBOT_WORLD
+                0x008003fd                isLost
+ .data          0x0080040e        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_open.o)
+ .data          0x0080040e        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_sample.o)
+ .data          0x0080040e        0x1 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_set_channel.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_set_VREF.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_main.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_clear.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_open.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_backlight.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_next_PGC.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_PGC_addr.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_write.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_clr_pattern.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_open.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_set_patttern.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_set_slave_addr.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_transmit.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_open.o)
+ .data          0x0080040f        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_get_nSteps.o)
+ .data          0x0080040f        0x8 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_globals.o)
+                0x00800413                Motor_R_LUT
+                0x0080040f                Motor_L_LUT
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_move.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_open.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_run.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_accel.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_dir.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_mode.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_speed.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_steps.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_step.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_stop.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_wait_and_then.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_get_state.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_globals.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_set_state.o)
+ .data          0x00800417        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_get_sensors.o)
+ .data          0x00800417        0x6 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_get_SW_state.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_open.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_delay.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_new.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_get.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_send.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_start.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_stop.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_open.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_set_BRG.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__ADC_init.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_init.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_isr.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_attach.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_globals.o)
+ .data          0x0080041d        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_open.o)
+ .data          0x0080041d        0xe C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_globals.o)
+                0x0080041d                LCD_stdout
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LCD_init.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LCD_putchar.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_clr_pattern.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_init.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_set_pattern.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATMEGA_open.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATMEGA_set_clk_mode.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_globals.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_open.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_receive.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_set_config_func.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR__SPKR__TIMER1_COMPA_vect.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_clk.o)
+ .data          0x0080042b        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_close.o)
+ .data          0x0080042b       0x38 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_globals.o)
+                0x0080045b                diatonic_LUT
+                0x0080042b                note_LUT
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_init.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_play_beep.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_stop.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_go.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__STEPPER_init.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_stop_mode.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_setup_decels.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_init.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_globals.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_globals.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_insert.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_open.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_start.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_start.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_enable.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_globals.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__I2C_init.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__ISR_attach.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__ATMEGA_init.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_cfgrs.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPI_init.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_beep.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_close.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_decel_step_values.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_init.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_tick.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_beep_clk.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_clk.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_accel.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_run_mode.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_step_mode.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_process.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_stop.o)
+ .data          0x00800463        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_pwm.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3x.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(cmpsf2.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3x.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixsfsi.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixunssfsi.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(floatsisf.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_cmp.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_inf.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_nan.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscA.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscB.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_round.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_split3.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_zero.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(gesf2.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(lrint.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3x.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(pow.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(exp.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_powser.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(inverse.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(ldexp.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(log.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(modf.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_mpack.o)
+ .data          0x00800463        0x0 C:\WinAVR-20100110\avr\lib\avr4\libprintf_flt.a(vfprintf_flt.o)
+ .data          0x00800463        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+ .data          0x00800463        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+ .data          0x00800463        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+ .data          0x00800463        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+ .data          0x00800463        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .data          0x00800463        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .data          0x00800463        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .data          0x00800463        0x6 C:\WinAVR-20100110\avr\lib\avr4\libc.a(malloc.o)
+                0x00800465                __malloc_heap_start
+                0x00800467                __malloc_heap_end
+                0x00800463                __malloc_margin
+ .data          0x00800469        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ftoa_engine.o)
+ .data          0x00800469        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen_P.o)
+ .data          0x00800469        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen.o)
+ .data          0x00800469        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(fputc.o)
+ .data          0x00800469        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(iob.o)
+ .data          0x00800469        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(printf.o)
+ .data          0x00800469        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(puts.o)
+ .data          0x00800469        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ultoa_invert.o)
  *(.data*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x00800458                . = ALIGN (0x2)
-                0x00800458                _edata = .
-                0x00800458                PROVIDE (__data_end, .)
+                0x0080046a                . = ALIGN (0x2)
+ *fill*         0x00800469        0x1 00
+                0x0080046a                _edata = .
+                0x0080046a                PROVIDE (__data_end, .)
 
-.bss            0x00800458      0x3d8
-                0x00800458                PROVIDE (__bss_start, .)
+.bss            0x0080046a      0x3cf
+                0x0080046a                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x00800458        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
- .bss           0x00800458        0x0 CEEN_Interfaces.o
- .bss           0x00800458        0x0 Custom_Support.o
- .bss           0x00800458       0x20 Localization.o
-                0x00800468                ROBOT_METRIC_WORLD
-                0x00800458                localizeGateways
-                0x00800467                currentBranch
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_open.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_sample.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_set_channel.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_set_VREF.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_main.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_clear.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_open.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_backlight.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_next_PGC.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_PGC_addr.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_write.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_clr_pattern.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_open.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_set_patttern.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_set_slave_addr.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_transmit.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_open.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_get_nSteps.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_globals.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_move.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_open.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_run.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_accel.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_dir.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_mode.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_speed.o)
- .bss           0x00800478        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_steps.o)
- .bss           0x00800478        0x2 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_step.o)
- .bss           0x0080047a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_stop.o)
- .bss           0x0080047a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_wait_and_then.o)
- .bss           0x0080047a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_get_state.o)
- .bss           0x0080047a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_globals.o)
- .bss           0x0080047a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_set_state.o)
- .bss           0x0080047a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_get_sensors.o)
- .bss           0x0080047a        0xe C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_get_SW_state.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_open.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_delay.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_new.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_get.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_send.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_start.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_stop.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_open.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_set_BRG.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__ADC_init.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_init.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_isr.o)
- .bss           0x00800488        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_attach.o)
- .bss           0x00800488       0x40 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_globals.o)
-                0x00800488                CBOT_ISR_vtable
- .bss           0x008004c8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_open.o)
- .bss           0x008004c8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_globals.o)
- .bss           0x008004c8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LCD_init.o)
- .bss           0x008004c8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LCD_putchar.o)
- .bss           0x008004c8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_clr_pattern.o)
- .bss           0x008004c8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_init.o)
- .bss           0x008004c8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_set_pattern.o)
- .bss           0x008004c8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATMEGA_open.o)
- .bss           0x008004c8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATMEGA_set_clk_mode.o)
- .bss           0x008004c8       0x10 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_globals.o)
-                0x008004c8                spi_config_func_LUT
- .bss           0x008004d8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_open.o)
- .bss           0x008004d8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_receive.o)
- .bss           0x008004d8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_set_config_func.o)
- .bss           0x008004d8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR__SPKR__TIMER1_COMPA_vect.o)
- .bss           0x008004d8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_clk.o)
- .bss           0x008004d8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_close.o)
- .bss           0x008004d8       0x10 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_globals.o)
-                0x008004e6                p_Freq_LUT
-                0x008004da                spkr_accum32
-                0x008004de                spkr_freq
-                0x008004e4                beep_freq
-                0x008004e2                beep_accum16
-                0x008004d9                beep_mode_active
-                0x008004d8                tone_mode_active
- .bss           0x008004e8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_init.o)
- .bss           0x008004e8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_play_beep.o)
- .bss           0x008004e8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_stop.o)
- .bss           0x008004e8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_go.o)
- .bss           0x008004e8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__STEPPER_init.o)
- .bss           0x008004e8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_stop_mode.o)
- .bss           0x008004e8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_setup_decels.o)
- .bss           0x008004e8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_init.o)
- .bss           0x008004e8        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_globals.o)
- .bss           0x008004e8        0x2 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_globals.o)
-                0x008004e9                timer_run_status
-                0x008004e8                timer_busy_status
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_insert.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_open.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_start.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_start.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_enable.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_globals.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__I2C_init.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__ISR_attach.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__ATMEGA_init.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_cfgrs.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPI_init.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_beep.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_close.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_decel_step_values.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_init.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_tick.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_beep_clk.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_clk.o)
- .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_accel.o)
- .bss           0x008004ea        0x1 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_run_mode.o)
- .bss           0x008004eb        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_step_mode.o)
- .bss           0x008004eb        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_process.o)
- .bss           0x008004eb        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_stop.o)
- .bss           0x008004eb        0x4 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_pwm.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3x.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(cmpsf2.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3x.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixsfsi.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixunssfsi.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(floatsisf.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_cmp.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_inf.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_nan.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscA.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscB.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_round.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_split3.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_zero.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(gesf2.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(lrint.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3x.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(pow.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(exp.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_powser.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(inverse.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(ldexp.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(log.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(modf.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_mpack.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libprintf_flt.a(vfprintf_flt.o)
- .bss           0x008004ef        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
- .bss           0x008004ef        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
- .bss           0x008004ef        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
- .bss           0x008004ef        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
- .bss           0x008004ef        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .bss           0x008004ef        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
- .bss           0x008004ef        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(malloc.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ftoa_engine.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen_P.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(fputc.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(iob.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(printf.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(puts.o)
- .bss           0x008004ef        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ultoa_invert.o)
+ .bss           0x0080046a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm324p.o
+ .bss           0x0080046a        0x0 CEEN_Interfaces.o
+ .bss           0x0080046a        0x0 Custom_Support.o
+ .bss           0x0080046a       0x20 Localization.o
+                0x0080047a                ROBOT_METRIC_WORLD
+                0x0080046a                localizeGateways
+                0x00800479                currentBranch
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_open.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_sample.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_set_channel.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ADC_set_VREF.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_main.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_clear.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_open.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_backlight.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_next_PGC.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_set_PGC_addr.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_write.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_clr_pattern.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_open.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LED_set_patttern.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_set_slave_addr.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_transmit.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_open.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_get_nSteps.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_globals.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_move.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_open.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_run.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_accel.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_dir.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_mode.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_speed.o)
+ .bss           0x0080048a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_steps.o)
+ .bss           0x0080048a        0x2 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_step.o)
+ .bss           0x0080048c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_stop.o)
+ .bss           0x0080048c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_wait_and_then.o)
+ .bss           0x0080048c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_get_state.o)
+ .bss           0x0080048c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_globals.o)
+ .bss           0x0080048c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_set_state.o)
+ .bss           0x0080048c        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_get_sensors.o)
+ .bss           0x0080048c        0xe C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_get_SW_state.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_open.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_delay.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_new.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_get.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_send.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_start.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_MSTR_stop.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_open.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_set_BRG.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__ADC_init.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_init.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(CBOT_isr.o)
+ .bss           0x0080049a        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_attach.o)
+ .bss           0x0080049a       0x40 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_globals.o)
+                0x0080049a                CBOT_ISR_vtable
+ .bss           0x008004da        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR_open.o)
+ .bss           0x008004da        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_globals.o)
+ .bss           0x008004da        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LCD_init.o)
+ .bss           0x008004da        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LCD_putchar.o)
+ .bss           0x008004da        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_clr_pattern.o)
+ .bss           0x008004da        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_init.o)
+ .bss           0x008004da        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__LED_set_pattern.o)
+ .bss           0x008004da        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATMEGA_open.o)
+ .bss           0x008004da        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATMEGA_set_clk_mode.o)
+ .bss           0x008004da       0x10 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_globals.o)
+                0x008004da                spi_config_func_LUT
+ .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_open.o)
+ .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_receive.o)
+ .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_set_config_func.o)
+ .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR__SPKR__TIMER1_COMPA_vect.o)
+ .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_clk.o)
+ .bss           0x008004ea        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_close.o)
+ .bss           0x008004ea       0x10 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_globals.o)
+                0x008004f8                p_Freq_LUT
+                0x008004ec                spkr_accum32
+                0x008004f0                spkr_freq
+                0x008004f6                beep_freq
+                0x008004f4                beep_accum16
+                0x008004eb                beep_mode_active
+                0x008004ea                tone_mode_active
+ .bss           0x008004fa        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_init.o)
+ .bss           0x008004fa        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_play_beep.o)
+ .bss           0x008004fa        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_stop.o)
+ .bss           0x008004fa        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_go.o)
+ .bss           0x008004fa        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__STEPPER_init.o)
+ .bss           0x008004fa        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_stop_mode.o)
+ .bss           0x008004fa        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_setup_decels.o)
+ .bss           0x008004fa        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_init.o)
+ .bss           0x008004fa        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_globals.o)
+ .bss           0x008004fa        0x2 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_globals.o)
+                0x008004fb                timer_run_status
+                0x008004fa                timer_busy_status
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_insert.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_open.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_start.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_start.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_enable.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_globals.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__I2C_init.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__ISR_attach.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__ATMEGA_init.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_cfgrs.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPI_init.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_beep.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__SPKR_close.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_set_decel_step_values.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(ISR__TIMER0_COMPA_vect.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(__TMRSRVC_init.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_tick.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(SPKR_beep_clk.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_clk.o)
+ .bss           0x008004fc        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_accel.o)
+ .bss           0x008004fc        0x1 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_run_mode.o)
+ .bss           0x008004fd        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_step_mode.o)
+ .bss           0x008004fd        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_process.o)
+ .bss           0x008004fd        0x0 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_stop.o)
+ .bss           0x008004fd        0x4 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_process_pwm.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(addsf3x.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(cmpsf2.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(divsf3x.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixsfsi.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fixunssfsi.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(floatsisf.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_cmp.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_inf.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_nan.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscA.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_pscB.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_round.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_split3.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_zero.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(gesf2.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(lrint.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(mulsf3x.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(pow.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(exp.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_powser.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(inverse.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(ldexp.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(log.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(modf.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libm.a(fp_mpack.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libprintf_flt.a(vfprintf_flt.o)
+ .bss           0x00800501        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
+ .bss           0x00800501        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
+ .bss           0x00800501        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+ .bss           0x00800501        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+ .bss           0x00800501        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .bss           0x00800501        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .bss           0x00800501        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(malloc.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ftoa_engine.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen_P.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(strnlen.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(fputc.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(iob.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(printf.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(puts.o)
+ .bss           0x00800501        0x0 C:\WinAVR-20100110\avr\lib\avr4\libc.a(ultoa_invert.o)
  *(.bss*)
  *(COMMON)
- COMMON         0x008004ef        0x6 CEEN_Interfaces.o
-                0x008004ef                LCopstat
-                0x008004f1                LEopstat
-                0x008004f3                ATopstat
- COMMON         0x008004f5      0x2b4 Custom_Support.o
-                0x008004f5                odometryStepR
-                0x008004f9                ltIR_old
-                0x00800571                ftIR
-                0x00800575                Ierror
-                0x00800579                currentGateway
-                0x0080057a                currentMoveWorld
-                0x0080057b                bkIR
-                0x0080057f                currentGoalWorld
-                0x00800580                nextGateway
-                0x00800581                bkIR_old
-                0x008005f9                odometryTrigger
-                0x008005fd                moveCommands
-                0x00800609                rightLightVolt
-                0x0080060d                currentOrientationStart
-                0x0080060e                currentOrientation
-                0x0080060f                nextOrientation
-                0x00800610                error_old
-                0x00800614                ftIR_old
-                0x0080068c                pix_arr
-                0x0080070c                curr_step
-                0x00800710                currentCellWorld
-                0x00800711                currentCellWorldStart
-                0x00800712                rightContact
-                0x00800713                leftContact
-                0x00800714                ltIR
-                0x00800718                odometryFlag
-                0x00800719                rtIR
-                0x0080071d                rtIR_old
-                0x00800795                moveGateways
-                0x008007a1                leftLightVolt
-                0x008007a5                odometryStepL
- COMMON         0x008007a9        0x5 Localization.o
-                0x008007a9                currentMove
-                0x008007aa                oldMove
-                0x008007ab                isGoal
-                0x008007ac                matchSeeds
-                0x008007ad                isMapping
- COMMON         0x008007ae       0x39 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_globals.o)
-                0x008007ae                STEPPER_params
-                0x008007e5                step_done
- COMMON         0x008007e7       0x13 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_globals.o)
-                0x008007e7                CBOT_system
- COMMON         0x008007fa        0x5 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_globals.o)
-                0x008007fa                LCD_params
- COMMON         0x008007ff        0x1 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_globals.o)
-                0x008007ff                curr_spi_addr
- COMMON         0x00800800       0x1e C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_globals.o)
-                0x00800800                ATTINY_params
- COMMON         0x0080081e        0x3 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_globals.o)
-                0x0080081e                tmrNodes
- COMMON         0x00800821        0x5 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_globals.o)
-                0x00800821                I2C_params
- COMMON         0x00800826        0x4 C:\WinAVR-20100110\avr\lib\avr4\libc.a(malloc.o)
-                0x00800826                __brkval
-                0x00800828                __flp
- COMMON         0x0080082a        0x6 C:\WinAVR-20100110\avr\lib\avr4\libc.a(iob.o)
-                0x0080082a                __iob
-                0x00800830                PROVIDE (__bss_end, .)
-                0x00007104                __data_load_start = LOADADDR (.data)
-                0x0000745c                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800501        0x6 CEEN_Interfaces.o
+                0x00800501                LCopstat
+                0x00800503                LEopstat
+                0x00800505                ATopstat
+ COMMON         0x00800507      0x2ab Custom_Support.o
+                0x00800507                ltIR_old
+                0x0080057f                ftIR
+                0x00800583                Ierror
+                0x00800587                currentGateway
+                0x00800588                currentMoveWorld
+                0x00800589                bkIR
+                0x0080058d                currentGoalWorld
+                0x0080058e                nextGateway
+                0x0080058f                bkIR_old
+                0x00800607                odometryTrigger
+                0x0080060b                moveCommands
+                0x00800617                rightLightVolt
+                0x0080061b                currentOrientationStart
+                0x0080061c                currentOrientation
+                0x0080061d                nextOrientation
+                0x0080061e                error_old
+                0x00800622                ftIR_old
+                0x0080069a                pix_arr
+                0x0080071a                curr_step
+                0x0080071e                currentCellWorld
+                0x0080071f                currentCellWorldStart
+                0x00800720                rightContact
+                0x00800721                leftContact
+                0x00800722                ltIR
+                0x00800726                rtIR
+                0x0080072a                rtIR_old
+                0x008007a2                moveGateways
+                0x008007ae                leftLightVolt
+ COMMON         0x008007b2        0x5 Localization.o
+                0x008007b2                currentMove
+                0x008007b3                oldMove
+                0x008007b4                isGoal
+                0x008007b5                matchSeeds
+                0x008007b6                isMapping
+ COMMON         0x008007b7       0x39 C:\Program Files\AVR Libraries\libcapi324v221.a(STEPPER_globals.o)
+                0x008007b7                STEPPER_params
+                0x008007ee                step_done
+ COMMON         0x008007f0       0x13 C:\Program Files\AVR Libraries\libcapi324v221.a(SYS_globals.o)
+                0x008007f0                CBOT_system
+ COMMON         0x00800803        0x5 C:\Program Files\AVR Libraries\libcapi324v221.a(LCD_globals.o)
+                0x00800803                LCD_params
+ COMMON         0x00800808        0x1 C:\Program Files\AVR Libraries\libcapi324v221.a(SPI_globals.o)
+                0x00800808                curr_spi_addr
+ COMMON         0x00800809       0x1e C:\Program Files\AVR Libraries\libcapi324v221.a(ATTINY_globals.o)
+                0x00800809                ATTINY_params
+ COMMON         0x00800827        0x3 C:\Program Files\AVR Libraries\libcapi324v221.a(TMRSRVC_globals.o)
+                0x00800827                tmrNodes
+ COMMON         0x0080082a        0x5 C:\Program Files\AVR Libraries\libcapi324v221.a(I2C_globals.o)
+                0x0080082a                I2C_params
+ COMMON         0x0080082f        0x4 C:\WinAVR-20100110\avr\lib\avr4\libc.a(malloc.o)
+                0x0080082f                __brkval
+                0x00800831                __flp
+ COMMON         0x00800833        0x6 C:\WinAVR-20100110\avr\lib\avr4\libc.a(iob.o)
+                0x00800833                __iob
+                0x00800839                PROVIDE (__bss_end, .)
+                0x00006fc2                __data_load_start = LOADADDR (.data)
+                0x0000732c                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800830        0x0
-                0x00800830                PROVIDE (__noinit_start, .)
+.noinit         0x00800839        0x0
+                0x00800839                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800830                PROVIDE (__noinit_end, .)
-                0x00800830                _end = .
-                0x00800830                PROVIDE (__heap_start, .)
+                0x00800839                PROVIDE (__noinit_end, .)
+                0x00800839                _end = .
+                0x00800839                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -1502,54 +1498,54 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x00000040       0x20 Localization.o
 
 .debug_pubnames
-                0x00000000      0x87b
+                0x00000000      0x821
  *(.debug_pubnames)
  .debug_pubnames
                 0x00000000      0x168 CEEN_Interfaces.o
  .debug_pubnames
-                0x00000168      0x312 Custom_Support.o
+                0x00000168      0x2fa Custom_Support.o
  .debug_pubnames
-                0x0000047a      0x401 Localization.o
+                0x00000462      0x3bf Localization.o
 
-.debug_info     0x00000000     0x1e9b
+.debug_info     0x00000000     0x1e66
  *(.debug_info)
  .debug_info    0x00000000      0x7de CEEN_Interfaces.o
- .debug_info    0x000007de      0xb42 Custom_Support.o
- .debug_info    0x00001320      0xb7b Localization.o
+ .debug_info    0x000007de      0xbcf Custom_Support.o
+ .debug_info    0x000013ad      0xab9 Localization.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x48e
+.debug_abbrev   0x00000000      0x491
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0xfc CEEN_Interfaces.o
- .debug_abbrev  0x000000fc      0x1e8 Custom_Support.o
- .debug_abbrev  0x000002e4      0x1aa Localization.o
+ .debug_abbrev  0x000000fc      0x201 Custom_Support.o
+ .debug_abbrev  0x000002fd      0x194 Localization.o
 
-.debug_line     0x00000000     0x1a1d
+.debug_line     0x00000000     0x1aaa
  *(.debug_line)
  .debug_line    0x00000000      0x730 CEEN_Interfaces.o
- .debug_line    0x00000730      0x79e Custom_Support.o
- .debug_line    0x00000ece      0xb4f Localization.o
+ .debug_line    0x00000730      0x84a Custom_Support.o
+ .debug_line    0x00000f7a      0xb30 Localization.o
 
-.debug_frame    0x00000000      0x350
+.debug_frame    0x00000000      0x360
  *(.debug_frame)
  .debug_frame   0x00000000      0x130 CEEN_Interfaces.o
- .debug_frame   0x00000130       0xe0 Custom_Support.o
- .debug_frame   0x00000210      0x140 Localization.o
+ .debug_frame   0x00000130      0x100 Custom_Support.o
+ .debug_frame   0x00000230      0x130 Localization.o
 
-.debug_str      0x00000000      0xe2b
+.debug_str      0x00000000      0xe0a
  *(.debug_str)
  .debug_str     0x00000000      0x6c0 CEEN_Interfaces.o
                                 0x74f (size before relaxing)
- .debug_str     0x000006c0      0x4e6 Custom_Support.o
-                                0x811 (size before relaxing)
- .debug_str     0x00000ba6      0x285 Localization.o
-                                0x7d3 (size before relaxing)
+ .debug_str     0x000006c0      0x552 Custom_Support.o
+                                0x87d (size before relaxing)
+ .debug_str     0x00000c12      0x1f8 Localization.o
+                                0x79d (size before relaxing)
 
-.debug_loc      0x00000000     0x1379
+.debug_loc      0x00000000     0x1354
  *(.debug_loc)
  .debug_loc     0x00000000      0x734 CEEN_Interfaces.o
- .debug_loc     0x00000734      0x717 Custom_Support.o
- .debug_loc     0x00000e4b      0x52e Localization.o
+ .debug_loc     0x00000734      0x77c Custom_Support.o
+ .debug_loc     0x00000eb0      0x4a4 Localization.o
 
 .debug_macinfo
  *(.debug_macinfo)

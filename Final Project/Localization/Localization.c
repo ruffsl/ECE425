@@ -8,21 +8,11 @@
 * AUTHORS: Ander Solorzano & Ruffin White   
 ********************************************************************/
 
-/** Header Files ***************************************************/     
-#include "capi324v221.h"
-#include "stdio.h"
-#include "CEEN_Interfaces.h"
+/** Header Files ***************************************************/
 #include "Custom_Support.h"
 
 /** Define Constants Here ******************************************/
 
-// Wall Following Threshold
-#define IR_WALL_F_THRESH 0
-#define IR_WALL_R_THRESH 15
-#define IR_WALL_L_THRESH 15
-#define IR_WALL_B_THRESH 15
-#define MAX_SPEED 200
-#define WALL_STEP 20
 
 // Gateway Thresholds
 #define FT_GATEWAY 13
@@ -38,7 +28,6 @@
 
 /** Local Function Prototypes **************************************/
 // Locomotion Primitives
-char moveWall(void);
 char moveWallOld(void);
 
 // User Inputs
@@ -112,25 +101,25 @@ void CBOT_main( void )
 	// // Loop variables for print debug
 	// unsigned char i, branch, move, orent;
 	
-	// // Display the map
-	// LCD_clear();
-	// LCD_printf("      New Map\n\n\n\n");
-	// printMap(RESET);
-	// TMRSRVC_delay(1000);//wait 1 seconds
-	// LCD_clear();
+	// Display the map
+	LCD_clear();
+	LCD_printf("      New Map\n\n\n\n");
+	printMap(RESET);
+	TMRSRVC_delay(1000);//wait 1 seconds
+	LCD_clear();
 	
-	// // Localization Loop 
-	// while(isLost)
-	// {	
-		// //Sense Gateway
-		// checkIR();	
-		// checkWorld();
+	// Localization Loop 
+	while(isLost)
+	{	
+		//Sense Gateway
+		checkIR();	
+		checkWorld();
 		
-		// //Plan using the Gateway
-		// planGateway();
+		//Plan using the Gateway
+		planGateway();
 		
-		// //Localize from Gateways?
-		// isLost = localizeGateway();
+		//Localize from Gateways?
+		isLost = localizeGateway();
 				
 		// //Print Tree		
 		// LCD_clear();
@@ -151,46 +140,36 @@ void CBOT_main( void )
 		// }
 		// LCD_printf("isLost %1d ",isLost);
 		// LCD_printf("seeds: %1d", matchSeeds);
-		// TMRSRVC_delay(2000);//wait 3 seconds
 		
-		// //Act on the Gateway
-		// moveMap();
+		// TMRSRVC_delay(5000);//wait 5 seconds
 		
-		// // Break if not isLost
-		// if(!isLost){
-			// break;
-		// }
-	// }
-	
-	
-
-	/**
-	while(!odometryFlag){
-		moveWall();
-		checkOdometry(0);
-		// LCD_clear();
-		// LCD_printf("%5.5f\n%5.5f\n",odometryStepL,odometryStepL);
-		// TMRSRVC_delay(1000);//wait 3 seconds
+		//Act on the Gateway
+		moveMap();
+		
+		// Break if not isLost
+		if(!isLost){
+			break;
+		}
 	}
-	**/
-	
-	// LCD_clear();
-	// LCD_printf("LOLZ\nI'm found!");
-	// TMRSRVC_delay(3000);//wait 3 seconds
-	
-	// LCD_clear();
-	// LCD_printf("      New Map\n\n\n\n");
-	// printMap(RESET);
-	// TMRSRVC_delay(10000);//wait 10 seconds
-	// LCD_clear();
 	
 	
-	currentCellWorld = 0b0000;
+	LCD_clear();
+	LCD_printf("LOLZ\nI'm found!");
+	TMRSRVC_delay(3000);//wait 3 seconds
+	
+	LCD_clear();
+	LCD_printf("      New Map\n\n\n\n");
+	printMap(RESET);
+	TMRSRVC_delay(5000);//wait 5 seconds
+	LCD_clear();
+	
+	// currentCellWorld = 0b0000;
 	currentGoalWorld = 0b1111;
 	
 	// Make metric map
 	wavefrontMake();
 	
+	// Metric Loop 
 	while(!isGoal){
 	
 		LCD_clear();
@@ -265,6 +244,7 @@ void CBOT_main( void )
 	
 	LCD_clear();
 	LCD_printf("LOLZ\nI'm here!");
+	STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
 	TMRSRVC_delay(5000);//wait 3 seconds
 	
 	/**
@@ -579,8 +559,8 @@ void wavefrontMake(void)
 			// for all other cells compute the distance
 			else{
 				// compute the differences in rows and columns
-				rowDelta = abs((WORLD_CELL[row][col]>>2) - rowGoal);
-				colDelta = abs((WORLD_CELL[row][col]&0b0011) - colGoal);
+				rowDelta = abs(row - rowGoal);
+				colDelta = abs(col - colGoal);
 				// compute the distance without using sqrt
 				distance = ((rowDelta*rowDelta)+(colDelta*colDelta));
 				// overwrite the cells in the metric map to the actual distance values
@@ -814,18 +794,24 @@ void planMap( void )
 ********************************************************************/
 void moveMap( void )
 {	
+	char isDone = 0;
+	
 	switch(currentMove){
 		case MOVE_LEFT:
 				move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
 			break;
 		case MOVE_FORWARD:
-			// checkOdometry(1);
-			// while(!odometryFlag){
-				// moveWall();
-				// checkOdometry(0);
-			// }
+		
+			setOdometry(WALL_STEP);
+			while(!isDone){
+				checkIR();
+				isDone = moveWall();
+			}
+			STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_ON);
+			TMRSRVC_delay(100);//wait .1 seconds
+			STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
 			
-			move_arc_stwt(NO_TURN, 45, 10, 10, 0);
+			// move_arc_stwt(NO_TURN, 45, 10, 10, 0);
 			break;
 		case MOVE_RIGHT:
 			move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
@@ -1229,119 +1215,6 @@ char moveWorld( void )
 	// TMRSRVC_delay(1000);//wait 1 seconds
 	oldMove = currentMove;
 	return 1;
-}
-
-/*******************************************************************
-* Function:			char moveWall(void)
-* Input Variables:	void
-* Output Return:	char
-* Overview:			This function searches for walls and adjust the 
-*					robots differential steering to attempts to
-*					follow them
-********************************************************************/
-char moveWall( void )
-{	
-	// Check for walls
-	BOOL isWall = (ftIR < IR_WALL_F_THRESH)|(bkIR < IR_WALL_B_THRESH)|(rtIR < IR_WALL_R_THRESH)|(ltIR < IR_WALL_L_THRESH);
-	if(!isWall){
-	
-		// Update odometry
-		curr_step = STEPPER_get_nSteps();
-		
-		if(curr_step.left != 0){
-			odometryStepL += WALL_STEP - curr_step.left;
-		}
-		if(curr_step.right != 0){
-			odometryStepR += WALL_STEP - curr_step.right;
-		}
-		
-		STEPPER_set_steps(STEPPER_BOTH,0);
-	
-		// Move with wall
-		STEPPER_move_stnb( STEPPER_BOTH, 
-		STEPPER_REV, WALL_STEP, 200, 450, STEPPER_BRK_OFF, // Left
-		STEPPER_REV, WALL_STEP, 200, 450, STEPPER_BRK_OFF ); // Right
-		return isWall;
-	}
-		
-	// A variable that contains the logic of which wall is imaginary
-	BOOL isLEFT;
-	
-	// If there is no wall on our right side
-	// place an imaginary wall just within the threshold
-	if(rtIR>IR_WALL_R_THRESH){
-		rtIR = IR_WALL_R_THRESH-18;
-		isLEFT = 0;
-	}
-	// If there is no wall on our left side
-	// place an imaginary wall just within the threshold
-	if(ltIR>IR_WALL_L_THRESH){
-		ltIR = IR_WALL_L_THRESH-18;
-		isLEFT = 1;
-	}
-	
-	float error;
-	
-	// Check to see if the wall exists in front of the robot
-	if(ftIR < IR_WALL_F_THRESH)
-	{
-		// if the imaginary wall was on the left side
-		// then biased the error so that when the robot encounters
-		// an upcoming corner, the robot will turn away from both walls
-		if (isLEFT)
-		{
-			error = rtIR - (ltIR + (1000/ftIR));
-		}
-		// biased the error appropriately for the inverse situation
-		else 
-		{
-			error = rtIR - (ltIR - (1000/ftIR));
-		}
-	}
-	
-	// If no front facing walls detected
-	// the air is simply the right distance minus the left left distance
-	// this ensures symmetry that the robot will follow in between the two walls
-	// either one real and one imaginary, or both real
-	else 
-	{
-		error = rtIR - ltIR;
-	}
-
-	// Use the PID controller function to calculate error
-	float effort = pidController(-error, 0);
-	
-	// Limit the control effort to the max allowable effort
-	if((abs(effort) > MAX_EFFORT)&(effort!=0)){
-		effort = MAX_EFFORT*(effort/abs(effort));
-	}
-	
-	// Calculate the stepper speeds for each wheel using a ratio
-	float stepper_speed_L = MAX_SPEED/2 + (MAX_SPEED/2)*(effort/MAX_EFFORT);
-	float stepper_speed_R = MAX_SPEED/2 - (MAX_SPEED/2)*(effort/MAX_EFFORT);
-	
-	// Update odometry
-	curr_step = STEPPER_get_nSteps();
-	
-	if(curr_step.left != 0){
-		odometryStepL += WALL_STEP - (curr_step.left);
-	}
-	if(curr_step.right != 0){
-		odometryStepR += WALL_STEP - (curr_step.right);
-	}
-	
-	STEPPER_set_steps(STEPPER_BOTH,0);
-	
-	// Move with wall
-	STEPPER_move_stnb( STEPPER_BOTH, 
-	STEPPER_REV, WALL_STEP, stepper_speed_L, 450, STEPPER_BRK_OFF, // Left
-	STEPPER_REV, WALL_STEP, stepper_speed_R, 450, STEPPER_BRK_OFF ); // Right
-	
-	// debug LCP print statement
-	// LCD_clear();
-	// LCD_printf("bkIR: %3.2f\nmoveWall\nError: %3f\nEffort: %3f\n", bkIR, error, effort);
-	return isWall;
-	
 }
 
 /*******************************************************************
