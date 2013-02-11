@@ -23,7 +23,7 @@ void initializeRobot(void)
 	LEopstat = LED_open(); //open the LED module
 	LCopstat = LCD_open(); //open the LCD module
 	STEPPER_open(); // Open STEPPER module for use
-	SPKR_open(SPKR_TONE_MODE);//open the speaker in tone mode
+	SPKR_open(SPKR_BEEP_MODE);//open the speaker in tone mode
 	
 	LED_open();
 	I2C_open();

@@ -100,7 +100,7 @@ void CBOT_main( void )
 	// initialize the robot
 	initializeRobot();
 	
-	// // Loop variables for print debug
+	// Loop variables for print debug
 	// unsigned char i, branch, move, orent;
 	
 	// Display the map
@@ -123,7 +123,7 @@ void CBOT_main( void )
 		//Localize from Gateways?
 		isLost = localizeGateway();
 				
-		// //Print Tree		
+		//Print Tree		
 		// LCD_clear();
 		// LCD_printf("Branch");
 		// for(i = 0; i<BRANCH_MAX; i++){
@@ -154,10 +154,11 @@ void CBOT_main( void )
 		}
 	}
 	
-	
+	SPKR_beep(500);	
 	LCD_clear();
 	LCD_printf("LOLZ\nI'm found!");
 	TMRSRVC_delay(3000);//wait 3 seconds
+	SPKR_beep(0);
 	
 	LCD_clear();
 	LCD_printf("      New Map\n\n\n\n");
@@ -244,10 +245,12 @@ void CBOT_main( void )
 		// TMRSRVC_delay(2000);//wait 1 seconds
 	}
 	
+	SPKR_beep(500);	
 	LCD_clear();
 	LCD_printf("LOLZ\nI'm here!");
 	STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
 	TMRSRVC_delay(5000);//wait 3 seconds
+	SPKR_beep(0);	
 	
 	/**
 	// Enter the robot's current (starting) position
@@ -583,6 +586,7 @@ char matchBranch( unsigned char *ptROBOT_WORLD, unsigned char row, unsigned char
 {	
 	// Local variables for comparing branch and gateway 
 	unsigned char branch, curMove, curOrnt, gateway, i;
+	unsigned char curCell = 0;
 	
 	// Local variables for nested for loops 
 	unsigned char curRow = row;
@@ -622,22 +626,23 @@ char matchBranch( unsigned char *ptROBOT_WORLD, unsigned char row, unsigned char
 		}
 		
 		// Set the new cell of the next branch
-		currentCellWorld = (curRow << 2) + curCol;
+		curCell = (curRow << 2) + curCol;
 
 		// If this is the last branch
 		// dont move the cell
 		// so we are left with our locilized position 
 		// if((i == (currentBranch-2))&&){
 		// Prep for the gateway by moving with the next branch
-		currentCellWorld = shiftMap(currentCellWorld, curMove, curOrnt);
+		curCell = shiftMap(curCell, curMove, curOrnt);
 		// }
 				
 		// Get the currrent cell of the branch
-		curRow = currentCellWorld >> 2;
-		curCol = currentCellWorld & 0b0011;
+		curRow = curCell >> 2;
+		curCol = curCell & 0b0011;
 	}
 	// If we make it through all the branches
 	// then return success
+	currentCellWorld = curCell;
 	return SUCCESS;
 }
 
@@ -703,7 +708,7 @@ void planGateway( void )
 	// as the new seed
 	unsigned char i;
 	if(currentBranch>=BRANCH_MAX){
-		for(i = 0; i<=(BRANCH_MAX-1); i++){
+		for(i = 0; i < BRANCH_MAX; i++){
 			localizeGateways[0][i] = localizeGateways[0][1+i];
 			localizeGateways[1][i] = localizeGateways[1][1+i];
 			localizeGateways[2][i] = localizeGateways[2][1+i];
