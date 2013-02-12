@@ -101,45 +101,65 @@ void CBOT_main( void )
 	
 	// Initialize State
 	isLost = 1;
-	currentOrientation = NORTH;
+	currentOrientation = SOUTH;
 	oldMove = MOVE_STOP;
 	
 	// Localization Loop 
-	// // // while(isLost)
-	// // // {	
-		// // // // Break if not isLost
-		// // // if(!isLost){
-			// // // break;
-		// // // }
+	while(isLost)
+	{	
+		// Break if not isLost
+		if(!isLost){
+			break;
+		}
 		
-		// // // //Sense Gateway
-		// // // checkIR();	
-		// // // checkWorld();
+		//Sense Gateway
+		checkIR();	
+		checkWorld();
 		
-		// // // //Plan using the Gateway
-		// // // planGateway();
+		//Plan using the Gateway
+		planGateway();
 		
-		// // // //Localize from Gateways?
-		// // // isLost = localizeGateway();
+		//Localize from Gateways?
+		isLost = localizeGateway();
 		
-		// // // //Act on the Gateway
-		// // // moveMap();
-	// // // }
+		//Act on the Gateway
+		moveMap();
+	}
 		
-		// // SPKR_beep(500);	
-		// // LCD_clear();
-		// // LCD_printf("LOLZ\nI'm found!");
-		// // TMRSRVC_delay(3000);//wait 3 seconds
-		// // SPKR_beep(0);
+	// Update the currentOrientation using currentMove
+	switch(currentMove){
+		case MOVE_LEFT:
+			// If we move left
+			// shift our oriention CCW
+			currentOrientation--;
+			currentOrientation = currentOrientation&0b11;
+			break;
+		case MOVE_FORWARD:
+			break;
+		case MOVE_RIGHT:
+			// If we move right
+			// shift our oriention CW
+			currentOrientation++;
+			currentOrientation = currentOrientation&0b11;
+			break;
+		default:
+			LCD_printf("Whatz2?!");
+			break;
+	}
+	
+		SPKR_beep(500);	
+		// LCD_clear();
+		// LCD_printf("LOLZ\nI'm found!");
+		// TMRSRVC_delay(3000);//wait 3 seconds
 		
-		// // LCD_clear();
-		// // LCD_printf("      New Map\n\n\n\n");
-		// // printMap(RESET);
-		// // TMRSRVC_delay(5000);//wait 5 seconds
-		// // LCD_clear();
+		LCD_clear();
+		LCD_printf("      New Map\n\n\n\n");
+		printMap(RESET);
+		TMRSRVC_delay(1000);//wait 1 seconds
+		SPKR_beep(0);
 		
 		
-	currentCellWorld = 0;
+	// currentCellWorld = 0;
 	isFire = 0;
 	
 	// Go firefight
@@ -163,15 +183,15 @@ void CBOT_main( void )
 		moveMap();
 	}
 	
-	// Beep for the fire SIREN
-	int ii;
-	for (ii=0; ii<=3; ii++){
-		SPKR_beep(250);	
-		TMRSRVC_delay(1000);
-		SPKR_beep(500);	
-		TMRSRVC_delay(1000);
-	}
-	SPKR_beep(0);
+	// // Beep for the fire SIREN
+	// int ii;
+	// for (ii=0; ii<=3; ii++){
+		// SPKR_beep(250);	
+		// TMRSRVC_delay(1000);
+		// SPKR_beep(500);	
+		// TMRSRVC_delay(1000);
+	// }
+	// SPKR_beep(0);
 	
 	// // Print the fire cell location
 	// LCD_clear();
@@ -184,16 +204,15 @@ void CBOT_main( void )
 		// Stop when home is reached
 		STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
 		
-		// Beep when home is reached
-		SPKR_beep(500);
-		TMRSRVC_delay(3000);//wait 3 seconds
-		SPKR_beep(0);
 		
 		// Print that you are at home and the fire cell location
 		LCD_clear();
 		LCD_printf("LOLZ\nI'm HOME\nFire at Cell: %i\n\n",currentFireCell);
-		STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
-		TMRSRVC_delay(10000);//wait 10 seconds
+		STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);// Beep when home is reached
+		SPKR_beep(500);
+		TMRSRVC_delay(3000);//wait 3 seconds
+		SPKR_beep(0);
+		TMRSRVC_delay(7000);//wait 7 seconds
 		
 	
 	
@@ -339,16 +358,26 @@ unsigned char checkFire(void)
 void metric (void)
 {
 	// currentCellWorld = 0b0000;
-	//currentGoalWorld = 12;
+	currentGoalWorld = 15;
 	
 	// Make metric map
 	wavefrontMake();
 	
 	// Initialize State
 	isGoal = 0;
+	unsigned char isSiren = 0;
 	
 	// Metric Loop 
 	while(!isGoal){
+		
+		if(isSiren){
+			SPKR_beep(500);
+			isSiren = 0;
+		}
+		else{
+			SPKR_beep(250);
+			isSiren = 1;
+		}
 	
 		LCD_clear();
 		
@@ -416,6 +445,7 @@ void metric (void)
 		currentCellWorld = shiftMap(currentCellWorld, currentMove, currentOrientation);
 		// TMRSRVC_delay(2000);//wait 1 seconds
 	}
+	SPKR_beep(0);
 }
 
 /*******************************************************************
@@ -782,10 +812,10 @@ char localizeGateway( void )
 	}
 	
 	
-	SPKR_play_beep(500,1000,50);
-	for(i = 0; i < matchSeeds; i++){
-		SPKR_play_beep(1000,1000,50);
-	}
+	// SPKR_play_beep(500,1000,50);
+	// for(i = 0; i < matchSeeds; i++){
+		// SPKR_play_beep(1000,1000,50);
+	// }
 	
 	// If we have only one remaining seed
 	// Then we are localized

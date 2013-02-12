@@ -94,7 +94,7 @@
 	
 	#define MAX_SPEED_STEP 500
  	#define MAX_ACL_STEP   500
-	#define WALL_STEP 340
+	#define WALL_STEP 330
 
 	#define BYTETOBINARYPATTERN "%d%d%d%d%d%d%d%d"
 	#define BYTETOBINARY(byte)  \
