@@ -44,6 +44,9 @@ char localizeGateway(void);
 char matchBranch( unsigned char, unsigned char);
 void localize(void);
 
+// Firefighting tools
+unsigned char checkFire(void);
+
 
 /** Global Variables ***********************************************/
 
@@ -52,6 +55,7 @@ unsigned char matchSeeds;
 unsigned char isMapping;
 unsigned char isLost;
 unsigned char isGoal;
+unsigned char isFire;
 
 
 unsigned char localizeGateways[BRANCH_TYPES][BRANCH_MAX] = {
@@ -101,48 +105,96 @@ void CBOT_main( void )
 	oldMove = MOVE_STOP;
 	
 	// Localization Loop 
-	while(isLost)
-	{	
-		// Break if not isLost
-		if(!isLost){
-			break;
-		}
+	// // // while(isLost)
+	// // // {	
+		// // // // Break if not isLost
+		// // // if(!isLost){
+			// // // break;
+		// // // }
 		
+		// // // //Sense Gateway
+		// // // checkIR();	
+		// // // checkWorld();
+		
+		// // // //Plan using the Gateway
+		// // // planGateway();
+		
+		// // // //Localize from Gateways?
+		// // // isLost = localizeGateway();
+		
+		// // // //Act on the Gateway
+		// // // moveMap();
+	// // // }
+		
+		// // SPKR_beep(500);	
+		// // LCD_clear();
+		// // LCD_printf("LOLZ\nI'm found!");
+		// // TMRSRVC_delay(3000);//wait 3 seconds
+		// // SPKR_beep(0);
+		
+		// // LCD_clear();
+		// // LCD_printf("      New Map\n\n\n\n");
+		// // printMap(RESET);
+		// // TMRSRVC_delay(5000);//wait 5 seconds
+		// // LCD_clear();
+		
+		
+	currentCellWorld = 0;
+	isFire = 0;
+	
+	// Go firefight
+	while(!isFire){
 		//Sense Gateway
 		checkIR();	
 		checkWorld();
 		
-		//Plan using the Gateway
-		planGateway();
+		isFire = checkFire();
+		if(isFire){
+			break;
+		}
 		
-		//Localize from Gateways?
-		isLost = localizeGateway();
+		// Plan using Map
+		planMap();
 		
-		//Act on the Gateway
+		// Shift the map
+		currentCellWorld = shiftMap(currentCellWorld, currentMove, currentOrientation);
+		
+		// Act on the Map
 		moveMap();
 	}
-		
+	
+	// Beep for the fire SIREN
+	int ii;
+	for (ii=0; ii<=3; ii++){
+		SPKR_beep(250);	
+		TMRSRVC_delay(1000);
 		SPKR_beep(500);	
-		LCD_clear();
-		LCD_printf("LOLZ\nI'm found!");
-		TMRSRVC_delay(3000);//wait 3 seconds
-		SPKR_beep(0);
-		
-		LCD_clear();
-		LCD_printf("      New Map\n\n\n\n");
-		printMap(RESET);
-		TMRSRVC_delay(5000);//wait 5 seconds
-		LCD_clear();
+		TMRSRVC_delay(1000);
+	}
+	SPKR_beep(0);
+	
+	// // Print the fire cell location
+	// LCD_clear();
+	// LCD_printf("Fire = %i\n\n\n\n", currentFireCell);
+	// TMRSRVC_delay(5000);
 	
 	// Moves the Robot to the goal
 	metric();
 	
-		SPKR_beep(500);	
-		LCD_clear();
-		LCD_printf("LOLZ\nI'm here!");
+		// Stop when home is reached
 		STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
-		TMRSRVC_delay(5000);//wait 3 seconds
+		
+		// Beep when home is reached
+		SPKR_beep(500);
+		TMRSRVC_delay(3000);//wait 3 seconds
 		SPKR_beep(0);
+		
+		// Print that you are at home and the fire cell location
+		LCD_clear();
+		LCD_printf("LOLZ\nI'm HOME\nFire at Cell: %i\n\n",currentFireCell);
+		STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
+		TMRSRVC_delay(10000);//wait 10 seconds
+		
 	
 	
 	
@@ -230,6 +282,53 @@ void CBOT_main( void )
 /*******************************************************************
 * Additional Helper Functions
 ********************************************************************/
+
+/*******************************************************************
+* Function:			void checkFire(void)
+* Input Variables:	none
+* Output Return:	unsigned char
+* Overview:			Checks world for Fires
+********************************************************************/
+unsigned char checkFire(void)
+{
+	// Acquire the current gateway
+	unsigned char curGate = currentGateway;
+	
+	// Acquire the current cell
+	unsigned char curRow = (currentCellWorld>>2);
+	unsigned char curCol = (currentCellWorld&0b0011);
+	unsigned char curCell = ROBOT_WORLD[curRow][curCol];
+	
+	// Rotate the current gateway wrt to current orientation
+	curGate = rotateCell (curGate, currentOrientation, TO_MAP_ROTATE);
+	
+	// Return the boolean value of the equality
+	if (curGate != curCell){
+		switch(curGate^curCell){
+			case 0b0001:
+				currentFireCell = (curRow<<2)+(curCol-1);
+				break;
+			case 0b0010:
+				currentFireCell = ((curRow+1)<<2)+(curCol);
+				return SUCCESS;
+				break;
+			case 0b0100:
+				currentFireCell = (curRow<<2)+(curCol+1);
+				return SUCCESS;
+				break;
+			case 0b1000:
+				currentFireCell = ((curRow-1)<<2)+(curCol);
+				return SUCCESS;
+				break;
+			default:
+				return FAIL;
+				break;
+		}
+		return SUCCESS;
+	}
+	return FAIL;
+	// return 0;
+}
 
 /*******************************************************************
 * Function:			void metric(void)

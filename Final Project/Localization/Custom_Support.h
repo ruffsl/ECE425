@@ -168,6 +168,7 @@
 	unsigned char currentOrientationStart;
 	unsigned char currentGateway;
 	unsigned char nextGateway;
+	unsigned char currentFireCell;
 	
 	unsigned char currentMove;
 	unsigned char oldMove;
