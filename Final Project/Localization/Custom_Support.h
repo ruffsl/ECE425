@@ -31,8 +31,8 @@
 	#define WHEEL_BASE 21.3
 	#define POINT_TURN 0
 	#define NO_TURN 2147483647
-	#define RIGHT_TURN 17.50
-	#define LEFT_TURN -17.50
+	#define RIGHT_TURN 16.50
+	#define LEFT_TURN -16.50
 	
 	// Obstacle Avoidance Threshold
 	#define IR_OBST_F_THRESH 10
@@ -42,9 +42,15 @@
 	
 	// Wall Following Threshold
 	#define IR_WALL_F_THRESH 0
-	#define IR_WALL_R_THRESH 15
-	#define IR_WALL_L_THRESH 15
-	#define IR_WALL_B_THRESH 15
+	#define IR_WALL_R_THRESH 13
+	#define IR_WALL_L_THRESH 13
+	#define IR_WALL_B_THRESH 10
+	
+	// Gateway Thresholds
+	#define FT_GATEWAY 10
+	#define BK_GATEWAY 35
+	#define LT_GATEWAY 30
+	#define RT_GATEWAY 30
 	
 	// Movement Commands for pathplanning
 	#define MOVE_LEFT 1
@@ -88,7 +94,7 @@
 	
 	#define MAX_SPEED_STEP 500
  	#define MAX_ACL_STEP   500
-	#define WALL_STEP 300
+	#define WALL_STEP 340
 
 	#define BYTETOBINARYPATTERN "%d%d%d%d%d%d%d%d"
 	#define BYTETOBINARY(byte)  \
@@ -163,6 +169,9 @@
 	unsigned char currentGateway;
 	unsigned char nextGateway;
 	
+	unsigned char currentMove;
+	unsigned char oldMove;
+	
 	
 	// odometry values
 	STEPPER_STEPS curr_step;
@@ -186,5 +195,13 @@
 	char checkOdometry( char);
 	void setOdometry( float );
 	char moveWall(void);
+	
+	// User Inputs
+	void worldInput(void);
+	void orientationInput(void);
+	void movesInput(void);
+	
+	// Sensory Primitives
+	void checkWorld(void);
 
 #endif

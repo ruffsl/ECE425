@@ -13,35 +13,20 @@
 
 /** Define Constants Here ******************************************/
 
-
-// Gateway Thresholds
-#define FT_GATEWAY 10
-#define BK_GATEWAY 35
-#define LT_GATEWAY 30
-#define RT_GATEWAY 30
-
 // localizeGateways Size
 #define BRANCH_TYPES 3
 #define BRANCH_MAX 5
-
 
 
 /** Local Function Prototypes **************************************/
 // Locomotion Primitives
 char moveWallOld(void);
 
-// User Inputs
-void worldInput(void);
-void orientationInput(void);
-void movesInput(void);
-
-// Sensory Primitives
-void checkWorld(void);
 
 // Pathplanning Tools
-char moveWorld(void);
 void getGateways(void);
 void setGateways(void);
+void metric(void);
 
 void wavefrontMake(void);
 unsigned char fourNeighborSearch(unsigned char);
@@ -51,22 +36,22 @@ void planMetric(void);
 void planMap(void);
 void moveMap(void);
 unsigned char shiftMap(unsigned char, unsigned char, unsigned char);
+void map (void);
 
 // Localization Tools
 void planGateway(void);
 char localizeGateway(void);
-char matchBranch(unsigned char *, unsigned char, unsigned char);
+char matchBranch( unsigned char, unsigned char);
+void localize(void);
 
 
 /** Global Variables ***********************************************/
 
 // moveBehavior Global Flag Variables
-char currentMove;
-char oldMove;
-char isMapping;
-char isLost = 1;
 unsigned char matchSeeds;
-unsigned char isGoal = 0;
+unsigned char isMapping;
+unsigned char isLost;
+unsigned char isGoal;
 
 
 unsigned char localizeGateways[BRANCH_TYPES][BRANCH_MAX] = {
@@ -100,19 +85,29 @@ void CBOT_main( void )
 	// initialize the robot
 	initializeRobot();
 	
-	// Loop variables for print debug
-	// unsigned char i, branch, move, orent;
+		// Display the map
+		LCD_clear();
+		LCD_printf("      New Map\n\n\n\n");
+		printMap(RESET);
+		TMRSRVC_delay(1000);//wait 1 seconds
+		LCD_clear();
 	
-	// Display the map
-	LCD_clear();
-	LCD_printf("      New Map\n\n\n\n");
-	printMap(RESET);
-	TMRSRVC_delay(1000);//wait 1 seconds
-	LCD_clear();
+	// Locilize the Robot
+	// localize();
+	
+	// Initialize State
+	isLost = 1;
+	currentOrientation = NORTH;
+	oldMove = MOVE_STOP;
 	
 	// Localization Loop 
 	while(isLost)
 	{	
+		// Break if not isLost
+		if(!isLost){
+			break;
+		}
+		
 		//Sense Gateway
 		checkIR();	
 		checkWorld();
@@ -122,137 +117,37 @@ void CBOT_main( void )
 		
 		//Localize from Gateways?
 		isLost = localizeGateway();
-				
-		//Print Tree		
-		// LCD_clear();
-		// LCD_printf("Branch");
-		// for(i = 0; i<BRANCH_MAX; i++){
-			// branch = localizeGateways[0][i];
-			// LCD_printf("%3d", branch);
-		// }
-		// LCD_printf("Move  ");
-		// for(i = 0; i<BRANCH_MAX; i++){
-			// move = localizeGateways[1][i];
-			// LCD_printf("%3d", move);
-		// }
-		// LCD_printf("Ornt  ");
-		// for(i = 0; i<BRANCH_MAX; i++){
-			// orent = localizeGateways[2][i];
-			// LCD_printf("%3d", orent);
-		// }
-		// LCD_printf("isLost %1d ",isLost);
-		// LCD_printf("seeds: %1d", matchSeeds);
-		
-		// TMRSRVC_delay(5000);//wait 5 seconds
 		
 		//Act on the Gateway
 		moveMap();
-		
-		// Break if not isLost
-		if(!isLost){
-			break;
-		}
 	}
-	
-	SPKR_beep(500);	
-	LCD_clear();
-	LCD_printf("LOLZ\nI'm found!");
-	TMRSRVC_delay(3000);//wait 3 seconds
-	SPKR_beep(0);
-	
-	LCD_clear();
-	LCD_printf("      New Map\n\n\n\n");
-	printMap(RESET);
-	TMRSRVC_delay(5000);//wait 5 seconds
-	LCD_clear();
-	
-	// currentCellWorld = 0b0000;
-	currentGoalWorld = 12;
-	
-	// Make metric map
-	wavefrontMake();
-	
-	// Metric Loop 
-	while(!isGoal){
-	
+		
+		SPKR_beep(500);	
 		LCD_clear();
-		switch(currentOrientation){
-			case NORTH:
-				LCD_printf("CurtOrent:NORTH\n");
-				break;
-			case EAST:
-				LCD_printf("CurtOrent:EAST\n");
-				break;
-			case SOUTH:
-				LCD_printf("CurtOrent:SOUTH\n");
-				break;
-			case WEST:
-				LCD_printf("CurtOrent:WEST\n");
-				break;
-			default:
-				break;
-		}
+		LCD_printf("LOLZ\nI'm found!");
+		TMRSRVC_delay(3000);//wait 3 seconds
+		SPKR_beep(0);
+		
+		LCD_clear();
+		LCD_printf("      New Map\n\n\n\n");
+		printMap(RESET);
+		TMRSRVC_delay(5000);//wait 5 seconds
+		LCD_clear();
 	
-		// Find the next orentation
-		isGoal = fourNeighborSearch(currentCellWorld);
-		if(isGoal){
-			break;
-		}
-		
-		// if(nextOrientation != SOUTH){
-			// break;
-		// }
-				
-		switch(nextOrientation){
-			case NORTH:
-				LCD_printf("NextOrent:NORTH\n");
-				break;
-			case EAST:
-				LCD_printf("NextOrent:EAST\n");
-				break;
-			case SOUTH:
-				LCD_printf("NextOrent:SOUTH\n");
-				break;
-			case WEST:
-				LCD_printf("NextOrent:WEST\n");
-				break;
-			default:
-				break;
-		}
-		
-		switch(currentMove){
-			case MOVE_LEFT:
-				LCD_printf("CurMOVE:LEFT\n");
-				break;
-			case MOVE_RIGHT:
-				LCD_printf("CurMOVE:RIGHT\n");
-				break;
-			case MOVE_FORWARD:
-				LCD_printf("CurMOVE:FORWARD\n");
-				break;
-			default:
-				break;
-		}
-		
-		// Plan using metric map and next orientation
-		planMetric();
-		
-		// Act on the move
-		moveMap();
-		
-		// Shift the map
-		currentCellWorld = shiftMap(currentCellWorld, currentMove, currentOrientation);
-		// TMRSRVC_delay(2000);//wait 1 seconds
-	}
+	// Moves the Robot to the goal
+	metric();
 	
-	SPKR_beep(500);	
-	LCD_clear();
-	LCD_printf("LOLZ\nI'm here!");
-	STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
-	TMRSRVC_delay(5000);//wait 3 seconds
-	SPKR_beep(0);	
+		SPKR_beep(500);	
+		LCD_clear();
+		LCD_printf("LOLZ\nI'm here!");
+		STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
+		TMRSRVC_delay(5000);//wait 3 seconds
+		SPKR_beep(0);
+	
+	
 	
 	/**
+	
 	// Enter the robot's current (starting) position
 	LCD_printf("START Map/nlocation\n\n\n");	
 	TMRSRVC_delay(1000);//wait 1 seconds
@@ -269,51 +164,6 @@ void CBOT_main( void )
 	TMRSRVC_delay(1000);//wait 3 seconds
 	LCD_clear();
 	
-	isMapping = 1;
-	
-	
-	LCD_printf("      Your Map\n\n\n\n");	
-	printMap(RESET);
-	TMRSRVC_delay(1000);//wait 1 seconds
-	LCD_clear();	
-	
-	// Mapping Loop
-	while(isMapping)
-	{	
-		//Sense
-		checkIR();	
-		checkWorld();
-		
-		//Record
-		setGateways();
-				
-		//Plan using the Map
-		planMap();
-		
-		//Act on the Map
-		moveMap();
-		
-		//Shift the Map
-		currentCellWorld = shiftMap(currentCellWorld, currentOrientation);
-		
-		//Break?
-		isMapping = !((currentCellWorldStart == currentCellWorld)&&(currentOrientationStart == currentOrientation));
-		if(!isMapping){			
-			LCD_clear();
-			LCD_printf("LOLZ\nI'm done!");
-			TMRSRVC_delay(3000);//wait 3 seconds
-			break;
-		}
-		
-		//Print Map
-		LCD_clear();
-		LCD_printf("      Move"BYTETOBINARYPATTERN"\n      Cell"BYTETOBINARYPATTERN"\n      Ornt"BYTETOBINARYPATTERN"\n\n",BYTETOBINARY(currentMove),BYTETOBINARY(currentCellWorld),BYTETOBINARY(currentOrientation));
-		printMap(RESET);
-		TMRSRVC_delay(500);//wait 3 seconds
-	}
-	**/
-	
-	/**
 	// Print the map
 	LCD_clear();	
 	printMap(RESET);
@@ -374,12 +224,155 @@ void CBOT_main( void )
 		// TMRSRVC_delay(1000);//wait 1 seconds
     }
 	**/
-}// end the CBOT_main()
 
+}// end the CBOT_main()
 
 /*******************************************************************
 * Additional Helper Functions
 ********************************************************************/
+
+/*******************************************************************
+* Function:			void metric(void)
+* Input Variables:	none
+* Output Return:	none
+* Overview:			Moves the robot to the goal
+********************************************************************/
+void metric (void)
+{
+	// currentCellWorld = 0b0000;
+	//currentGoalWorld = 12;
+	
+	// Make metric map
+	wavefrontMake();
+	
+	// Initialize State
+	isGoal = 0;
+	
+	// Metric Loop 
+	while(!isGoal){
+	
+		LCD_clear();
+		
+		switch(currentOrientation){
+			case NORTH:
+				LCD_printf("CurtOrent:NORTH\n");
+				break;
+			case EAST:
+				LCD_printf("CurtOrent:EAST\n");
+				break;
+			case SOUTH:
+				LCD_printf("CurtOrent:SOUTH\n");
+				break;
+			case WEST:
+				LCD_printf("CurtOrent:WEST\n");
+				break;
+			default:
+				break;
+		}
+	
+		// Find the next orentation
+		isGoal = fourNeighborSearch(currentCellWorld);
+		if(isGoal){
+			break;
+		}
+				
+		switch(nextOrientation){
+			case NORTH:
+				LCD_printf("NextOrent:NORTH\n");
+				break;
+			case EAST:
+				LCD_printf("NextOrent:EAST\n");
+				break;
+			case SOUTH:
+				LCD_printf("NextOrent:SOUTH\n");
+				break;
+			case WEST:
+				LCD_printf("NextOrent:WEST\n");
+				break;
+			default:
+				break;
+		}
+		
+		switch(currentMove){
+			case MOVE_LEFT:
+				LCD_printf("CurMOVE:LEFT\n");
+				break;
+			case MOVE_RIGHT:
+				LCD_printf("CurMOVE:RIGHT\n");
+				break;
+			case MOVE_FORWARD:
+				LCD_printf("CurMOVE:FORWARD\n");
+				break;
+			default:
+				break;
+		}
+		
+		// Plan using metric map and next orientation
+		planMetric();
+		
+		// Act on the move
+		moveMap();
+		
+		// Shift the map
+		currentCellWorld = shiftMap(currentCellWorld, currentMove, currentOrientation);
+		// TMRSRVC_delay(2000);//wait 1 seconds
+	}
+}
+
+/*******************************************************************
+* Function:			void localize(void)
+* Input Variables:	none
+* Output Return:	none
+* Overview:			localize the robot
+********************************************************************/
+void localize (void)
+{	
+}
+
+/*******************************************************************
+* Function:			void map (void)
+* Input Variables:	none
+* Output Return:	none
+* Overview:			Makes the robot map the world
+********************************************************************/
+void map (void)
+{
+	// Initialize State
+	isMapping = 1;
+	
+	// Mapping Loop
+	while(isMapping)
+	{	
+		//Sense
+		checkIR();	
+		checkWorld();
+		
+		//Record
+		setGateways();
+				
+		//Plan using the Map
+		planMap();
+		
+		//Act on the Map
+		moveMap();
+		
+		//Shift the Map
+		currentCellWorld = shiftMap(currentCellWorld, currentMove, currentOrientation);
+		
+		//Break?
+		isMapping = !((currentCellWorldStart == currentCellWorld)&&(currentOrientationStart == currentOrientation));
+		if(!isMapping){			
+			break;
+		}
+		
+		//Print Map
+		LCD_clear();
+		LCD_printf("      Move"BYTETOBINARYPATTERN"\n      Cell"BYTETOBINARYPATTERN"\n      Ornt"BYTETOBINARYPATTERN"\n\n",BYTETOBINARY(currentMove),BYTETOBINARY(currentCellWorld),BYTETOBINARY(currentOrientation));
+		printMap(RESET);
+		TMRSRVC_delay(500);//wait 3 seconds
+	}
+	
+}
 
 /*******************************************************************
 * Function:			unsigned char fourNeighborSearch(unsigned char)
@@ -582,7 +575,7 @@ void wavefrontMake(void)
 * Overview:		    Check to see if the branch is valid
 *					given the map and starting seed
 ********************************************************************/
-char matchBranch( unsigned char *ptROBOT_WORLD, unsigned char row, unsigned char col)
+char matchBranch( unsigned char row, unsigned char col)
 {	
 	// Local variables for comparing branch and gateway 
 	unsigned char branch, curMove, curOrnt, gateway, i;
@@ -654,12 +647,17 @@ char matchBranch( unsigned char *ptROBOT_WORLD, unsigned char row, unsigned char
 ********************************************************************/
 char localizeGateway( void )
 {	
+	unsigned char i = 0;
+	
 	// Get the root seed from the tree
 	unsigned char localizeSeed = localizeGateways[0][0];
+	
 	// Local variables for nested for loops 
 	unsigned char row, col;
+	
 	// Stores the number of matching seeds
 	matchSeeds = 0;
+	
 	// // Stores the last matching seed index
 	// unsigned char matchRow, matchCol;
 	
@@ -675,13 +673,19 @@ char localizeGateway( void )
 			if(localizeSeed == ROBOT_WORLD[row][col]){
 			
 				//Check to see if we have a matching branch
-				if(matchBranch(*ROBOT_WORLD,row,col)){
+				if(matchBranch(row,col)){
 					// matchRow = row;
 					// matchCol = col;
 					matchSeeds++;
 				}
 			}			
 		}
+	}
+	
+	
+	SPKR_play_beep(500,1000,50);
+	for(i = 0; i < matchSeeds; i++){
+		SPKR_play_beep(1000,1000,50);
 	}
 	
 	// If we have only one remaining seed
@@ -707,7 +711,7 @@ void planGateway( void )
 	// Pop of the seed and use the second oldest
 	// as the new seed
 	unsigned char i;
-	if(currentBranch>=BRANCH_MAX){
+	if(currentBranch >= BRANCH_MAX){
 		for(i = 0; i < BRANCH_MAX; i++){
 			localizeGateways[0][i] = localizeGateways[0][1+i];
 			localizeGateways[1][i] = localizeGateways[1][1+i];
@@ -727,13 +731,15 @@ void planGateway( void )
 	// Update the currentOrientation using currentMove
 	switch(currentMove){
 		case MOVE_LEFT:
-			//If we move left
+			// If we move left
 			// shift our oriention CCW
 			currentOrientation--;
 			currentOrientation = currentOrientation&0b11;
 			break;
+		case MOVE_FORWARD:
+			break;
 		case MOVE_RIGHT:
-			//If we move right
+			// If we move right
 			// shift our oriention CW
 			currentOrientation++;
 			currentOrientation = currentOrientation&0b11;
@@ -789,7 +795,6 @@ void planMap( void )
 			break;
 	}
 	
-	
 	oldMove = currentMove;
 }
 
@@ -806,6 +811,7 @@ void moveMap( void )
 	switch(currentMove){
 		case MOVE_LEFT:
 			move_arc_stwt(POINT_TURN, LEFT_TURN, 30, 30, 0);
+			
 			STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_ON);
 			TMRSRVC_delay(BRAKE_DELAY);
 			STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
@@ -825,6 +831,7 @@ void moveMap( void )
 			break;
 		case MOVE_RIGHT:
 			move_arc_stwt(POINT_TURN, RIGHT_TURN, 30, 30, 0);
+			
 			STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_ON);
 			TMRSRVC_delay(BRAKE_DELAY);
 			STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
@@ -845,11 +852,7 @@ unsigned char shiftMap( unsigned char currentCell, unsigned char curMove, unsign
 {		
 	// Get the currrent location of the robot
 	unsigned char curRow = currentCell >> 2;
-	unsigned char curCol = currentCell & 0b0011;
-		
-	// // Git the currrent orientation of the robot
-	// unsigned char curOrient = currentOrientation;
-			
+	unsigned char curCol = currentCell & 0b0011;			
 		
 	switch(curMove){
 		case MOVE_LEFT:
@@ -917,7 +920,7 @@ void setGateways(void)
 	unsigned char curOrient = currentOrientation;
 		
 	// Rotate the cell with reference to the robot
-	curCell = rotateCell(curCell,curOrient,0);
+	curCell = rotateCell(curCell,curOrient,TO_MAP_ROTATE);
 	
 	// Set the current cell
 	ROBOT_WORLD[curRow][curCol] = curCell;
@@ -1011,232 +1014,4 @@ void getGateways(void)
 		LCD_printf("Num:\n%i\nCurCell:\n"BYTETOBINARYPATTERN,j,BYTETOBINARY(curCell));
 		TMRSRVC_delay(1000);//wait 1 second
 	}
-}
-
-/*******************************************************************
-* Function:			void checkWorld(void)
-* Input Variables:	void
-* Output Return:	void
-* Overview:		    Checks the cell of the robot using IR sensors
-********************************************************************/
-void checkWorld( void )
-{	
-	currentGateway = 0;
-	
-	// Acquire current gateway description
-	currentGateway += (ftIR<FT_GATEWAY)<<3;
-	currentGateway += (ltIR<LT_GATEWAY)<<2;
-	currentGateway += (bkIR<BK_GATEWAY)<<1;
-	currentGateway += (rtIR<RT_GATEWAY)<<0;
-	nextGateway = moveGateways[currentMoveWorld+1];
-	
-	// Check to see if the robot has entered the next cell of the robot world
-	if(currentGateway == nextGateway){
-		currentMoveWorld += 1;
-	}
-}
-
-/*******************************************************************
-* Function:			void worldInput(void)
-* Input Variables:	void
-* Output Return:	void
-* Overview:			Allows the user to initialize the location of
-*					the robot 
-********************************************************************/
-void worldInput( void )
-{
-	// Initialize a button holder
-	unsigned char btnHolder = UNPRESSED;
-	// unsigned char btnHolderOld = UNPRESSED;
-	unsigned char i = 0;
-	
-	while (i < WORLD_ROW_SIZE){
-		btnHolder = EnterTopoCommand();
-
-		if (btnHolder == MOVE_LEFT){
-			currentCellWorld = currentCellWorld << 1;
-			currentCellWorld += 0;
-			i++;
-		}
-		else if (btnHolder == MOVE_FORWARD){
-			currentCellWorld = currentCellWorld << 1;
-			currentCellWorld += 1;
-			i++;
-		}
-
-		// if (btnHolder != 0){
-			LCD_clear();
-			LCD_printf("Current World Cell:\n%i\nCommand Num: %i\n",currentCellWorld,i);
-		// }
-		TMRSRVC_delay(500);	//wait 0.5 seconds
-	}
-	
-	currentCellWorldStart = currentCellWorld;
-}
-
-/*******************************************************************
-* Function:			void orientationInput(void)
-* Input Variables:	void
-* Output Return:	void
-* Overview:		    Enter the starting orientation of the robot
-*						NORTH = 0b00
-*						EAST = 0b01
-*						SOUTH = 0b10
-*						WEST = 0b11
-********************************************************************/
-void orientationInput(void)
-{
-	// Initialize a button holder
-	unsigned char btnHolder = UNPRESSED;
-	// unsigned char btnHolderOld = UNPRESSED;
-	unsigned char i = 0;
-	
-	while (i < 2){
-		btnHolder = EnterTopoCommand();
-
-		if (btnHolder == MOVE_LEFT){
-			currentOrientation = currentOrientation << 1;
-			currentOrientation += 0;
-			i++;
-		}
-		else if (btnHolder == MOVE_FORWARD){
-			currentOrientation = currentOrientation << 1;
-			currentOrientation += 1;
-			i++;
-		}
-
-		if (btnHolder != 0){
-			LCD_clear();
-			LCD_printf("Current World Orientation:\n%i\nCommand Num: %i\n",currentOrientation,i);	
-		}
-		TMRSRVC_delay(500);	//wait 0.5 seconds
-	}
-	LCD_clear();
-	switch(currentOrientation){
-		case NORTH:
-			LCD_printf("Current World Orientation:\nNORTH\n\n");
-			break;
-		case EAST:
-			LCD_printf("Current World Orientation:\nEAST\n\n");
-			break;
-		case SOUTH:
-			LCD_printf("Current World Orientation:\nSOUTH\n\n");
-			break;
-		case WEST:
-			LCD_printf("Current World Orientation:\nWEST\n\n");
-			break;
-		default:
-			break;
-	}
-	
-	currentOrientationStart = currentOrientation;
-	
-	TMRSRVC_delay(500);	//wait 0.5 seconds
-}
-
-/*******************************************************************
-* Function:			void movesInput(void)
-* Input Variables:	void
-* Output Return:	void
-* Overview:			Stores the button values pressed by user into an
-*					array of max size 32.
-********************************************************************/
-void movesInput( void )
-{
-	// Initialize a button holder
-	unsigned char btnHolder = UNPRESSED;
-	unsigned char btnHolderOld = UNPRESSED;
-	unsigned char i = 0;
-	
-	while (i < (MAX_MOVE_SIZE-1)){
-		btnHolder = EnterTopoCommand();
-	
-		if (btnHolder == MOVE_LEFT){
-			moveCommands[i] = MOVE_LEFT;
-			i++;
-		}
-		else if (btnHolder == MOVE_FORWARD){
-			moveCommands[i] = MOVE_FORWARD;
-			i++;
-		}
-		else if (btnHolder == MOVE_RIGHT){
-			moveCommands[i] = MOVE_RIGHT;
-			i++;
-		}
-
-		if (btnHolder != 0){
-			LCD_clear();
-			LCD_printf("Old Command: %i\nNew Command: %i\nCommand Num %i\n\n",btnHolderOld,btnHolder,i);
-			btnHolderOld = btnHolder;
-		}
-		TMRSRVC_delay(500);	//wait 0.5 seconds
-	}
-	i++;
-	moveCommands[i] = MOVE_STOP;
-}
-
-/*******************************************************************
-* Function:			char moveWorld(void)
-* Input Variables:	void
-* Output Return:	char
-* Overview:		    Moves robot through the world
-********************************************************************/
-char moveWorld( void )
-{	
-	LCD_clear();
-	// LCD_printf("Current Move:\n%i\n",currentMove);
-	
-	char isDone = 0;
-	
-	currentMove = moveCommands[currentMoveWorld];
-	// if(currentMove != oldMove){
-		// move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE, 10, 10, 0);
-	// }
-	// LCD_clear();
-	
-	if(((currentMove == MOVE_LEFT)|(currentMove == MOVE_RIGHT))&(oldMove == MOVE_FORWARD))
-	{
-		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(2.5/5.0), 10, 10, 0);		
-	}
-	
-	if(((oldMove == MOVE_LEFT)|(oldMove == MOVE_RIGHT))&(currentMove == MOVE_FORWARD))
-	{
-		move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE*(2.2/5.0), 10, 10, 0);		
-	}
-	
-	switch(currentMove){
-		case MOVE_LEFT:
-			LCD_printf("Left\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
-			// TMRSRVC_delay(1000);//wait 1 seconds
-			move_arc_stwt(POINT_TURN, LEFT_TURN, 10, 10, 0);
-			break;
-		case MOVE_FORWARD:
-			LCD_printf("Forward\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
-			// TMRSRVC_delay(1000);//wait 1 seconds
-		
-			setOdometry(WALL_STEP);
-			while(!isDone){
-				checkIR();
-				isDone = moveWall();
-			}
-			STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_ON);
-			TMRSRVC_delay(100);//wait .1 seconds
-			STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
-			
-			// move_arc_stwt(NO_TURN, WORLD_RESOLUTION_SIZE, 10, 10, 0);
-			break;
-		case MOVE_RIGHT:
-			LCD_printf("Right\nCurMove:%i\nGateway:%i\nNextGateway:%i\n",currentMoveWorld,currentGateway,nextGateway);
-			// TMRSRVC_delay(1000);//wait 1 seconds
-			move_arc_stwt(POINT_TURN, RIGHT_TURN, 10, 10, 0);
-			break;
-		default:
-			LCD_printf("Whatz4?!");
-			STEPPER_stop( STEPPER_BOTH, STEPPER_BRK_OFF);
-			while(1);
-			break;
-	}
-	// TMRSRVC_delay(1000);//wait 1 seconds
-	oldMove = currentMove;
-	return 1;
 }

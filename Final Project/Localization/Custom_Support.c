@@ -621,13 +621,13 @@ char moveWall( void )
 	// If there is no wall on our right side
 	// place an imaginary wall just within the threshold
 	if(rtIR>IR_WALL_R_THRESH){
-		rtIR = IR_WALL_R_THRESH-18;
+		rtIR = IR_WALL_R_THRESH;
 		isLEFT = 0;
 	}
 	// If there is no wall on our left side
 	// place an imaginary wall just within the threshold
 	if(ltIR>IR_WALL_L_THRESH){
-		ltIR = IR_WALL_L_THRESH-18;
+		ltIR = IR_WALL_L_THRESH;
 		isLEFT = 1;
 	}
 	
@@ -659,7 +659,7 @@ char moveWall( void )
 	}
 
 	// Use the PID controller function to calculate error
-	float effort = pidController(-error, 0);
+	float effort = pidController(error, 0);
 	
 	// Limit the control effort to the max allowable effort
 	if((abs(effort) > MAX_EFFORT)&(effort!=0)){
@@ -677,3 +677,166 @@ char moveWall( void )
 	// Return weather or not we are finished
 	return checkOdometry(NO_RESET);
 }
+
+/*******************************************************************
+* Function:			void worldInput(void)
+* Input Variables:	void
+* Output Return:	void
+* Overview:			Allows the user to initialize the location of
+*					the robot 
+********************************************************************/
+void worldInput( void )
+{
+	// Initialize a button holder
+	unsigned char btnHolder = UNPRESSED;
+	// unsigned char btnHolderOld = UNPRESSED;
+	unsigned char i = 0;
+	
+	while (i < WORLD_ROW_SIZE){
+		btnHolder = EnterTopoCommand();
+
+		if (btnHolder == MOVE_LEFT){
+			currentCellWorld = currentCellWorld << 1;
+			currentCellWorld += 0;
+			i++;
+		}
+		else if (btnHolder == MOVE_FORWARD){
+			currentCellWorld = currentCellWorld << 1;
+			currentCellWorld += 1;
+			i++;
+		}
+
+		// if (btnHolder != 0){
+			LCD_clear();
+			LCD_printf("Current World Cell:\n%i\nCommand Num: %i\n",currentCellWorld,i);
+		// }
+		TMRSRVC_delay(500);	//wait 0.5 seconds
+	}
+	
+	currentCellWorldStart = currentCellWorld;
+}
+
+/*******************************************************************
+* Function:			void orientationInput(void)
+* Input Variables:	void
+* Output Return:	void
+* Overview:		    Enter the starting orientation of the robot
+*						NORTH = 0b00
+*						EAST = 0b01
+*						SOUTH = 0b10
+*						WEST = 0b11
+********************************************************************/
+void orientationInput(void)
+{
+	// Initialize a button holder
+	unsigned char btnHolder = UNPRESSED;
+	// unsigned char btnHolderOld = UNPRESSED;
+	unsigned char i = 0;
+	
+	while (i < 2){
+		btnHolder = EnterTopoCommand();
+
+		if (btnHolder == MOVE_LEFT){
+			currentOrientation = currentOrientation << 1;
+			currentOrientation += 0;
+			i++;
+		}
+		else if (btnHolder == MOVE_FORWARD){
+			currentOrientation = currentOrientation << 1;
+			currentOrientation += 1;
+			i++;
+		}
+
+		if (btnHolder != 0){
+			LCD_clear();
+			LCD_printf("Current World Orientation:\n%i\nCommand Num: %i\n",currentOrientation,i);	
+		}
+		TMRSRVC_delay(500);	//wait 0.5 seconds
+	}
+	LCD_clear();
+	switch(currentOrientation){
+		case NORTH:
+			LCD_printf("Current World Orientation:\nNORTH\n\n");
+			break;
+		case EAST:
+			LCD_printf("Current World Orientation:\nEAST\n\n");
+			break;
+		case SOUTH:
+			LCD_printf("Current World Orientation:\nSOUTH\n\n");
+			break;
+		case WEST:
+			LCD_printf("Current World Orientation:\nWEST\n\n");
+			break;
+		default:
+			break;
+	}
+	
+	currentOrientationStart = currentOrientation;
+	
+	TMRSRVC_delay(500);	//wait 0.5 seconds
+}
+
+/*******************************************************************
+* Function:			void movesInput(void)
+* Input Variables:	void
+* Output Return:	void
+* Overview:			Stores the button values pressed by user into an
+*					array of max size 32.
+********************************************************************/
+void movesInput( void )
+{
+	// Initialize a button holder
+	unsigned char btnHolder = UNPRESSED;
+	unsigned char btnHolderOld = UNPRESSED;
+	unsigned char i = 0;
+	
+	while (i < (MAX_MOVE_SIZE-1)){
+		btnHolder = EnterTopoCommand();
+	
+		if (btnHolder == MOVE_LEFT){
+			moveCommands[i] = MOVE_LEFT;
+			i++;
+		}
+		else if (btnHolder == MOVE_FORWARD){
+			moveCommands[i] = MOVE_FORWARD;
+			i++;
+		}
+		else if (btnHolder == MOVE_RIGHT){
+			moveCommands[i] = MOVE_RIGHT;
+			i++;
+		}
+
+		if (btnHolder != 0){
+			LCD_clear();
+			LCD_printf("Old Command: %i\nNew Command: %i\nCommand Num %i\n\n",btnHolderOld,btnHolder,i);
+			btnHolderOld = btnHolder;
+		}
+		TMRSRVC_delay(500);	//wait 0.5 seconds
+	}
+	i++;
+	moveCommands[i] = MOVE_STOP;
+}
+
+/*******************************************************************
+* Function:			void checkWorld(void)
+* Input Variables:	void
+* Output Return:	void
+* Overview:		    Checks the cell of the robot using IR sensors
+********************************************************************/
+void checkWorld( void )
+{	
+	currentGateway = 0;
+	
+	// Acquire current gateway description
+	currentGateway += (ftIR<FT_GATEWAY)<<3;
+	currentGateway += (ltIR<LT_GATEWAY)<<2;
+	currentGateway += (bkIR<BK_GATEWAY)<<1;
+	currentGateway += (rtIR<RT_GATEWAY)<<0;
+	nextGateway = moveGateways[currentMoveWorld+1];
+	
+	// Check to see if the robot has entered the next cell of the robot world
+	if(currentGateway == nextGateway){
+		currentMoveWorld += 1;
+	}
+}
+ 
