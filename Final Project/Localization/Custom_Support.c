@@ -176,14 +176,26 @@ void printCell(unsigned char cell, unsigned char r, unsigned char c, BOOL isrobo
 		switch(orent){
 			case NORTH:
 				LCD_set_pixel(LCD_OFFSET - (r+2), c+3, isrobot);
+				LCD_set_pixel(LCD_OFFSET - (r+3), c+5, !reset);
+				LCD_set_pixel(LCD_OFFSET - (r+5), c+4, !reset);
+				LCD_set_pixel(LCD_OFFSET - (r+4), c+2, !reset);	
 				break;
 			case EAST:
+				LCD_set_pixel(LCD_OFFSET - (r+2), c+3, !reset);
 				LCD_set_pixel(LCD_OFFSET - (r+3), c+5, isrobot);
+				LCD_set_pixel(LCD_OFFSET - (r+5), c+4, !reset);
+				LCD_set_pixel(LCD_OFFSET - (r+4), c+2, !reset);	
 				break;
 			case SOUTH:
-				LCD_set_pixel(LCD_OFFSET - (r+5), c+4, isrobot);			
+				LCD_set_pixel(LCD_OFFSET - (r+2), c+3, !reset);
+				LCD_set_pixel(LCD_OFFSET - (r+3), c+5, !reset);
+				LCD_set_pixel(LCD_OFFSET - (r+5), c+4, isrobot);
+				LCD_set_pixel(LCD_OFFSET - (r+4), c+2, !reset);	
 				break;
 			case WEST:
+				LCD_set_pixel(LCD_OFFSET - (r+2), c+3, !reset);
+				LCD_set_pixel(LCD_OFFSET - (r+3), c+5, !reset);
+				LCD_set_pixel(LCD_OFFSET - (r+5), c+4, !reset);
 				LCD_set_pixel(LCD_OFFSET - (r+4), c+2, isrobot);			
 				break;
 			default:
@@ -676,145 +688,6 @@ char moveWall( void )
 	
 	// Return weather or not we are finished
 	return checkOdometry(NO_RESET);
-}
-
-/*******************************************************************
-* Function:			void worldInput(void)
-* Input Variables:	void
-* Output Return:	void
-* Overview:			Allows the user to initialize the location of
-*					the robot 
-********************************************************************/
-void worldInput( void )
-{
-	// Initialize a button holder
-	unsigned char btnHolder = UNPRESSED;
-	// unsigned char btnHolderOld = UNPRESSED;
-	unsigned char i = 0;
-	
-	while (i < WORLD_ROW_SIZE){
-		btnHolder = EnterTopoCommand();
-
-		if (btnHolder == MOVE_LEFT){
-			currentCellWorld = currentCellWorld << 1;
-			currentCellWorld += 0;
-			i++;
-		}
-		else if (btnHolder == MOVE_FORWARD){
-			currentCellWorld = currentCellWorld << 1;
-			currentCellWorld += 1;
-			i++;
-		}
-
-		// if (btnHolder != 0){
-			LCD_clear();
-			LCD_printf("Current World Cell:\n%i\nCommand Num: %i\n",currentCellWorld,i);
-		// }
-		TMRSRVC_delay(500);	//wait 0.5 seconds
-	}
-	
-	currentCellWorldStart = currentCellWorld;
-}
-
-/*******************************************************************
-* Function:			void orientationInput(void)
-* Input Variables:	void
-* Output Return:	void
-* Overview:		    Enter the starting orientation of the robot
-*						NORTH = 0b00
-*						EAST = 0b01
-*						SOUTH = 0b10
-*						WEST = 0b11
-********************************************************************/
-void orientationInput(void)
-{
-	// Initialize a button holder
-	unsigned char btnHolder = UNPRESSED;
-	// unsigned char btnHolderOld = UNPRESSED;
-	unsigned char i = 0;
-	
-	while (i < 2){
-		btnHolder = EnterTopoCommand();
-
-		if (btnHolder == MOVE_LEFT){
-			currentOrientation = currentOrientation << 1;
-			currentOrientation += 0;
-			i++;
-		}
-		else if (btnHolder == MOVE_FORWARD){
-			currentOrientation = currentOrientation << 1;
-			currentOrientation += 1;
-			i++;
-		}
-
-		if (btnHolder != 0){
-			LCD_clear();
-			LCD_printf("Current World Orientation:\n%i\nCommand Num: %i\n",currentOrientation,i);	
-		}
-		TMRSRVC_delay(500);	//wait 0.5 seconds
-	}
-	LCD_clear();
-	switch(currentOrientation){
-		case NORTH:
-			LCD_printf("Current World Orientation:\nNORTH\n\n");
-			break;
-		case EAST:
-			LCD_printf("Current World Orientation:\nEAST\n\n");
-			break;
-		case SOUTH:
-			LCD_printf("Current World Orientation:\nSOUTH\n\n");
-			break;
-		case WEST:
-			LCD_printf("Current World Orientation:\nWEST\n\n");
-			break;
-		default:
-			break;
-	}
-	
-	currentOrientationStart = currentOrientation;
-	
-	TMRSRVC_delay(500);	//wait 0.5 seconds
-}
-
-/*******************************************************************
-* Function:			void movesInput(void)
-* Input Variables:	void
-* Output Return:	void
-* Overview:			Stores the button values pressed by user into an
-*					array of max size 32.
-********************************************************************/
-void movesInput( void )
-{
-	// Initialize a button holder
-	unsigned char btnHolder = UNPRESSED;
-	unsigned char btnHolderOld = UNPRESSED;
-	unsigned char i = 0;
-	
-	while (i < (MAX_MOVE_SIZE-1)){
-		btnHolder = EnterTopoCommand();
-	
-		if (btnHolder == MOVE_LEFT){
-			moveCommands[i] = MOVE_LEFT;
-			i++;
-		}
-		else if (btnHolder == MOVE_FORWARD){
-			moveCommands[i] = MOVE_FORWARD;
-			i++;
-		}
-		else if (btnHolder == MOVE_RIGHT){
-			moveCommands[i] = MOVE_RIGHT;
-			i++;
-		}
-
-		if (btnHolder != 0){
-			LCD_clear();
-			LCD_printf("Old Command: %i\nNew Command: %i\nCommand Num %i\n\n",btnHolderOld,btnHolder,i);
-			btnHolderOld = btnHolder;
-		}
-		TMRSRVC_delay(500);	//wait 0.5 seconds
-	}
-	i++;
-	moveCommands[i] = MOVE_STOP;
 }
 
 /*******************************************************************

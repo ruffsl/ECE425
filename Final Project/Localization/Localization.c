@@ -66,10 +66,10 @@ unsigned char localizeGateways[BRANCH_TYPES][BRANCH_MAX] = {
 unsigned char currentBranch = 0;
 
 unsigned char ROBOT_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] = 	{
-																{0b1101, 0b1111, 0b1111, 0b1101}, 
-																{0b0101, 0b1111, 0b1111, 0b0101}, 
-																{0b0001, 0b1010, 0b1010, 0b0100}, 
-																{0b0111, 0b1111, 0b1111, 0b0111}
+																{0b1011, 0b1000, 0b1010, 0b1100}, 
+																{0b1111, 0b0101, 0b1111, 0b0101}, 
+																{0b1111, 0b0101, 0b1111, 0b0101}, 
+																{0b1111, 0b0111, 0b1111, 0b0111}
 																};
 																
 unsigned char ROBOT_METRIC_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] =	
@@ -120,7 +120,7 @@ void CBOT_main( void )
 	isDone = 0;
 	btnHolder = UNPRESSED;
 	LCD_clear();
-	LCD_printf("      Orent?\n\n\n\n");
+	LCD_printf("      Orient?\n\n\n\n");
 	while(!isDone){
 		btnHolder = EnterTopoCommand();
 		switch(btnHolder){
@@ -197,26 +197,26 @@ void CBOT_main( void )
 		moveMap();
 	}
 		
-	// Update the currentOrientation using currentMove
-	switch(currentMove){
-		case MOVE_LEFT:
-			// If we move left
-			// shift our oriention CCW
-			currentOrientation--;
-			currentOrientation = currentOrientation&0b11;
-			break;
-		case MOVE_FORWARD:
-			break;
-		case MOVE_RIGHT:
-			// If we move right
-			// shift our oriention CW
-			currentOrientation++;
-			currentOrientation = currentOrientation&0b11;
-			break;
-		default:
-			LCD_printf("Whatz2?!");
-			break;
-	}
+	// // Update the currentOrientation using currentMove
+	// switch(currentMove){
+		// case MOVE_LEFT:
+			// // If we move left
+			// // shift our oriention CCW
+			// currentOrientation--;
+			// currentOrientation = currentOrientation&0b11;
+			// break;
+		// case MOVE_FORWARD:
+			// break;
+		// case MOVE_RIGHT:
+			// // If we move right
+			// // shift our oriention CW
+			// currentOrientation++;
+			// currentOrientation = currentOrientation&0b11;
+			// break;
+		// default:
+			// LCD_printf("Whatz2?!");
+			// break;
+	// }
 	
 		SPKR_beep(500);	
 		// LCD_clear();
@@ -226,7 +226,7 @@ void CBOT_main( void )
 		LCD_clear();
 		LCD_printf("      New Map\n\n\n\n");
 		printMap(currentOrientation,currentCellWorld,RESET);
-		TMRSRVC_delay(1000);//wait 1 seconds
+		TMRSRVC_delay(5000);//wait 1 seconds
 		SPKR_beep(0);
 		
 		
@@ -272,22 +272,18 @@ void CBOT_main( void )
 	// Moves the Robot to the goal
 	metric();
 	
-		// Stop when home is reached
-		STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
-		
 		
 		// Print that you are at home and the fire cell location
 		LCD_clear();
 		LCD_printf("LOLZ\nI'm HOME\nFire at Cell: %i\n\n",currentFireCell);
-		STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);// Beep when home is reached
+		// Stop when home is reached
+		STEPPER_stop(STEPPER_BOTH, STEPPER_BRK_OFF);
+		// Beep when home is reached
 		SPKR_beep(500);
 		TMRSRVC_delay(3000);//wait 3 seconds
 		SPKR_beep(0);
 		TMRSRVC_delay(7000);//wait 7 seconds
 		
-	
-	
-	
 	/**
 	
 	// Enter the robot's current (starting) position
@@ -429,7 +425,7 @@ unsigned char checkFire(void)
 void metric (void)
 {
 	// currentCellWorld = 0b0000;
-	currentGoalWorld = 15;
+	// currentGoalWorld = 15;
 	
 	// Make metric map
 	wavefrontMake();

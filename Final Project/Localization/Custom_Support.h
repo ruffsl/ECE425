@@ -196,12 +196,7 @@
 	char checkOdometry( char);
 	void setOdometry( float );
 	char moveWall(void);
-	
-	// User Inputs
-	void worldInput(void);
-	void orientationInput(void);
-	void movesInput(void);
-	
+		
 	// Sensory Primitives
 	void checkWorld(void);
 
