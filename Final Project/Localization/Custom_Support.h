@@ -192,7 +192,7 @@
 	char move_arc_stnb(float, float, float, float, BOOL);
 	void LCD_set_pixel(unsigned char row, unsigned char col, BOOL val);
 	void printCell(unsigned char, unsigned char, unsigned char, BOOL, unsigned char, BOOL);
-	void printMap(char);
+	void printMap(unsigned char, unsigned char, char);
 	char checkOdometry( char);
 	void setOdometry( float );
 	char moveWall(void);

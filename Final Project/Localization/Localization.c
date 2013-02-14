@@ -88,20 +88,91 @@ void CBOT_main( void )
 {
 	// initialize the robot
 	initializeRobot();
+	currentOrientation = NORTH;
 	
-		// Display the map
-		LCD_clear();
-		LCD_printf("      New Map\n\n\n\n");
-		printMap(RESET);
-		TMRSRVC_delay(1000);//wait 1 seconds
-		LCD_clear();
+	// Ask for Goal
+	char isDone = 0;
+	unsigned char btnHolder = UNPRESSED;
+	LCD_clear();
+	LCD_printf("      Goal?\n\n\n\n");
+	while(!isDone){
+		btnHolder = EnterTopoCommand();
+		switch(btnHolder){
+			case MOVE_LEFT:
+				currentGoalWorld--;
+				currentGoalWorld = currentGoalWorld&0b1111;
+				break;
+			case MOVE_FORWARD:
+				isDone = 1;
+				break;
+			case MOVE_RIGHT:
+				currentGoalWorld++;
+				currentGoalWorld = currentGoalWorld&0b1111;
+				break;
+			default:
+				break;
+		}
+		printMap(currentOrientation,currentGoalWorld,RESET);
+		TMRSRVC_delay(100);//wait .1 seconds
+	}
+	
+	// Ask for starting orentation
+	isDone = 0;
+	btnHolder = UNPRESSED;
+	LCD_clear();
+	LCD_printf("      Orent?\n\n\n\n");
+	while(!isDone){
+		btnHolder = EnterTopoCommand();
+		switch(btnHolder){
+			case MOVE_LEFT:
+				// If we move left
+				// shift our oriention CCW
+				currentOrientation--;
+				currentOrientation = currentOrientation&0b11;
+				break;
+			case MOVE_FORWARD:
+				isDone = 1;
+				break;
+			case MOVE_RIGHT:
+				// If we move right
+				// shift our oriention CW
+				currentOrientation++;
+				currentOrientation = currentOrientation&0b11;
+				break;
+			default:
+				break;
+		}
+		printMap(currentOrientation,currentGoalWorld,RESET);
+		TMRSRVC_delay(100);//wait .1 seconds
+	}
+	
+	// Ask to start
+	isDone = 0;
+	btnHolder = UNPRESSED;
+	LCD_clear();
+	LCD_printf("      Start?\n\n\n\n");
+	while(!isDone){
+		btnHolder = EnterTopoCommand();
+		switch(btnHolder){
+			case MOVE_LEFT:
+				break;
+			case MOVE_FORWARD:
+				isDone = 1;
+				break;
+			case MOVE_RIGHT:
+				break;
+			default:
+				break;
+		}
+		printMap(currentOrientation,currentGoalWorld,RESET);
+		TMRSRVC_delay(100);//wait .1 seconds
+	}
 	
 	// Locilize the Robot
 	// localize();
 	
 	// Initialize State
 	isLost = 1;
-	currentOrientation = SOUTH;
 	oldMove = MOVE_STOP;
 	
 	// Localization Loop 
@@ -154,7 +225,7 @@ void CBOT_main( void )
 		
 		LCD_clear();
 		LCD_printf("      New Map\n\n\n\n");
-		printMap(RESET);
+		printMap(currentOrientation,currentCellWorld,RESET);
 		TMRSRVC_delay(1000);//wait 1 seconds
 		SPKR_beep(0);
 		
@@ -237,7 +308,7 @@ void CBOT_main( void )
 	
 	// Print the map
 	LCD_clear();	
-	printMap(RESET);
+	printMap(currentOrientation,currentCellWorld,RESET);
 	TMRSRVC_delay(10000);//wait 10 seconds
 	LCD_clear();	
 	
@@ -497,7 +568,7 @@ void map (void)
 		//Print Map
 		LCD_clear();
 		LCD_printf("      Move"BYTETOBINARYPATTERN"\n      Cell"BYTETOBINARYPATTERN"\n      Ornt"BYTETOBINARYPATTERN"\n\n",BYTETOBINARY(currentMove),BYTETOBINARY(currentCellWorld),BYTETOBINARY(currentOrientation));
-		printMap(RESET);
+		printMap(currentOrientation,currentCellWorld,RESET);
 		TMRSRVC_delay(500);//wait 3 seconds
 	}
 	

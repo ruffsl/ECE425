@@ -96,25 +96,25 @@ char checkOdometry( char reset )
 
 /*******************************************************************
 * Function:			void printMap(char reset)
-* Input Variables:	char
+* Input Variables:	unsigned char, unsigned char, char
 * Output Return:	void
-* Overview:		    Print the map
+* Overview:		    Prints the map with the robot
 ********************************************************************/
-void printMap(char reset)
+void printMap(unsigned char curOrient, unsigned char curCell, char reset)
 {
 	unsigned char r;
 	unsigned char c;
 	unsigned char cell;
 	
-	unsigned char curRow = currentCellWorld >> 2;
-	unsigned char curCol = currentCellWorld & 0b0011;
+	unsigned char curRow = curCell >> 2;
+	unsigned char curCol = curCell & 0b0011;
 	
 	BOOL isrobot;
 	for(r = 0; r < WORLD_ROW_SIZE; r++){
 		for(c = 0; c < WORLD_COLUMN_SIZE; c++){
 			cell = ROBOT_WORLD[r][c];
 			isrobot = (r == curRow)&&(c == curCol);
-			printCell(cell, r, c, isrobot, currentOrientation, reset);
+			printCell(cell, r, c, isrobot, curOrient, reset);
 		}	
 	}
 }
