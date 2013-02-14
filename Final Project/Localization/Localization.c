@@ -28,7 +28,7 @@ void getGateways(void);
 void setGateways(void);
 void metric(void);
 
-char wavefrontMake(unsigned char, unsigned char, unsigned char);
+void wavefrontMake(void);
 unsigned char fourNeighborSearch(unsigned char);
 void planMetric(void);
 
@@ -86,7 +86,6 @@ unsigned char ROBOT_METRIC_WORLD[WORLD_ROW_SIZE][WORLD_COLUMN_SIZE] =
 
 void CBOT_main( void )
 {
-		
 	// initialize the robot
 	initializeRobot();
 	currentOrientation = NORTH;
@@ -168,14 +167,6 @@ void CBOT_main( void )
 		printMap(currentOrientation,currentGoalWorld,RESET);
 		TMRSRVC_delay(100);//wait .1 seconds
 	}
-	
-	
-	// Get the cell current row and column
-	unsigned char curRow = (currentCellWorld>>2);
-	unsigned char curCol = (currentCellWorld&0b0011);
-	
-	// Make metric map
-	wavefrontMake(curRow,curCol,0);
 	
 	// Locilize the Robot
 	// localize();
@@ -436,6 +427,9 @@ void metric (void)
 	// currentCellWorld = 0b0000;
 	// currentGoalWorld = 15;
 	
+	// Make metric map
+	wavefrontMake();
+	
 	// Initialize State
 	isGoal = 0;
 	unsigned char isSiren = 0;
@@ -592,7 +586,7 @@ unsigned char fourNeighborSearch(unsigned char curCell)
 	
 	// If our current cell is 0
 	// then we have reached our goal
-	if( ROBOT_METRIC_WORLD[curRow][curCol] == 1){
+	if( ROBOT_METRIC_WORLD[curRow][curCol] == 0){
 		return SUCCESS;
 	}
 	
@@ -735,67 +729,39 @@ void planMetric (void)
 * Overview:			Makes the wavefront metric map to goal location
 *					from current location 
 ********************************************************************/
-char wavefrontMake(unsigned char curRow, unsigned char curCol, unsigned char curVal)
+void wavefrontMake(void)
 {
-	if(((curRow)<WORLD_ROW_SIZE)&&((curCol)<WORLD_COLUMN_SIZE)){
-		if(ROBOT_WORLD[curRow][curCol] == 0b1111){
-			ROBOT_METRIC_WORLD[(curRow)][curCol] = 99;
-			return 0;
-		}
-		
-		ROBOT_METRIC_WORLD[curRow][curCol] = (curVal++);
-
-		curRow--;
-		// Check the north cell
-		if((curRow)<WORLD_ROW_SIZE){
-			wavefrontMake(curRow,curCol,curVal);
-		}
-		
-		curRow++;
-		curRow++;
-		// Check the south cell
-		if((curRow)<WORLD_ROW_SIZE){
-			wavefrontMake(curRow,curCol,curVal);
-		}
-		
-		curRow--;
-		curCol++;
-		// Check the east cell
-		if((curCol)<WORLD_COLUMN_SIZE){
-			wavefrontMake(curRow,curCol,curVal);
-		}
-		
-		curCol--;
-		curCol--;
-		// Check the west cell
-		if((curCol)<WORLD_COLUMN_SIZE){
-			wavefrontMake(curRow,curCol,curVal);
-		}
-		return 1;
-	}
-	return 0;	
+	// User-defined goal location
+	// unsigned char goalLocation = currentGoalWorld;
+	// Extract x and y goal location
+	int rowGoal = (currentGoalWorld>>2);
+	int colGoal = (currentGoalWorld&0b0011);
+	// Declare some variables and initialize a distance 
+	unsigned int rowDelta, colDelta;
+	int row, col;
+	int distance = 0;
 	
-	// // For every cell in the world
-	// for(row = 0; row < WORLD_ROW_SIZE; row++)
-	// {
-		// for(col = 0; col < WORLD_COLUMN_SIZE; col++)
-		// {
-			// // for cells with 4 walls, set metric map vaule to 99
-			// if(ROBOT_WORLD[row][col] == 0b1111){
-				// ROBOT_METRIC_WORLD[row][col] = 99;
-			// }
-			// // for all other cells compute the distance
-			// else{
-				// // compute the differences in rows and columns
-				// rowDelta = abs(row - rowGoal);
-				// colDelta = abs(col - colGoal);
-				// // compute the distance without using sqrt
-				// distance = ((rowDelta*rowDelta)+(colDelta*colDelta));
-				// // overwrite the cells in the metric map to the actual distance values
-				// ROBOT_METRIC_WORLD[row][col] = distance;
-			// }
-		// }
-	// }
+	// For every cell in the world
+	for(row = 0; row < WORLD_ROW_SIZE; row++)
+	{
+		for(col = 0; col < WORLD_COLUMN_SIZE; col++)
+		{
+			// for cells with 4 walls, set metric map vaule to 99
+			if(ROBOT_WORLD[row][col] == 0b1111){
+				ROBOT_METRIC_WORLD[row][col] = 99;
+			}
+			// for all other cells compute the distance
+			else{
+				// compute the differences in rows and columns
+				rowDelta = abs(row - rowGoal);
+				colDelta = abs(col - colGoal);
+				// compute the distance without using sqrt
+				distance = ((rowDelta*rowDelta)+(colDelta*colDelta));
+				// overwrite the cells in the metric map to the actual distance values
+				ROBOT_METRIC_WORLD[row][col] = distance;
+			}
+		}
+	}
 }
 
 /*******************************************************************
