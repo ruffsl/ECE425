@@ -42,15 +42,15 @@
 	
 	// Wall Following Threshold
 	#define IR_WALL_F_THRESH 0
-	#define IR_WALL_R_THRESH 13
-	#define IR_WALL_L_THRESH 13
-	#define IR_WALL_B_THRESH 10
+	#define IR_WALL_R_THRESH 16
+	#define IR_WALL_L_THRESH 16
+	#define IR_WALL_B_THRESH 13
 	
 	// Gateway Thresholds
-	#define FT_GATEWAY 10
-	#define BK_GATEWAY 35
-	#define LT_GATEWAY 30
-	#define RT_GATEWAY 30
+	#define FT_GATEWAY 17
+	#define BK_GATEWAY 37
+	#define LT_GATEWAY 32
+	#define RT_GATEWAY 32
 	
 	// Movement Commands for pathplanning
 	#define MOVE_LEFT 1
