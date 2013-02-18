@@ -5,7 +5,7 @@
 *
 * Code Description: 
 *    1. Robot localizes itself in a known world
-*    2. Robot searches for a fire source
+*    2. Robot searches the world for a fire source
 *    3. Robot goes to a user-designated goal location 
 *    4. Upon arrival to the goal, robot displays the cell location of the fire
 *
